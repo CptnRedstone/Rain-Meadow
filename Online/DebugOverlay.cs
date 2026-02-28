@@ -378,18 +378,17 @@ namespace RainMeadow
                 }
                 return comp;
             });
-            foreach (var onlineEntity in onlineEntities)
-            {
-                ResourceNode resourceNode = resourceNodes.Find(node => node.resource == onlineEntity.currentlyJoinedResource);
-                if (resourceNode != null && onlineEntity is OnlinePhysicalObject onlinePhysicalObject)
-                {
 
-                    EntityNode entityNode = entityNodes.Find(node => node.entity == onlineEntity);
+            for (int i = 0; i < onlineEntities.Count; i++)
+            {
+                ResourceNode resourceNode = resourceNodes.Find(node => node.resource == onlineEntities[i].currentlyJoinedResource);
+                if (resourceNode != null && onlineEntities[i] is OnlinePhysicalObject onlinePhysicalObject)
+                {
+                    EntityNode entityNode = entityNodes.Find(node => node.entity == onlineEntities[i]);
                     if (entityNode == null)
                     {
-
                         bool isMe = false;
-                        if (onlineEntity.isMine)
+                        if (onlineEntities[i].isMine)
                         {
                             if (onlinePhysicalObject.apo.type == AbstractPhysicalObject.AbstractObjectType.Creature)
                             {
@@ -401,14 +400,15 @@ namespace RainMeadow
                                     {
                                         isMe = true;
                                     }
-                                } catch
+                                }
+                                catch
                                 {
                                     RainMeadow.Error($"Failed to cast {onlinePhysicalObject.apo} to AbstractCreature type");
                                 }
                             }
                         }
 
-                        entityNode = new EntityNode(self.rainWorld, overlayContainer, onlineEntity)
+                        entityNode = new EntityNode(self.rainWorld, overlayContainer, onlineEntities[i])
                         {
                             text = isMe ? "YOU" : ""
                         };
@@ -430,12 +430,15 @@ namespace RainMeadow
                 return false;
             });
 
-            foreach (var node in entityNodes)
+            for (int i = 0; i < entityNodes.Count; i++)
             {
-                node.Update();
+                entityNodes[i].Update();
             }
+
+            localClientSettings.text = "You:" + AssembleClientFlags(OnlineManager.mePlayer);
         }
 
+        private static FLabel localClientSettings;
         public static void CreateOverlay(RainWorldGame self)
         {
             Vector2 screenSize = self.rainWorld.options.ScreenSize;
@@ -453,6 +456,13 @@ namespace RainMeadow
                 x = 205.01f,
                 y = screenSize.y - 10,
             });
+            localClientSettings = (new FLabel(Custom.GetFont(), "You:" + AssembleClientFlags(OnlineManager.mePlayer))
+            {
+                alignment = FLabelAlignment.Left,
+                x = 405.01f,
+                y = screenSize.y - 10,
+            });
+            overlayContainer.AddChild(localClientSettings);
 
             // Lobby (Root)
             resourceNodes.Add(new ResourceNode(self.rainWorld, overlayContainer, OnlineManager.lobby)
@@ -474,9 +484,10 @@ namespace RainMeadow
         private static string AssembleClientFlags(OnlinePlayer player)
         {
             string clientFlags = "";
-            if (OnlineManager.lobby.clientSettings.TryGetValue(player, out var playerExists) && OnlineManager.lobby.gameMode is StoryGameMode)
+            if (OnlineManager.lobby.clientSettings.TryGetValue(player, out _) && OnlineManager.lobby.gameMode is StoryGameMode)
             {
-             if (OnlineManager.lobby.clientSettings[player].TryGetData<StoryClientSettingsData>(out var currentClientSettings)) {
+                if (OnlineManager.lobby.clientSettings[player].TryGetData<StoryClientSettingsData>(out var currentClientSettings))
+            {
                 if (!OnlineManager.lobby.clientSettings[player].inGame)
                 {
                     clientFlags += "L";
@@ -487,10 +498,19 @@ namespace RainMeadow
                     clientFlags += currentClientSettings.readyForTransition ? "G" : "";
                     clientFlags += currentClientSettings.isDead             ? "D" : "";
                 }
-                clientFlags = $" [{clientFlags}]";
+                }
+            }
+            else if (OnlineManager.lobby.clientSettings.TryGetValue(player, out _) && OnlineManager.lobby.gameMode is ArenaOnlineGameMode)
+            {
+                if (OnlineManager.lobby.clientSettings[player].TryGetData<ArenaClientSettings>(out var currentClientSettings))
+                {
+                    if (!OnlineManager.lobby.clientSettings[player].inGame)
+                    {
+                        clientFlags += "L";
+                    }
               }
             }
-            return clientFlags;
+            return $" [{clientFlags}]";
         }
     }
 }
