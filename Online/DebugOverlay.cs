@@ -22,6 +22,7 @@ namespace RainMeadow
             public float thickness = 3;
             public int lines = 0;
             public int entityCount = 0;
+            public List<OnlineEntity> childEntities = [];
 
             public float width => label.textRect.width;
             public ResourceNode(RainWorld rainWorld, FContainer container, OnlineResource resource)
@@ -120,7 +121,7 @@ namespace RainMeadow
                 iconSymbol.Draw(1, pos + new Vector2(0.5f, 0));
 
                 label.x = pos.x + 0.01f;
-                label.y = pos.y + 20;
+                label.y = pos.y + 15f;
                 label.text = text;
             }
 
@@ -332,91 +333,68 @@ namespace RainMeadow
                 lastWorldLines = regionNode.lines;
             }
 
-            foreach (var node in resourceNodes)
+            for (int i = 0; i < resourceNodes.Count; i++)
             {
-                node.Update();
+                resourceNodes[i].Update();
+                resourceNodes[i].childEntities.Clear();
             }
 
             var onlineEntities = OnlineManager.recentEntities.Values.ToList();
-            onlineEntities.Sort((x, y) =>
-            {
-                int comp = (x is OnlinePhysicalObject ? -1 : 0) + (y is OnlinePhysicalObject ? 1 : 0);
-                if (comp != 0)
-                {
-                    return comp;
-                }
-                comp = (x is OnlineCreature ? -1 : 0) + (y is OnlineCreature ? 1 : 0);
-                if (comp != 0)
-                {
-                    return comp;
-                }
-                comp = (x is ClientSettings ? -1 : 0) + (y is ClientSettings ? 1 : 0);
-                if (comp != 0)
-                {
-                    return comp;
-                }
-                comp = (x.isMine ? -1 : 0) + (y.isMine ? 1 : 0);
-                if (comp != 0)
-                {
-                    return comp;
-                }
-                if (x is OnlinePhysicalObject && y is OnlinePhysicalObject)
-                {
-                    comp = (int)((OnlinePhysicalObject)x).apo.type - (int)((OnlinePhysicalObject)y).apo.type;
-                    if (comp != 0)
-                    {
-                        return comp;
-                    }
-                }
-                if (x is OnlineCreature && y is OnlineCreature)
-                {
-                    comp = (int)((AbstractCreature)((OnlineCreature)x).apo).creatureTemplate.type - (int)((AbstractCreature)((OnlineCreature)y).apo).creatureTemplate.type;
-                    if (comp != 0)
-                    {
-                        return comp;
-                    }
-                }
-                return comp;
-            });
-
             for (int i = 0; i < onlineEntities.Count; i++)
             {
                 ResourceNode resourceNode = resourceNodes.Find(node => node.resource == onlineEntities[i].currentlyJoinedResource);
                 if (resourceNode != null && onlineEntities[i] is OnlinePhysicalObject onlinePhysicalObject)
                 {
-                    EntityNode entityNode = entityNodes.Find(node => node.entity == onlineEntities[i]);
-                    if (entityNode == null)
+                    resourceNode.childEntities.Add(onlineEntities[i]);
+                }
+            }
+
+            for (int i = 0; i < entityNodes.Count; i++)
+            {
+                entityNodes[i].RemoveSprites();
+            }
+            entityNodes.Clear();
+            for (int i = 0; i < resourceNodes.Count; i++)
+            {
+                if (resourceNodes[i].childEntities.Count == 0) { continue; }
+                SortOnlineEntities(resourceNodes[i].childEntities);
+
+                IconSymbol.IconSymbolData iconType = new();
+                IconSymbol.IconSymbolData lastIconType = new();
+                int j = 0;
+                int iconCount = 1;
+                bool lastIsMine = true;
+                while (j < resourceNodes[i].childEntities.Count)
+                {
+                    iconType = (((OnlinePhysicalObject)resourceNodes[i].childEntities[j]).apo is AbstractCreature creature) ?
+                        CreatureSymbol.SymbolDataFromCreature(creature) :
+                        ItemSymbol.SymbolDataFromItem(((OnlinePhysicalObject)resourceNodes[i].childEntities[j]).apo).GetValueOrDefault();
+
+                    if (iconType == lastIconType && resourceNodes[i].childEntities[j].isMine == lastIsMine)
                     {
-                        bool isMe = false;
-                        if (onlineEntities[i].isMine)
+                        iconCount++;
+                        entityNodes.Last().text = iconCount.ToString();
+                    }
+                    else
+                    {
+                        iconCount = 1;
+
+                        EntityNode entityNode = entityNodes.Find(node => node.entity == resourceNodes[i].childEntities[j]);
+                        if (entityNode == null)
                         {
-                            if (onlinePhysicalObject.apo.type == AbstractPhysicalObject.AbstractObjectType.Creature)
+                            entityNode = new EntityNode(self.rainWorld, overlayContainer, resourceNodes[i].childEntities[j])
                             {
-                                try
-                                {
-                                    AbstractCreature creature = (AbstractCreature)onlinePhysicalObject.apo;
-
-                                    if (creature.creatureTemplate.TopAncestor().type == CreatureTemplate.Type.Slugcat)
-                                    {
-                                        isMe = true;
-                                    }
-                                }
-                                catch
-                                {
-                                    RainMeadow.Error($"Failed to cast {onlinePhysicalObject.apo} to AbstractCreature type");
-                                }
-                            }
+                                text = (resourceNodes[i].childEntities[j].isMine && iconType.critType == CreatureTemplate.Type.Slugcat) ? "YOU" : iconCount.ToString()
+                            };
+                            entityNodes.Add(entityNode);
                         }
-
-                        entityNode = new EntityNode(self.rainWorld, overlayContainer, onlineEntities[i])
-                        {
-                            text = isMe ? "YOU" : ""
-                        };
-                        entityNodes.Add(entityNode);
+                        entityNode.pos = resourceNodes[i].pos + new Vector2(40 + 25 * resourceNodes[i].entityCount + resourceNodes[i].width, 0);
+                        resourceNodes[i].entityCount++;
                     }
 
-                    entityNode.pos = resourceNode.pos + new Vector2(40 + 20 * resourceNode.entityCount + resourceNode.width, 0);
-                    resourceNode.entityCount++;
+                    lastIconType = iconType;
+                    lastIsMine = resourceNodes[i].childEntities[j].isMine;
+                    j++;
                 }
             }
 
@@ -481,23 +459,68 @@ namespace RainMeadow
             overlayContainer = null;
         }
 
+        private static List<OnlineEntity> SortOnlineEntities(List<OnlineEntity> onlineEntities)
+        {
+            onlineEntities.Sort((x, y) =>
+            {
+                int comp = (x is OnlinePhysicalObject ? -1 : 0) + (y is OnlinePhysicalObject ? 1 : 0);
+                if (comp != 0)
+                {
+                    return comp;
+                }
+                comp = (x is OnlineCreature ? -1 : 0) + (y is OnlineCreature ? 1 : 0);
+                if (comp != 0)
+                {
+                    return comp;
+                }
+                comp = (x is ClientSettings ? -1 : 0) + (y is ClientSettings ? 1 : 0);
+                if (comp != 0)
+                {
+                    return comp;
+                }
+                comp = (x.isMine ? -1 : 0) + (y.isMine ? 1 : 0);
+                if (comp != 0)
+                {
+                    return comp;
+                }
+                if (x is OnlinePhysicalObject && y is OnlinePhysicalObject)
+                {
+                    comp = (int)((OnlinePhysicalObject)x).apo.type - (int)((OnlinePhysicalObject)y).apo.type;
+                    if (comp != 0)
+                    {
+                        return comp;
+                    }
+                }
+                if (x is OnlineCreature && y is OnlineCreature)
+                {
+                    comp = (int)((AbstractCreature)((OnlineCreature)x).apo).creatureTemplate.type - (int)((AbstractCreature)((OnlineCreature)y).apo).creatureTemplate.type;
+                    if (comp != 0)
+                    {
+                        return comp;
+                    }
+                }
+                return comp;
+            });
+            return onlineEntities;
+        }
+
         private static string AssembleClientFlags(OnlinePlayer player)
         {
             string clientFlags = "";
             if (OnlineManager.lobby.clientSettings.TryGetValue(player, out _) && OnlineManager.lobby.gameMode is StoryGameMode)
             {
                 if (OnlineManager.lobby.clientSettings[player].TryGetData<StoryClientSettingsData>(out var currentClientSettings))
-            {
-                if (!OnlineManager.lobby.clientSettings[player].inGame)
                 {
-                    clientFlags += "L";
-                }
-                else
-                {
-                    clientFlags += currentClientSettings.readyForWin        ? "S" : "";
-                    clientFlags += currentClientSettings.readyForTransition ? "G" : "";
-                    clientFlags += currentClientSettings.isDead             ? "D" : "";
-                }
+                    if (!OnlineManager.lobby.clientSettings[player].inGame)
+                    {
+                        clientFlags += "L";
+                    }
+                    else
+                    {
+                        clientFlags += currentClientSettings.readyForWin        ? "S" : "";
+                        clientFlags += currentClientSettings.readyForTransition ? "G" : "";
+                        clientFlags += currentClientSettings.isDead             ? "D" : "";
+                    }
                 }
             }
             else if (OnlineManager.lobby.clientSettings.TryGetValue(player, out _) && OnlineManager.lobby.gameMode is ArenaOnlineGameMode)
@@ -508,7 +531,7 @@ namespace RainMeadow
                     {
                         clientFlags += "L";
                     }
-              }
+                }
             }
             return $" [{clientFlags}]";
         }
