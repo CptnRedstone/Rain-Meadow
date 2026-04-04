@@ -121,7 +121,7 @@ namespace RainMeadow.Arena.ArenaOnlineGameModes.TeamBattle
                     {
                         if (self.gameSession.game.world.rainCycle.speedUpToRain == false)
                         {
-                            RainMeadow.OLDDebug("Team Battle: Adding rain");
+                            RainMeadow.LogDebug("Team Battle: Adding rain");
                             self.gameSession.game.world.rainCycle.ArenaEndSessionRain();
                         }
                         return true;
@@ -488,7 +488,7 @@ namespace RainMeadow.Arena.ArenaOnlineGameModes.TeamBattle
                     == RainMeadow.Ext_SlugcatStatsName.OnlineOverseerSpectator
                 )
                 {
-                    RainMeadow.OLDDebug("Player spawned as Overseer");
+                    RainMeadow.LogDebug("Player spawned as Overseer");
                     if (arena.enableOverseer)
                     {
                         SpawnTransferableCreature(

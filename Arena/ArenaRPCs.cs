@@ -14,7 +14,7 @@ namespace RainMeadow
             var game = RWCustom.Custom.rainWorld.processManager.currentMainLoop as RainWorldGame;
             if (game == null)
             {
-                RainMeadow.OLDError("Arena: RainWorldGame is null!");
+                RainMeadow.LogFatal("Arena: RainWorldGame is null!");
                 return;
             }
             for (int j = 0; j < game.cameras[0].hud.parts.Count; j++)
@@ -85,13 +85,11 @@ namespace RainMeadow
             {
                 if (lobby == null)
                 {
-                    RainMeadow.OLDDebug("Could not start player");
+                    RainMeadow.LogFatal("Could not start player - Lobby is null");
                     return;
                 }
-                RainMeadow.OLDDebug("Starting game for player");
                 arena.isInGame = true; // state might be too late
                 arena.hasPermissionToRejoin = hasPermission;
-                RainMeadow.OLDDebug("Start game immediately");
                 lobby.StartGame();
             }
         }
@@ -103,7 +101,7 @@ namespace RainMeadow
                 var game = (RWCustom.Custom.rainWorld.processManager.currentMainLoop as RainWorldGame);
                 if (game == null)
                 {
-                    RainMeadow.OLDError("Arena: RainWorldGame is null!");
+                    RainMeadow.LogFatal("Arena: RainWorldGame is null!");
                     return;
                 }
                 game.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.MultiplayerResults);

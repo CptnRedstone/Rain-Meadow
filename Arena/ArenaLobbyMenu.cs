@@ -11,6 +11,7 @@ using Rewired.ControllerExtensions;
 using RainMeadow.Arena.ArenaOnlineGameModes.TeamBattle;
 namespace RainMeadow
 {
+    //TODO This is unused and should potentially be removed.
     public class ArenaLobbyMenu : MultiplayerMenu
     {
 
@@ -137,7 +138,7 @@ namespace RainMeadow
                 }
                 if (arena.isInGame && !pushClientIntoGame && !arena.clientWantsToLeaveGame && arena.hasPermissionToRejoin)
                 {
-                    RainMeadow.OLDDebug("Client was late but given permission to rejoin!");
+                    RainMeadow.LogDebug("Client was late but given permission to rejoin!");
                     pushClientIntoGame = true;
                     this.StartGame();
                 }
@@ -252,7 +253,7 @@ namespace RainMeadow
             RemoveExcessArenaObjects();
 
             this.currentGameType = this.nextGameType = ArenaSetup.GameTypeID.Competitive;
-            RainMeadow.OLDDebug(this.currentGameType);
+            RainMeadow.LogDebug(this.currentGameType);
             this.nextButton.signalText = "NEXTONLINEGAME";
             this.prevButton.signalText = "PREVONLINEGAME";
 
@@ -320,15 +321,15 @@ namespace RainMeadow
                 pages[0].subObjects.Add(slugcatButtons);
                 if (arena.playersInLobbyChoosingSlugs?.TryGetValue(OnlineManager.mePlayer.GetUniqueID(), out int existingValue) == true)
                 {
-                    RainMeadow.OLDDebug("Player already exists in dictionary");
-                    RainMeadow.OLDDebug("Current index" + existingValue.ToString());
+                    RainMeadow.LogDebug("Player already exists in dictionary");
+                    RainMeadow.LogDebug("Current index" + existingValue.ToString());
                     CurrentColorIndex = existingValue;
                     slugcatButtons.meButton!.SetNewSlugcat(SlugcatFromIndex, existingValue, ArenaImage);
                     (OnlineManager.lobby.clientSettings[OnlineManager.mePlayer].GetData<ArenaClientSettings>()).playingAs = SlugcatFromIndex;
                 }
                 else
                 {
-                    RainMeadow.OLDDebug("Player did NOT exist in dictionary");
+                    RainMeadow.LogDebug("Player did NOT exist in dictionary");
                     CurrentColorIndex = 0;
 
                 }
@@ -337,9 +338,9 @@ namespace RainMeadow
                     CurrentColorIndex = (CurrentColorIndex + 1) % ArenaHelpers.selectableSlugcats.Count;
                     slugcatButtons.meButton!.SetNewSlugcat(SlugcatFromIndex, CurrentColorIndex, ArenaImage);
                     PlaySound(SoundID.MENU_Button_Standard_Button_Pressed);
-                    RainMeadow.OLDDebug($"My ID: {OnlineManager.mePlayer.GetUniqueID()}");
+                    RainMeadow.LogDebug($"My ID: {OnlineManager.mePlayer.GetUniqueID()}");
                     (OnlineManager.lobby.clientSettings[OnlineManager.mePlayer].GetData<ArenaClientSettings>()).playingAs = SlugcatFromIndex;
-                    RainMeadow.OLDDebug($"My Slugcat: {OnlineManager.lobby.clientSettings[OnlineManager.mePlayer].GetData<ArenaClientSettings>().playingAs}");
+                    RainMeadow.LogDebug($"My Slugcat: {OnlineManager.lobby.clientSettings[OnlineManager.mePlayer].GetData<ArenaClientSettings>().playingAs}");
 
                 };
                 Action<SimplerButton> changeTeam = (_) =>
@@ -369,7 +370,7 @@ namespace RainMeadow
             {
                 BuildPlayerButtons();
                 List<OnlinePlayer> otherOnlinePlayers = OtherOnlinePlayers;
-                RainMeadow.OLDDebug($"Player count without me: {otherOnlinePlayers.Count}");
+                RainMeadow.LogDebug($"Player count without me: {otherOnlinePlayers.Count}");
                 slugcatButtons.otherOnlinePlayers = otherOnlinePlayers;
                 slugcatButtons.PopulatePage(slugcatButtons.CurrentOffset);
                 if (OnlineManager.lobby?.isOwner == true)
@@ -485,11 +486,11 @@ namespace RainMeadow
             if (arena.registeredGameModes.Keys.Contains(arena.currentGameMode))
             {
                 arena.externalArenaGameMode = arena.registeredGameModes.FirstOrDefault(kvp => kvp.Key == arena.currentGameMode).Value;
-                RainMeadow.OLDDebug("Playing GameMode: " + arena.externalArenaGameMode);
+                RainMeadow.LogDebug("Playing GameMode: " + arena.externalArenaGameMode);
             }
             else
             {
-                RainMeadow.OLDError("Could not find gamemode in list! Setting to FFA as a fallback");
+                RainMeadow.LogWarning("Could not find gamemode in list! Setting to FFA as a fallback");
                 arena.externalArenaGameMode = arena.registeredGameModes.FirstOrDefault(kvp => kvp.Key == FFA.FFAMode.value).Value;
             }
             arena.externalArenaGameMode.InitAsCustomGameType(this.arena, this.GetGameTypeSetup);
@@ -525,7 +526,7 @@ namespace RainMeadow
 
                     if (OnlineManager.players.Count > 1 && !arena.playersReadiedUp.list.Contains(OnlineManager.mePlayer.id))
                     {
-                        RainMeadow.OLDDebug("Arena: Notifying host I'm ready to go");
+                        RainMeadow.LogDebug("Arena: Notifying host I'm ready to go");
 
                         OnlineManager.lobby.owner.InvokeRPC(ArenaRPCs.Arena_NotifyLobbyReadyUp, OnlineManager.mePlayer);
                         this.playButton.menuLabel.text = this.Translate("Waiting for others...");
@@ -541,7 +542,7 @@ namespace RainMeadow
             {
                 if (!arena.isInGame)
                 {
-                    RainMeadow.OLDDebug("Host is not in game");
+                    RainMeadow.LogDebug("Host is not in game");
                     return;
                 }
                 else
@@ -555,7 +556,7 @@ namespace RainMeadow
                         }
                         else
                         {
-                            RainMeadow.OLDDebug("Arena: Notifying host I'm late");
+                            RainMeadow.LogDebug("Arena: Notifying host I'm late");
                             OnlineManager.lobby.owner.InvokeRPC(ArenaRPCs.Arena_AddPlayerWaiting, OnlineManager.mePlayer);
                             this.playButton.inactive = true;
                             this.playButton.buttonBehav.greyedOut = true;
@@ -571,7 +572,7 @@ namespace RainMeadow
                     // there's still a chance someone is queued and they're not ready by host yet
                     if (!arena.hasPermissionToRejoin && arena.playersLateWaitingInLobbyForNextRound.Contains(OnlineManager.mePlayer.inLobbyId))
                     {
-                        RainMeadow.OLDDebug("Arena: You've let the host know you're ready, they've acknowled the request, but the time is not right");
+                        RainMeadow.LogDebug("Arena: You've let the host know you're ready, they've acknowled the request, but the time is not right");
                         return;
                     }
 

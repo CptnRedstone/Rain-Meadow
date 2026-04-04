@@ -444,11 +444,9 @@ namespace RainMeadow
         {
             if (bannedSlugs.Contains(slugcatIndex))
             {
-                RainMeadow.OLDDebug($"Removing slugcat index: {slugcatIndex}");
                 bannedSlugs.Remove(slugcatIndex);
                 return false;
             }
-            RainMeadow.OLDDebug($"Adding slugcat index: {slugcatIndex}");
             bannedSlugs.Add(slugcatIndex);
             return true;
         }
@@ -565,7 +563,7 @@ namespace RainMeadow
             if (RoomSession.map.TryGetValue(absRoom, out var roomSession))
             {
                 // we go over all APOs in the room
-                RainMeadow.OLDDebug("Restarting level...");
+                RainMeadow.LogDebug("Restarting level...");
                 var entities = absRoom.entities;
                 for (int i = entities.Count - 1; i >= 0; i--)
                 {
@@ -578,7 +576,7 @@ namespace RainMeadow
                         if (!oe.isMine)
                         {
                             // not-online-aware removal
-                            RainMeadow.OLDDebug("removing remote entity from game " + oe);
+                            RainMeadow.LogDebug("removing remote entity from game " + oe);
                             oe.beingMoved = true;
 
                             if (oe.apo.realizedObject is Creature c && c.inShortcut)
@@ -599,7 +597,7 @@ namespace RainMeadow
                         }
                         else // mine leave the old online world elegantly
                         {
-                            RainMeadow.OLDDebug("removing my entity from online " + oe);
+                            RainMeadow.LogDebug("removing my entity from online " + oe);
                             oe.ExitResource(roomSession);
                             oe.ExitResource(roomSession.worldSession);
                         }
@@ -630,9 +628,6 @@ namespace RainMeadow
                         hasEnteredGameArea = true,
                     };
 
-                    RainMeadow.OLDDebug(
-                        $"Arena: Local Sitting Data: {newArenaPlayer.playerNumber}: {newArenaPlayer.playerClass}"
-                    );
                     AddOrInsertPlayerStats(this, newArenaPlayer, pl);
                     restartingGamePlayers.Add(pl);
                     arenaSitting.players.Add(newArenaPlayer);
@@ -661,9 +656,6 @@ namespace RainMeadow
                             playerClass = ArenaHelpers.GetArenaClientSettings(player)!.playingAs,
                             hasEnteredGameArea = true,
                         };
-                        RainMeadow.OLDDebug(
-                            $"Arena: Local Sitting Data: {newArenaPlayer.playerNumber}: {newArenaPlayer.playerClass}"
-                        );
                         AddOrInsertPlayerStats(this, newArenaPlayer, player);
                         arenaSitting.players.Add(newArenaPlayer);
                     }
@@ -789,12 +781,12 @@ namespace RainMeadow
 
         public void ReadFromStats(ArenaSitting.ArenaPlayer player, OnlinePlayer pl)
         {
+            RainMeadow.DebugMe();
             if (player == null || pl == null)
             {
-                RainMeadow.OLDDebug("ReadFromStats failed: player or pl is null!");
+                RainMeadow.LogError("ReadFromStats failed: player or pl is null!");
                 return;
             }
-            RainMeadow.OLDDebug(this);
             // Wins
             if (playerNumberWithWins.TryGetValue(pl.inLobbyId, out var wins))
             {
@@ -824,7 +816,7 @@ namespace RainMeadow
             player.allKills = ArenaHelpers.GetAllOnlinePlayerTrophies(this, player.playerNumber);
 
             // For the Arena tournament
-            RainMeadow.OLDInfo($"RMEL;{pl.id.DisplayName};{player.wins};{player.allKills.Count};{player.deaths};{player.totScore}");
+            RainMeadow.LogMessage($"RMEL;{pl.id.DisplayName};{player.wins};{player.allKills.Count};{player.deaths};{player.totScore}");
 
         }
 
@@ -882,24 +874,12 @@ namespace RainMeadow
                     }
 
 
-                    RainMeadow.OLDDebug(
-                        $"Player found witih stats: {newArenaPlayer} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Player found witih stats: {newArenaPlayer.wins} from online player: {pl} => NOW {arena.playerNumberWithWins[pl.inLobbyId]} "
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Player found witih score stats: {newArenaPlayer.score} from online player: {pl} {arena.playerNumberWithWins[pl.inLobbyId]} "
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Player found witih death stats: {newArenaPlayer.deaths} from online player: {pl} {arena.playerNumberWithWins[pl.inLobbyId]} "
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Player found witih totScore stats: {newArenaPlayer.totScore} from online player: {pl} {arena.playerNumberWithWins[pl.inLobbyId]}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Client read stats with allKills stats: {newArenaPlayer.allKills} from online player: {pl} {arena.playerNumberWithTrophies[pl.inLobbyId]}"
-                    );
+                    RainMeadow.LogDebug($"Player found witih stats: {newArenaPlayer} from online player: {pl}");
+                    RainMeadow.LogDebug($"Player found witih stats: {newArenaPlayer.wins} from online player: {pl} => NOW {arena.playerNumberWithWins[pl.inLobbyId]} ");
+                    RainMeadow.LogDebug($"Player found witih score stats: {newArenaPlayer.score} from online player: {pl} {arena.playerNumberWithWins[pl.inLobbyId]} ");
+                    RainMeadow.LogDebug($"Player found witih death stats: {newArenaPlayer.deaths} from online player: {pl} {arena.playerNumberWithWins[pl.inLobbyId]} ");
+                    RainMeadow.LogDebug($"Player found witih totScore stats: {newArenaPlayer.totScore} from online player: {pl} {arena.playerNumberWithWins[pl.inLobbyId]}");
+                    RainMeadow.LogDebug($"Client read stats with allKills stats: {newArenaPlayer.allKills} from online player: {pl} {arena.playerNumberWithTrophies[pl.inLobbyId]}");
                 }
                 else
                 {
@@ -908,32 +888,19 @@ namespace RainMeadow
                     newArenaPlayer.totScore = arena.playerTotScore[pl.inLobbyId];
                     newArenaPlayer.score = arena.playerNumberWithScore[pl.inLobbyId];
                     newArenaPlayer.roundKills = ArenaHelpers.GetRoundOnlinePlayerTrophies(
-    arena,
-    newArenaPlayer.playerNumber
-);
+                    arena,
+                    newArenaPlayer.playerNumber);
                     newArenaPlayer.allKills = ArenaHelpers.GetAllOnlinePlayerTrophies(
                         arena,
                         newArenaPlayer.playerNumber
                     );
 
-                    RainMeadow.OLDDebug(
-                        $"Client read stats: {newArenaPlayer} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Client read stats witih stats: {newArenaPlayer.wins} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Client read stats witih score stats: {newArenaPlayer.score} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Client read stats witih death stats: {newArenaPlayer.deaths} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Client read stats witih totScore stats: {newArenaPlayer.totScore} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"Client read stats with allKills stats: {newArenaPlayer.allKills} from online player: {pl}"
-                    );
+                    RainMeadow.LogDebug($"Client read stats: {newArenaPlayer} from online player: {pl}");
+                    RainMeadow.LogDebug($"Client read stats witih stats: {newArenaPlayer.wins} from online player: {pl}");
+                    RainMeadow.LogDebug($"Client read stats witih score stats: {newArenaPlayer.score} from online player: {pl}");
+                    RainMeadow.LogDebug($"Client read stats witih death stats: {newArenaPlayer.deaths} from online player: {pl}");
+                    RainMeadow.LogDebug($"Client read stats witih totScore stats: {newArenaPlayer.totScore} from online player: {pl}");
+                    RainMeadow.LogDebug($"Client read stats with allKills stats: {newArenaPlayer.allKills} from online player: {pl}");
                 }
             }
             else
@@ -952,24 +919,12 @@ namespace RainMeadow
                         pl.inLobbyId,
                         ArenaHelpers.GetRoundPlayerTrophies(arena, newArenaPlayer)
                     );
-                    RainMeadow.OLDDebug(
-                        $"New Player assigned witih stats: {newArenaPlayer} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"New Player assigned witih stats: {newArenaPlayer.wins} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"New Player assigned witih score stats: {newArenaPlayer.score} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"New Player assigned witih death stats: {newArenaPlayer.deaths} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"New Player assigned witih totScore stats: {newArenaPlayer.totScore} from online player: {pl}"
-                    );
-                    RainMeadow.OLDDebug(
-                        $"New Player assigned witih allKills stats: {newArenaPlayer.allKills} from online player: {pl}"
-                    );
+                    RainMeadow.LogDebug($"New Player assigned witih stats: {newArenaPlayer} from online player: {pl}");
+                    RainMeadow.LogDebug($"New Player assigned witih stats: {newArenaPlayer.wins} from online player: {pl}");
+                    RainMeadow.LogDebug($"New Player assigned witih score stats: {newArenaPlayer.score} from online player: {pl}");
+                    RainMeadow.LogDebug($"New Player assigned witih death stats: {newArenaPlayer.deaths} from online player: {pl}");
+                    RainMeadow.LogDebug($"New Player assigned witih totScore stats: {newArenaPlayer.totScore} from online player: {pl}");
+                    RainMeadow.LogDebug($"New Player assigned witih allKills stats: {newArenaPlayer.allKills} from online player: {pl}");
                 }
             }
         }
@@ -1254,7 +1209,7 @@ namespace RainMeadow
         {
             if (oc.TryGetData<SlugcatCustomization>(out var data))
             {
-                RainMeadow.OLDDebug(oc);
+                RainMeadow.LogDebug(oc);
                 RainMeadow.creatureCustomizations.GetValue(creature, (c) => data);
             }
         }

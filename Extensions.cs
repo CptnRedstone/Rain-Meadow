@@ -70,7 +70,7 @@ namespace RainMeadow
             if (!GetOnlineObject(apo, out var oe)) return true;
             if (!oe.isMine && !oe.beingMoved && (newCoord is null || oe.roomSession is null || oe.roomSession.absroom.index != newCoord.Value.room))
             {
-                if (!quiet) RainMeadow.OLDError($"Remote entity trying to move: {oe} at {oe.roomSession} {Environment.StackTrace}");
+                if (!quiet) RainMeadow.LogError($"Remote entity trying to move: {oe} at {oe.roomSession} {Environment.StackTrace}");
                 return false;
             }
             return true;
@@ -108,9 +108,10 @@ namespace RainMeadow
                 {
                     try {
                         apo.ChangeRooms(newCoord);
-                    } catch (Exception except) {
-                        RainMeadow.OLDError(except);
-                        RainMeadow.OLDDebug("Manually setting room");
+                    } catch (Exception except)
+                    {
+                        RainMeadow.LogError("Error manually setting room:");
+                        RainMeadow.LogFatal(except);
                         apo.world?.GetAbstractRoom(apo.pos)?.RemoveEntity(apo);
                         apo.world?.GetAbstractRoom(newCoord)?.AddEntity(apo);
                     }
@@ -151,7 +152,7 @@ namespace RainMeadow
             if (RemoveFromShortcuts(ref handler.borderTravelVessels, creature, room)) found = true;
             if (RemoveFromShortcuts(ref handler.betweenRoomsWaitingLobby, creature, room)) found = true;
             
-            if (!found) RainMeadow.OLDDebug("not found");
+            if (!found) RainMeadow.LogDebug("not found");
             return found;
         }
 
@@ -370,7 +371,7 @@ namespace RainMeadow
             List<MenuObject> WorkingObjects = menuObjects.Where(MenuObject => MenuObject != null).ToList(); //If our input list contains null entries (such as uninitialized), just remove them and continue gracefully.
             if (WorkingObjects.Count < 2)
             {
-                RainMeadow.OLDWarn(" Tried to keybind " + WorkingObjects.Count + " UI element(s) to each other, cancelling operation. Is the list not yet populated?");
+                RainMeadow.LogWarning(" Tried to keybind " + WorkingObjects.Count + " UI element(s) to each other, cancelling operation. Is the list not yet populated?");
                 return;
             }
             if (reverseList)
@@ -392,8 +393,8 @@ namespace RainMeadow
             //Clean up the lists
             List<MenuObject> ListA = fromObjectsList.Where(MenuObject => MenuObject != null).ToList(); //If our input lists contain null entries (such as uninitialized), just remove them and continue as if they don't exist.
             List<MenuObject> ListB =   toObjectsList.Where(MenuObject => MenuObject != null).ToList();
-            if (ListA.Count < 1) { RainMeadow.OLDWarn(" Tried to UI keybind to an empty or null fromObjects, cancelling operation. Is the list not yet populated?"); return; }
-            if (ListB.Count < 1) { RainMeadow.OLDWarn(" Tried to UI keybind to an empty or null toObjects, cancelling operation. Is the list not yet populated?");   return; }
+            if (ListA.Count < 1) { RainMeadow.LogWarning(" Tried to UI keybind to an empty or null fromObjects, cancelling operation. Is the list not yet populated?"); return; }
+            if (ListB.Count < 1) { RainMeadow.LogWarning(" Tried to UI keybind to an empty or null toObjects, cancelling operation. Is the list not yet populated?");   return; }
             if (reverseFromList) { ListA.Reverse(); }
             if (reverseToList)   { ListB.Reverse(); }
             if (swapLists) { (ListA, ListB) = (ListB, ListA); }
@@ -455,7 +456,7 @@ namespace RainMeadow
             List<List<MenuObject>> WorkingLists = listList.Where(List => List != null).ToList(); //If our input list contains null entries (such as uninitialized), just remove them and continue gracefully.
             if (WorkingLists.Count < 2)
             {
-                RainMeadow.OLDWarn(" Tried to keybind stitch " + listList.Count + " UI element list(s) to each other, cancelling operation. Is the list not yet populated?");
+                RainMeadow.LogWarning(" Tried to keybind stitch " + listList.Count + " UI element list(s) to each other, cancelling operation. Is the list not yet populated?");
                 return;
             }
             if (reverseListList)
