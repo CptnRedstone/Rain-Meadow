@@ -1,4 +1,6 @@
-WARN MODDERS OF LOG FUNCTINO NAME CHANGES
+## General
+### Modders
+- ⚠️ BREAKING: ``RainMeadow.Logging`` logging functions have been reworked to match their BepInEx counterparts. For instance, ``Debug()`` is now ``LogDebug()`` and prints as Debug instead of Info. All BepInEx channels now have a counterpart.
 
 # Release 1.13.1
 ## General
