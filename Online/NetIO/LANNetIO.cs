@@ -49,7 +49,7 @@ namespace RainMeadow
                 var player = (MatchmakingManager.instances[MatchmakingManager.MatchMakingDomain.LAN] as LANMatchmakingManager).GetPlayerLAN(point);
                 if (player == null)
                 {
-                    RainMeadow.Debug("Player not found! Instantiating new at: " + point);
+                    RainMeadow.OLDDebug("Player not found! Instantiating new at: " + point);
                     var playerid = new LANMatchmakingManager.LANPlayerId(point);
                     player = new OnlinePlayer(playerid);
                 }
@@ -147,7 +147,7 @@ namespace RainMeadow
                         var player = (MatchmakingManager.instances[MatchmakingManager.MatchMakingDomain.LAN] as LANMatchmakingManager).GetPlayerLAN(iPEndPoint);
                         if (player == null)
                         {
-                            RainMeadow.Debug("Player not found! Instantiating new at: " + iPEndPoint.Port);
+                            RainMeadow.OLDDebug("Player not found! Instantiating new at: " + iPEndPoint.Port);
                             var playerid = new LANMatchmakingManager.LANPlayerId(iPEndPoint);
                             player = new OnlinePlayer(playerid);
                         }
@@ -157,7 +157,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                     OnlineManager.serializer.EndRead();
                 }
             }

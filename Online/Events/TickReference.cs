@@ -23,7 +23,7 @@ namespace RainMeadow
         public float TimeSinceTick()
         {
             var player = OnlineManager.lobby.PlayerFromId(fromPlayer);
-            if (player == null) { RainMeadow.Error("Player not found: " + fromPlayer); return 0; }
+            if (player == null) { RainMeadow.OLDError("Player not found: " + fromPlayer); return 0; }
             return (player.tick - tick) / (float)OnlineManager.instance.framesPerSecond;
         }
 

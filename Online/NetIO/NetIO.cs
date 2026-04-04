@@ -23,7 +23,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 OnlineManager.serializer.EndWrite();
                 throw;
             }
@@ -38,7 +38,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
 

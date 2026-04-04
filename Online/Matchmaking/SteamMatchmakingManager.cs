@@ -19,7 +19,7 @@ namespace RainMeadow
             {
                 if (bool.TryParse(SteamMatchmaking.GetLobbyData(iD, MatchmakingManager.PINNED_KEY), out pinned))
                 {
-                    RainMeadow.Debug("Successfully read pinned lobby data");
+                    RainMeadow.OLDDebug("Successfully read pinned lobby data");
                 }
             }
 
@@ -151,7 +151,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -245,7 +245,7 @@ namespace RainMeadow
             else
             {
                 LeaveLobby();
-                RainMeadow.Debug("Failed to join local game. Wrong Password");
+                RainMeadow.OLDDebug("Failed to join local game. Wrong Password");
                 OnLobbyJoinedEvent(false, Utils.Translate("Wrong password!"));
             }
         }
@@ -254,11 +254,11 @@ namespace RainMeadow
         {
             if (args.Length >= 1 && ulong.TryParse(args[0], out var id))
             {
-                RainMeadow.Debug($"joining lobby with id {id} from the command line");
+                RainMeadow.OLDDebug($"joining lobby with id {id} from the command line");
                 RequestJoinLobby(new SteamLobbyInfo(new CSteamID(id), "", "", 0, false, 4), args.Length > 1 ? args[1] : null);
             }
             else
-                RainMeadow.Error($"failed to parse id: {string.Join(" ", args)}");
+                RainMeadow.OLDError($"failed to parse id: {string.Join(" ", args)}");
         }
 
         private static string creatingWithMode;
@@ -271,7 +271,7 @@ namespace RainMeadow
                 RainMeadow.DebugMe();
                 if (!bIOFailure && param.m_eResult == EResult.k_EResultOK)
                 {
-                    RainMeadow.Debug("success");
+                    RainMeadow.OLDDebug("success");
                     lobbyID = new CSteamID(param.m_ulSteamIDLobby);
                     SteamMatchmaking.SetLobbyData(lobbyID, CLIENT_KEY, CLIENT_VAL);
                     SteamMatchmaking.SetLobbyData(lobbyID, NAME_KEY, SteamFriends.GetPersonaName());
@@ -287,7 +287,7 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug("failure, error code is " + param.m_eResult);
+                    RainMeadow.OLDDebug("failure, error code is " + param.m_eResult);
                     OnlineManager.lobby = null;
                     lobbyID = default;
                     OnLobbyJoinedEvent(false, param.m_eResult.ToString());
@@ -295,7 +295,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -306,7 +306,7 @@ namespace RainMeadow
             {
                 if (!bIOFailure)
                 {
-                    RainMeadow.Debug("success");
+                    RainMeadow.OLDDebug("success");
                     lobbyID = new CSteamID(param.m_ulSteamIDLobby);
                     UpdatePlayersList();
                     var mode = new OnlineGameMode.OnlineGameModeType(SteamMatchmaking.GetLobbyData(lobbyID, MODE_KEY));
@@ -322,14 +322,14 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug("failure");
+                    RainMeadow.OLDDebug("failure");
                     OnlineManager.lobby = null;
                     OnLobbyJoinedEvent(false, ((EChatRoomEnterResponse)param.m_EChatRoomEnterResponse).ToString());
                 }
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -365,7 +365,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -374,7 +374,7 @@ namespace RainMeadow
             byte[] msgBytes = System.Text.Encoding.UTF8.GetBytes(message);
             bool outputted = SteamMatchmaking.SendLobbyChatMsg(lobbyID, msgBytes, msgBytes.Length);
 
-            if (!outputted) RainMeadow.Debug($"Failed to send message: {msgBytes} {msgBytes.Length}");
+            if (!outputted) RainMeadow.OLDDebug($"Failed to send message: {msgBytes} {msgBytes.Length}");
         }
         
         private void LobbyChatMessageReceived(LobbyChatMsg_t callback)
@@ -384,13 +384,13 @@ namespace RainMeadow
             int msgDataLength = SteamMatchmaking.GetLobbyChatEntry((CSteamID)callback.m_ulSteamIDLobby, (int)callback.m_iChatID, out senderID, msgData, msgData.Length, out EChatEntryType _);
 
             string message = System.Text.Encoding.UTF8.GetString(msgData, 0, msgDataLength);
-            RainMeadow.Debug($"Message from {SteamFriends.GetFriendPersonaName(senderID)}: {message}");
+            RainMeadow.OLDDebug($"Message from {SteamFriends.GetFriendPersonaName(senderID)}: {message}");
             RecieveChatMessage(GetPlayerSteam(senderID.m_SteamID), message);
         }
 
         private void PlayerJoined(CSteamID p)
         {
-            RainMeadow.Debug($"PlayerJoined:{p} - {SteamFriends.GetFriendPersonaName(p)}");
+            RainMeadow.OLDDebug($"PlayerJoined:{p} - {SteamFriends.GetFriendPersonaName(p)}");
             if (p == me) return;
             SteamFriends.RequestUserInformation(p, true);
             var player = new OnlinePlayer(new SteamPlayerId(p));
@@ -401,7 +401,7 @@ namespace RainMeadow
 
         private void PlayerLeft(CSteamID p)
         {
-            RainMeadow.Debug($"{p} - {SteamFriends.GetFriendPersonaName(p)}");
+            RainMeadow.OLDDebug($"{p} - {SteamFriends.GetFriendPersonaName(p)}");
 
             if (OnlineManager.players.FirstOrDefault(op => (op.id as SteamPlayerId).steamID == p) is OnlinePlayer player)
             {
@@ -413,15 +413,15 @@ namespace RainMeadow
         {
             try
             {
-                RainMeadow.Debug($"{param.m_ulSteamIDLobby} : {param.m_ulSteamIDMember} : {param.m_bSuccess}");
+                RainMeadow.OLDDebug($"{param.m_ulSteamIDLobby} : {param.m_ulSteamIDMember} : {param.m_bSuccess}");
                 if (OnlineManager.lobby == null)
                 {
-                    RainMeadow.Error("got lobby event with no lobby!");
+                    RainMeadow.OLDError("got lobby event with no lobby!");
                     return;
                 }
                 if ((CSteamID)param.m_ulSteamIDLobby != lobbyID)
                 {
-                    RainMeadow.Error("got lobby event for wrong lobby!");
+                    RainMeadow.OLDError("got lobby event for wrong lobby!");
                     return;
                 }
                 if (param.m_bSuccess > 0)
@@ -435,7 +435,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -444,16 +444,16 @@ namespace RainMeadow
         {
             try
             {
-                RainMeadow.Debug($"{param.m_ulSteamIDLobby} : {param.m_ulSteamIDUserChanged} : {param.m_ulSteamIDMakingChange} : {param.m_rgfChatMemberStateChange}");
+                RainMeadow.OLDDebug($"{param.m_ulSteamIDLobby} : {param.m_ulSteamIDUserChanged} : {param.m_ulSteamIDMakingChange} : {param.m_rgfChatMemberStateChange}");
                 if (OnlineManager.lobby == null)
                 {
-                    RainMeadow.Error("got lobby event with no lobby!");
+                    RainMeadow.OLDError("got lobby event with no lobby!");
                     return;
                 }
 
                 if ((CSteamID)param.m_ulSteamIDLobby != lobbyID)
                 {
-                    RainMeadow.Error("got lobby event for wrong lobby!");
+                    RainMeadow.OLDError("got lobby event for wrong lobby!");
                     return;
                 }
 
@@ -461,7 +461,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -471,12 +471,12 @@ namespace RainMeadow
             try
             {
                 var id = new CSteamID(param.m_identityRemote.GetSteamID64());
-                RainMeadow.Debug("session request from " + id);
+                RainMeadow.OLDDebug("session request from " + id);
                 if (OnlineManager.lobby != null)
                 {
                     if (OnlineManager.players.FirstOrDefault(op => (op.id as SteamPlayerId).steamID == id) is OnlinePlayer p)
                     {
-                        RainMeadow.Debug("accepted session from " + p.id.name);
+                        RainMeadow.OLDDebug("accepted session from " + p.id.name);
                         SteamNetworkingMessages.AcceptSessionWithUser(ref param.m_identityRemote);
                         return;
                     }
@@ -484,7 +484,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -500,11 +500,11 @@ namespace RainMeadow
             {
                 if (param.m_steamIDLobby.m_SteamID == lobbyID.m_SteamID)
                 {
-                    RainMeadow.Debug("trying to rejoin same lobby, ignoring, id: " + param.m_steamIDLobby);
+                    RainMeadow.OLDDebug("trying to rejoin same lobby, ignoring, id: " + param.m_steamIDLobby);
                     return;
                 }
 
-                RainMeadow.Debug("trying to join lobby from steam with id: " + param.m_steamIDLobby);
+                RainMeadow.OLDDebug("trying to join lobby from steam with id: " + param.m_steamIDLobby);
 
                 if (lobbyID != default)
                 {
@@ -518,7 +518,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }

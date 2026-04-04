@@ -74,7 +74,7 @@ namespace RainMeadow
             switch (modifyOperation)
             {
                 case Operation.Add:
-                    RainMeadow.Debug("Adding players...\n\t" + string.Join<OnlinePlayer>("\n\t", players));
+                    RainMeadow.OLDDebug("Adding players...\n\t" + string.Join<OnlinePlayer>("\n\t", players));
                     for (int i = 0; i < players.Length; i++)
                     {
                         if (((LANMatchmakingManager.LANPlayerId)players[i].id).isLoopback()) {
@@ -90,7 +90,7 @@ namespace RainMeadow
                     break;
 
                 case Operation.Remove:
-                    RainMeadow.Debug("Removing players...\n\t" + string.Join<OnlinePlayer>("\n\t", players));
+                    RainMeadow.OLDDebug("Removing players...\n\t" + string.Join<OnlinePlayer>("\n\t", players));
                     for (int i = 0; i < players.Length; i++)
                     {
                         (MatchmakingManager.instances[MatchmakingManager.MatchMakingDomain.LAN] as LANMatchmakingManager).RemoveLANPlayer(players[i]);

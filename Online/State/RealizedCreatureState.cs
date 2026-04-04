@@ -56,7 +56,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if (onlineEntity is not OnlineCreature onlineCreature) { RainMeadow.Error("target not onlinecreature: " + onlineEntity); return; }
+            if (onlineEntity is not OnlineCreature onlineCreature) { RainMeadow.OLDError("target not onlinecreature: " + onlineEntity); return; }
             if (onlineCreature.apo.realizedObject is not Creature creature) { RainMeadow.Trace("target not realized: " + onlineEntity); return; }
 
             creature.stun = stun;

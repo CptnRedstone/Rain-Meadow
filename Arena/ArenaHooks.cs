@@ -203,7 +203,7 @@ namespace RainMeadow
             }
             catch
             {
-                RainMeadow.Error("Could not find PlayerConsideredDead in PlayerSpecificMultiplayerHud.Update");
+                RainMeadow.LogFatal("Could not find PlayerConsideredDead in PlayerSpecificMultiplayerHud.Update");
             }
         }
 
@@ -318,7 +318,7 @@ namespace RainMeadow
             catch (Exception e)
             {
 
-                RainMeadow.Error($"IL_ExitManager_Update missed a patch!: {e}");
+                RainMeadow.LogFatal($"IL_ExitManager_Update missed a patch!: {e}");
             }
         }
         public void SandboxGameSession_SpawnEntity(On.SandboxGameSession.orig_SpawnEntity orig, SandboxGameSession self, ArenaBehaviors.SandboxEditor.PlacedIconData placedIconData)
@@ -389,7 +389,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                Error(e);
+                LogFatal(e);
             }
         }
 
@@ -686,7 +686,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                LogFatal(ex);
             }
         }
 
@@ -726,7 +726,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                LogFatal(ex);
             }
         }
 
@@ -784,7 +784,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                LogFatal(ex);
             }
         }
 
@@ -1167,7 +1167,6 @@ namespace RainMeadow
                 cursor.EmitDelegate(
                     (MenuIllustration illus, MenuScene self) =>
                     {
-                        Debug(self.menu is ArenaOnlineLobbyMenu);
                         if (self.menu is ArenaOnlineLobbyMenu)
                         {
                             illus.sprite.alpha = 0.0f;
@@ -1180,7 +1179,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.LogFatal(except);
             }
         }
 
@@ -1377,7 +1376,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                LogFatal(ex);
             }
         }
 
@@ -1400,7 +1399,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                LogFatal(ex);
             }
         }
 
@@ -1515,15 +1514,11 @@ namespace RainMeadow
                         i => i.MatchCallOrCallvirt<Creature>(nameof(Creature.Violence))
                     );
                     c.MarkLabel(skip);
-
-                    RainMeadow.Debug("Gourm Stomp RPC set with " + original.DeclaringType);
                 }
             }
             catch (Exception e)
             {
-                RainMeadow.Debug(
-                    "Gourm Stomp RPC with errors. - Type: " + original.DeclaringType + " - " + e
-                );
+                RainMeadow.LogFatal("Gourm Stomp RPC with errors. - Type: " + original.DeclaringType + " - " + e);
             }
         }
 
@@ -1603,9 +1598,7 @@ namespace RainMeadow
                                 }
                                 else
                                 {
-                                    RainMeadow.Error(
-                                        "ArenaHelpers.FindOnlinePlayerByFakePlayerNumber returned null."
-                                    );
+                                    RainMeadow.LogError("ArenaHelpers.FindOnlinePlayerByFakePlayerNumber returned null.");
                                 }
                             }
                         }
@@ -1769,7 +1762,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.LogFatal(except);
             }
         }
 
@@ -1865,7 +1858,7 @@ namespace RainMeadow
                 cursor.EmitDelegate(delegate () { return isArenaMode(out _); });
                 cursor.Emit(OpCodes.Brtrue, enableDevTools);
             }
-            catch (Exception ex) { RainMeadow.Error(ex); }
+            catch (Exception ex) { RainMeadow.LogFatal(ex); }
         }
 
         public bool MultiplayerUnlocks_IsCreatureUnlockedForLevelSpawn(
@@ -1958,7 +1951,7 @@ namespace RainMeadow
                         )
                     )
                     {
-                        RainMeadow.Error("Could not get PlayerLandSpear player");
+                        RainMeadow.LogError("Could not get PlayerLandSpear player");
                     }
                     var onlineArenaPlayer = ArenaHelpers.FindOnlinePlayerByFakePlayerNumber(
                         arena,
@@ -2109,11 +2102,6 @@ namespace RainMeadow
                     {
                         if (selectable is Menu.MultipleChoiceArray.MultipleChoiceButton)
                         {
-                            RainMeadow.Debug(
-                                (selectable as Menu.MultipleChoiceArray.MultipleChoiceButton)
-                                    .multipleChoiceArray
-                                    .IDString
-                            );
                             var onlineArrayMutliChoice = (
                                 selectable as Menu.MultipleChoiceArray.MultipleChoiceButton
                             )
@@ -2170,7 +2158,6 @@ namespace RainMeadow
                 {
                     if (arena.onlineArenaSettingsInterfaceMultiChoice.ContainsKey(array.IDString))
                     {
-                        RainMeadow.Debug($"Setting {array.IDString} to value {i}");
                         arena.onlineArenaSettingsInterfaceMultiChoice[array.IDString] = i;
                     }
                     foreach (var player in OnlineManager.players)
@@ -2209,7 +2196,6 @@ namespace RainMeadow
                 {
                     if (arena.onlineArenaSettingsInterfaceeBool.ContainsKey(box.IDString))
                     {
-                        RainMeadow.Debug($"Setting {box.IDString} to value {c}");
                         arena.onlineArenaSettingsInterfaceeBool[box.IDString] = c;
                     }
                     foreach (var player in OnlineManager.players)
@@ -2297,10 +2283,6 @@ namespace RainMeadow
                 }
                 orig(self, levelName);
                 arena.playList = self.levelsPlaylist.PlayList;
-                foreach (var i in arena.playList)
-                {
-                    RainMeadow.Debug(i);
-                }
             }
             else
             {
@@ -2335,7 +2317,7 @@ namespace RainMeadow
                 );
                 if (onlinePlayer == null)
                 {
-                    RainMeadow.Error("Error getting online player from fake player number!");
+                    RainMeadow.LogError("Error getting online player from fake player number!");
                     return false;
                 }
                 for (int i = 0; i < self.exitManager.playersInDens.Count; i++)
@@ -2347,12 +2329,12 @@ namespace RainMeadow
                         )
                     )
                     {
-                        RainMeadow.Error("Error getting online AC from playersInDens!");
+                        RainMeadow.LogError("Error getting online AC from playersInDens!");
                         return false;
                     }
                     if (onlineAC.owner == onlinePlayer)
                     {
-                        RainMeadow.Debug("Found player in den match");
+                        RainMeadow.LogInfo("Found player in den match");
                         return true;
                     }
                 }
@@ -2361,12 +2343,12 @@ namespace RainMeadow
                 {
                     if (!OnlinePhysicalObject.map.TryGetValue(self.Players[j], out var onlineAC))
                     {
-                        RainMeadow.Error("Error getting online AC from players!");
+                        RainMeadow.LogError("Error getting online AC from players!");
                         return false;
                     }
                     if (onlineAC.owner == onlinePlayer)
                     {
-                        RainMeadow.Debug("Found Player state end session");
+                        RainMeadow.LogInfo("Found Player state end session");
                         return self.Players[j].state.alive;
                     }
                 }
@@ -2516,9 +2498,7 @@ namespace RainMeadow
                     }
                     else
                     {
-                        RainMeadow.Debug(
-                            "Index out of bounds for entranceSprites or entranceSprites[i, 0] is null."
-                        );
+                        RainMeadow.LogDebug("Index out of bounds for entranceSprites or entranceSprites[i, 0] is null.");
                     }
                 }
             }
@@ -2539,7 +2519,7 @@ namespace RainMeadow
                     x => x.MatchCall(typeof(ExtEnum<ArenaSetup.GameTypeID>).GetMethod("op_Equality")));
                 cursor.EmitDelegate(delegate (bool origIsChallenge) { return origIsChallenge || isArenaMode(out var _); });
             }
-            catch (Exception ex) { RainMeadow.Error(ex); }
+            catch (Exception ex) { RainMeadow.LogFatal(ex); }
         }
 
         public void ArenaGameSession_Killing(
@@ -2677,10 +2657,10 @@ namespace RainMeadow
                         }
                     }
                     else
-                        RainMeadow.Error("no client settings");
+                        RainMeadow.LogError("no client settings");
                 }
                 else
-                    RainMeadow.Error("no online object");
+                    RainMeadow.LogError("no online object");
                 if (player.playerClass == null)
                     player.playerClass = SlugcatStats.Name.White; // prevent crash from null
 
@@ -2688,7 +2668,7 @@ namespace RainMeadow
 
                 if (self.backgroundRect == null)
                 {
-                    Debug("Rectangle went missing. Bringing it back");
+                    LogDebug("Rectangle went missing. Bringing it back");
                     self.backgroundRect = new(
                         menu,
                         self,
@@ -2828,7 +2808,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                LogFatal(ex);
             }
         }
 
@@ -2838,13 +2818,13 @@ namespace RainMeadow
             {
                 if (self == null)
                 {
-                    RainMeadow.Debug("Spear is null");
+                    RainMeadow.LogError("Spear is null"); //TODO Is this necessary/reachable?
                     return;
                 }
 
                 if (self.mode == Weapon.Mode.StuckInCreature && self.stuckInObject == null)
                 {
-                    RainMeadow.Debug("Creature fell off map with spear in them");
+                    RainMeadow.LogDebug("Creature fell off map with spear in them");
                     return;
                 }
 
@@ -2944,7 +2924,7 @@ namespace RainMeadow
             {
                 if (OnlineManager.lobby.isOwner)
                 {
-                    RainMeadow.Debug("Spawning creature");
+                    RainMeadow.LogDebug("Spawning creature");
 
                     arena.externalArenaGameMode.ArenaCreatureSpawner_SpawnCreatures(
                         arena,
@@ -2959,7 +2939,7 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug("Prevented client from spawning excess creatures");
+                    RainMeadow.LogDebug("Prevented client from spawning excess creatures");
                 }
             }
             else
@@ -2977,13 +2957,13 @@ namespace RainMeadow
             {
                 if (OnlineManager.lobby.isOwner)
                 {
-                    RainMeadow.Debug("Spawning creature");
+                    RainMeadow.LogDebug("Spawning creature");
 
                     orig(self);
                 }
                 else
                 {
-                    RainMeadow.Debug("Prevented client from spawning excess creatures");
+                    RainMeadow.LogDebug("Prevented client from spawning excess creatures");
                 }
             }
             else
@@ -3077,13 +3057,13 @@ namespace RainMeadow
                         )
                     )
                     {
-                        Error("Error getting online vessel");
+                        LogError("Error getting online vessel");
                         return false;
                     }
 
                     if (!RoomSession.map.TryGetValue(self.room.abstractRoom, out var roomSession))
                     {
-                        Error("Error getting exit manager room");
+                        LogError("Error getting exit manager room");
                         return false;
                     }
 

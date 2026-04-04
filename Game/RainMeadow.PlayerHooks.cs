@@ -233,7 +233,7 @@ public partial class RainMeadow
         }
         catch (Exception ex)
         {
-            Error(ex);
+            OLDError(ex);
         }
     }
 
@@ -261,7 +261,7 @@ public partial class RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                OLDError(ex);
             }
         }
     
@@ -296,7 +296,7 @@ public partial class RainMeadow
         }
         catch (Exception ex)
         {
-            Error(ex);
+            OLDError(ex);
         }
     }
     private void Player_RippleSpawnInteractions(ILContext il)
@@ -325,7 +325,7 @@ public partial class RainMeadow
         }
         catch (Exception ex)
         {
-            Error(ex);
+            OLDError(ex);
         }
     }
     delegate bool orig_get_Malnourished(Player self);
@@ -409,7 +409,7 @@ public partial class RainMeadow
         }
         catch (Exception except)
         {
-            RainMeadow.Error(except);
+            RainMeadow.OLDError(except);
         }
 
     }
@@ -550,15 +550,15 @@ public partial class RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Error($"No comparison implementation for {comparison.Name}");
+                    RainMeadow.OLDError($"No comparison implementation for {comparison.Name}");
                 }
             }
 
-            RainMeadow.Debug($"Overriden {overriden_count} comparisons in {ctx.Method.Name}");
+            RainMeadow.OLDDebug($"Overriden {overriden_count} comparisons in {ctx.Method.Name}");
         }
         catch (Exception except)
         {
-            RainMeadow.Error(except);
+            RainMeadow.OLDError(except);
         }
 
 
@@ -752,13 +752,13 @@ public partial class RainMeadow
                         var myobj = self.abstractCreature.GetOnlineCreature();
                         if (myobj is null)
                         {
-                            RainMeadow.Error($"{self.abstractCreature} is trying to backpack but it has no online presence.");
+                            RainMeadow.OLDError($"{self.abstractCreature} is trying to backpack but it has no online presence.");
                             continue;
                         }
                         var otherobj = other.abstractCreature.GetOnlineCreature();
                         if (otherobj is null)
                         {
-                            RainMeadow.Error($"{self.abstractCreature} is trying to backpack {other.abstractCreature} but it has no online presence.");
+                            RainMeadow.OLDError($"{self.abstractCreature} is trying to backpack {other.abstractCreature} but it has no online presence.");
                             continue;
                         }
                         otherobj.owner.InvokeRPC(otherobj.HopOnBack, myobj);
@@ -983,7 +983,7 @@ public partial class RainMeadow
                                 }
                                 catch (Exception except)
                                 {
-                                    RainMeadow.Debug(except);
+                                    RainMeadow.OLDDebug(except);
                                 }
                             }
                         }
@@ -1393,7 +1393,7 @@ public partial class RainMeadow
             }
             catch (System.Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
             }
         }
         else
@@ -1563,7 +1563,7 @@ public partial class RainMeadow
 
         if (!OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var onlineEntity))
         {
-            RainMeadow.Error("Player doesn't have OnlineEntity counterpart!!");
+            RainMeadow.OLDError("Player doesn't have OnlineEntity counterpart!!");
             orig(self);
             return;
         }
@@ -1611,7 +1611,7 @@ public partial class RainMeadow
 
         if (!OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var onlineEntity))
         {
-            RainMeadow.Error("Player doesn't have OnlineEntity counterpart!!");
+            RainMeadow.OLDError("Player doesn't have OnlineEntity counterpart!!");
             orig(self, add);
             return;
         }
@@ -1659,7 +1659,7 @@ public partial class RainMeadow
 
         if (!OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var onlineEntity))
         {
-            RainMeadow.Error("Player doesn't have OnlineEntity counterpart!!");
+            RainMeadow.OLDError("Player doesn't have OnlineEntity counterpart!!");
             orig(self, add);
             return;
         }
@@ -1730,7 +1730,7 @@ public partial class RainMeadow
             {
                 self.state = new PlayerState(self, 0, Ext_SlugcatStatsName.OnlineSessionPlayer, false);
             }
-            if (self.state == null) { Error($"Missing state for {self} of type {creatureTemplate}"); }
+            if (self.state == null) { OLDError($"Missing state for {self} of type {creatureTemplate}"); }
         }
     }
 
@@ -1762,7 +1762,7 @@ public partial class RainMeadow
             }
             else if (oe is null)
             {
-                RainMeadow.Error("player entity not found for " + self + " " + self.abstractCreature);
+                RainMeadow.OLDError("player entity not found for " + self + " " + self.abstractCreature);
             }
 
             // Allow glow for any non-watcher in watcher campaign
@@ -1796,7 +1796,7 @@ public partial class RainMeadow
             });
             cursor.Emit(OpCodes.Brfalse, breakTo);
         }
-        catch (Exception ex) { RainMeadow.Error(ex); }
+        catch (Exception ex) { RainMeadow.OLDError(ex); }
     }
 
     private void Player_GetInitialSlugcatClass(On.Player.orig_GetInitialSlugcatClass orig, Player self)
@@ -1824,12 +1824,12 @@ public partial class RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug("no SlugcatCustomization for " + oe);
+                    RainMeadow.OLDDebug("no SlugcatCustomization for " + oe);
                 }
             }
             else
             {
-                RainMeadow.Error("player entity not found for " + self + " " + self.abstractCreature);
+                RainMeadow.OLDError("player entity not found for " + self + " " + self.abstractCreature);
             }
         }
     }
@@ -1910,7 +1910,7 @@ public partial class RainMeadow
         {
             if (isArenaMode(out var _))
             {
-                RainMeadow.Error("Tried to get OnlineEntity counterpart. Die() may have been called earlier");
+                RainMeadow.OLDError("Tried to get OnlineEntity counterpart. Die() may have been called earlier");
             }
             else
             {
@@ -1918,7 +1918,7 @@ public partial class RainMeadow
             }
         }
         if (onlineEntity != null && !onlineEntity.isMine) return;
-        RainMeadow.Debug($"%%% DIE {onlineEntity}");
+        RainMeadow.OLDDebug($"%%% DIE {onlineEntity}");
         orig(self);
     }
 
@@ -1938,7 +1938,7 @@ public partial class RainMeadow
         self.deaf = 0; //Doctors HATE this one simple trick!
 
         OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var oe);
-        RainMeadow.Debug($"%%% DESTROY {oe}");
+        RainMeadow.OLDDebug($"%%% DESTROY {oe}");
 
         orig(self);
     }

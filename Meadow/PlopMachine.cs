@@ -111,52 +111,52 @@ namespace RainMeadow
             {
                 if (!fileshavebeenchecked)
                 {
-                    RainMeadow.Debug("   ##                         ");
-                    RainMeadow.Debug("   ##    ###                  ");
-                    RainMeadow.Debug(" .###%######             #####");
-                    RainMeadow.Debug("#-##=.=####             ##### ");
-                    RainMeadow.Debug("#==#########         #######  ");
-                    RainMeadow.Debug("############       ########   ");
-                    RainMeadow.Debug("##########################    ");
-                    RainMeadow.Debug(" ########################     ");
-                    RainMeadow.Debug("  #####################       ");
-                    RainMeadow.Debug("   ##################         ");
-                    RainMeadow.Debug("  ################            ");
-                    RainMeadow.Debug("  ###    ###                  ");
-                    RainMeadow.Debug("   ##      ####               ");
-                    RainMeadow.Debug("   ###       ##               ");
-                    RainMeadow.Debug("Checking files");
+                    RainMeadow.OLDDebug("   ##                         ");
+                    RainMeadow.OLDDebug("   ##    ###                  ");
+                    RainMeadow.OLDDebug(" .###%######             #####");
+                    RainMeadow.OLDDebug("#-##=.=####             ##### ");
+                    RainMeadow.OLDDebug("#==#########         #######  ");
+                    RainMeadow.OLDDebug("############       ########   ");
+                    RainMeadow.OLDDebug("##########################    ");
+                    RainMeadow.OLDDebug(" ########################     ");
+                    RainMeadow.OLDDebug("  #####################       ");
+                    RainMeadow.OLDDebug("   ##################         ");
+                    RainMeadow.OLDDebug("  ################            ");
+                    RainMeadow.OLDDebug("  ###    ###                  ");
+                    RainMeadow.OLDDebug("   ##      ####               ");
+                    RainMeadow.OLDDebug("   ###       ##               ");
+                    RainMeadow.OLDDebug("Checking files");
                     DrumMachine.StartthefuckingWaitDicthehe();
                     string[] mydirs = AssetManager.ListDirectory("soundeffects", false, true);
-                    RainMeadow.Debug("Printing all directories in soundeffects");
+                    RainMeadow.OLDDebug("Printing all directories in soundeffects");
                     foreach (string dir in mydirs)
                     {
                         string[] arr = dir.Split(Path.DirectorySeparatorChar);
                         string filename = arr[arr.Length - 1];
                         if (filename.ToLower() == "!entries.txt")
                         {
-                            RainMeadow.Debug("The file exists actually");
+                            RainMeadow.OLDDebug("The file exists actually");
                             string[] lines = File.ReadAllLines(dir);
 
-                            RainMeadow.Debug("it has read all its lines");
+                            RainMeadow.OLDDebug("it has read all its lines");
                             List<string[]> listtho = new List<string[]>();
                             foreach (string line in lines)
                             {
                                 string[] chord = line.Split(new char[] { '$' });
-                                RainMeadow.Debug("Plopmachine:  Registered Entry: " + line + " in ");
+                                RainMeadow.OLDDebug("Plopmachine:  Registered Entry: " + line + " in ");
                                 listtho.Add(chord);
                             }
-                            RainMeadow.Debug("it has added the thongs");
+                            RainMeadow.OLDDebug("it has added the thongs");
                             ChordInfos = listtho.ToArray();
                         }
                     }
-                    RainMeadow.Debug("Yo it's done with sfx");
+                    RainMeadow.OLDDebug("Yo it's done with sfx");
                     fileshavebeenchecked = true;
                 }
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 //throw;
             }
 
@@ -168,7 +168,7 @@ namespace RainMeadow
                 SoundLoader.SoundData sounddata = mic.GetSoundData(twentysecsilence, -1);
                 WetLoop = new PlopWetTrack(mic, sounddata, WetController, 0, MeadowMusic.defaultMusicVolume * MeadowMusic.defaultPlopVolume, 1, false);
                 //WE'RE SO FUCKING BACK
-                RainMeadow.Debug("Created wetloop");
+                RainMeadow.OLDDebug("Created wetloop");
             }
             else
             {
@@ -314,7 +314,7 @@ namespace RainMeadow
             try
             {
                 if (virtualMicrophone.visualize) virtualMicrophone.Log(SoundId);
-                if (!virtualMicrophone.AllowSound(SoundId)) { RainMeadow.Debug($"Too many sounds playing, denying a {SoundId}"); return; }
+                if (!virtualMicrophone.AllowSound(SoundId)) { RainMeadow.OLDDebug($"Too many sounds playing, denying a {SoundId}"); return; }
                 
                 SoundLoader.SoundData soundData = virtualMicrophone.GetSoundData(SoundId, -1);
                 if (virtualMicrophone.SoundClipReady(soundData))
@@ -325,7 +325,7 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug($"Soundclip not ready");
+                    RainMeadow.OLDDebug($"Soundclip not ready");
                     return;
                 }
 
@@ -336,7 +336,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Debug($"Log {e}");
+                RainMeadow.OLDDebug($"Log {e}");
             }
         }
         public struct Liaison
@@ -539,9 +539,9 @@ namespace RainMeadow
             }
             public static void PrintRace()
             {
-                RainMeadow.Debug("Liaisonrace being printed individually from left to right. The number is the index, the latter is what it represents.");
-                RainMeadow.Debug("Remember that the sequence they're PRINTED in is the order of the liaisonrace, NOT the index shown(as that is just the pointer)");
-                foreach (int i in liaisonrace) RainMeadow.Debug(i + " " + LiaisonList[i].Note);
+                RainMeadow.OLDDebug("Liaisonrace being printed individually from left to right. The number is the index, the latter is what it represents.");
+                RainMeadow.OLDDebug("Remember that the sequence they're PRINTED in is the order of the liaisonrace, NOT the index shown(as that is just the pointer)");
+                foreach (int i in liaisonrace) RainMeadow.OLDDebug(i + " " + LiaisonList[i].Note);
             }
             public static void Instantiate(PlopMachine plopMachine)
             {
@@ -1123,7 +1123,7 @@ namespace RainMeadow
             {
                 if (waits <= 0) waits = 1;
                 bool isvalidname = WaitDict.TryGetValue(waittype, out int waitvalue);
-                if (!isvalidname) { waitvalue = 24; RainMeadow.Debug("INVALID NAME: " + waittype); }
+                if (!isvalidname) { waitvalue = 24; RainMeadow.OLDDebug("INVALID NAME: " + waittype); }
                 return Leftof(waittype, atthistimeofyear) + ((waits - 1) * waitvalue);
             }
             public static int Untils(string waittype, int mininclusive, int maxinclusive, int atthistimeofyear)
@@ -1160,7 +1160,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e); // log but don't throw
+                RainMeadow.OLDError(e); // log but don't throw
             }
         }
 

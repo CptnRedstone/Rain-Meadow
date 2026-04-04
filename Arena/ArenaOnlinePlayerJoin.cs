@@ -64,7 +64,7 @@ namespace Menu
                 kickButton = new(menu, this, "Menu_Symbol_Clear_All", "KICKPLAYER", new(40, 110));
                 kickButton.OnClick += (_) =>
                 {
-                    RainMeadow.RainMeadow.Debug(string.Format("Kicked User: {0}", profileIdentifier), "/Arena/ArenaLobbyMenu.cs", "AddClassButtons");
+                    RainMeadow.RainMeadow.OLDDebug(string.Format("Kicked User: {0}", profileIdentifier), "/Arena/ArenaLobbyMenu.cs", "AddClassButtons");
                     BanHammer.BanUser(profileIdentifier);
                 };
                 subObjects.Add(kickButton);
@@ -169,7 +169,7 @@ namespace Menu
         {
             if (portrait!.fileName != newFile)
             {
-                RainMeadow.RainMeadow.Debug(newFile);
+                RainMeadow.RainMeadow.OLDDebug(newFile);
                 portrait.fileName = newFile;
                 portrait.LoadFile();
                 portrait.sprite.SetElementByName(portrait.fileName);

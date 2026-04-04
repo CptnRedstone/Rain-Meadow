@@ -418,8 +418,8 @@ namespace RainMeadow
             {
                 if (self.hud == null && self.followAbstractCreature?.realizedObject is Creature owner)
                 {
-                    RainMeadow.Debug("followed creature is " + owner);
-                    if (owner != meadowGameMode.avatars[0].realizedCreature) { RainMeadow.Error($"Camera owner != avatar {owner} {meadowGameMode.avatars[0]}"); }
+                    RainMeadow.OLDDebug("followed creature is " + owner);
+                    if (owner != meadowGameMode.avatars[0].realizedCreature) { RainMeadow.OLDError($"Camera owner != avatar {owner} {meadowGameMode.avatars[0]}"); }
 
                     self.hud = new HUD.HUD(new FContainer[]
                     {

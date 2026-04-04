@@ -50,12 +50,12 @@ namespace RainMeadow
                 if (!isMeadow && elapsed > timeoutSeconds && !cleanupTriggered)
                 {
                     cleanupTriggered = true; // Only do this once
-                    RainMeadow.Debug(
+                    RainMeadow.OLDDebug(
                         "WaitLoop: Timeout reached. Forcing participant cleanup, but continuing to wait for conditions..."
                     );
                     foreach (var player in participants)
                     {
-                        RainMeadow.Debug($"WaitLoop: Force-removing {player} from session.");
+                        RainMeadow.OLDDebug($"WaitLoop: Force-removing {player} from session.");
                         var remainingPlayers = session
                             .participants.Where(x => x != player)
                             .ToList();
@@ -74,7 +74,7 @@ namespace RainMeadow
                 yield return null;
             }
 
-            RainMeadow.Debug("WaitLoop: Proceeding to execution.");
+            RainMeadow.OLDDebug("WaitLoop: Proceeding to execution.");
             session.transitionInProgress = false;
             onComplete?.Invoke();
         }
@@ -124,11 +124,11 @@ namespace RainMeadow
                 }
                 catch (Exception)
                 {
-                    RainMeadow.Error($"duplicate room {room.name} for rs {rs}");
+                    RainMeadow.OLDError($"duplicate room {room.name} for rs {rs}");
                     var name = "";
                     for (var i = 0; roomSessions.Keys.Contains((name = room.name + "." + i)); i++)
                         ;
-                    RainMeadow.Error($"adding as {name}");
+                    RainMeadow.OLDError($"adding as {name}");
                     roomSessions.Add(name, rs);
                 }
                 subresources.Add(rs);
@@ -244,8 +244,8 @@ namespace RainMeadow
                             {
                                 if (!ws.alreadyLogged.Contains(index))
                                 {
-                                    RainMeadow.Error($"Room not found in region: {index} in {ws}");
-                                    RainMeadow.Error(
+                                    RainMeadow.OLDError($"Room not found in region: {index} in {ws}");
+                                    RainMeadow.OLDError(
                                         $"Region spans indexes: {ws.world.firstRoomIndex} to {ws.world.firstRoomIndex + ws.world.NumberOfRooms}"
                                     );
 

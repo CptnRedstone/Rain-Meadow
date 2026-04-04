@@ -47,7 +47,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if ((onlineEntity as OnlineCreature).realizedCreature is not Overseer overseer) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if ((onlineEntity as OnlineCreature).realizedCreature is not Overseer overseer) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             (overseer.abstractCreature.abstractAI as OverseerAbstractAI).ownerIterator = ownerIterator;
             overseer.rootPos = rootPos;

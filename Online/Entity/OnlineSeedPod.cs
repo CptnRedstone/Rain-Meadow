@@ -79,13 +79,13 @@
                 {
                     if (spawnedUtility && !seedCob.spawnedUtility)
                     {
-                        RainMeadow.Debug("seedcob spawnfood");
+                        RainMeadow.OLDDebug("seedcob spawnfood");
                         realizedSeedCob.spawnUtilityFoods();
                     }
 
                     if (opened && !seedCob.opened)
                     {
-                        RainMeadow.Debug("seedcob open");
+                        RainMeadow.OLDDebug("seedcob open");
                         realizedSeedCob.Open();
                     }
                 }

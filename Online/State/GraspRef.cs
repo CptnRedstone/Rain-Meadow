@@ -64,13 +64,13 @@ namespace RainMeadow
                 if (creature.room == null) return;
                 creature.room.AddObject(obj);
             }
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             creature.Grab(obj, graspUsed, chunkGrabbed, new Creature.Grasp.Shareability(Creature.Grasp.Shareability.values.GetEntry(shareability)), dominance, false, pacifying);
         }
 
         public void Release(Creature.Grasp grasp)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             grasp.grabber.ReleaseGrasp(grasp.graspUsed);
         }
 

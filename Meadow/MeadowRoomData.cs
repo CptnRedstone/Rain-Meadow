@@ -17,7 +17,7 @@ namespace RainMeadow
         internal void AddItemPlacement(int x, int y, bool rare)
         {
             places.Add(new Place(x, y, rare));
-            RainMeadow.Debug("place added! " + places[places.Count - 1].pos);
+            RainMeadow.OLDDebug("place added! " + places[places.Count - 1].pos);
         }
 
         internal IntVector2 GetUnusedPlace(Room placeRoom)

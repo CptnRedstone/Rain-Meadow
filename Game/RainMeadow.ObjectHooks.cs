@@ -54,8 +54,8 @@ namespace RainMeadow
                     }
                     catch (Exception e)
                     {
-                        RainMeadow.Error($"Object update error for object {(uad is PhysicalObject po ? $"{po} - {po.abstractPhysicalObject.ID}" : uad)} in room {room.abstractRoom.name}");
-                        RainMeadow.Error(e);
+                        RainMeadow.OLDError($"Object update error for object {(uad is PhysicalObject po ? $"{po} - {po.abstractPhysicalObject.ID}" : uad)} in room {room.abstractRoom.name}");
+                        RainMeadow.OLDError(e);
                     }
                     return true;
                 }
@@ -94,8 +94,8 @@ namespace RainMeadow
                     }
                     catch (Exception e)
                     {
-                        RainMeadow.Error($"Object post-update error for object {uad} in room {room.abstractRoom.name}");
-                        RainMeadow.Error(e);
+                        RainMeadow.OLDError($"Object post-update error for object {uad} in room {room.abstractRoom.name}");
+                        RainMeadow.OLDError(e);
                     }
                     return true;
                 }

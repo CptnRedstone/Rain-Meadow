@@ -17,10 +17,10 @@ namespace RainMeadow
             var warpData = warpPoint.overrideData ?? warpPoint.Data;
             if (saveRoomWarp)
             {
-                RainMeadow.Debug("Trying to spawn echo warp point in room");
+                RainMeadow.OLDDebug("Trying to spawn echo warp point in room");
                 if (warpPoint.room != null)
                     warpPoint.room.TrySpawnWarpPoint(warpPoint.placedObject);
-                else RainMeadow.Debug("Failed due to null room");
+                else RainMeadow.OLDDebug("Failed due to null room");
             }
             if (saveString) game.GetStorySession.spinningTopWarpsLeadingToRippleScreen.Add(warpData.ToString());
             game.GetStorySession.saveState.warpPointTargetAfterWarpPointSave = warpData;
@@ -36,7 +36,7 @@ namespace RainMeadow
             string destRoom = warpData.destRoom;
             var destCam = warpData.destCam;
             overWorld.game.cameras[0].WarpMoveCameraPrecast(destRoom, destCam);
-            RainMeadow.Debug($"switch camera to {destRoom}");
+            RainMeadow.OLDDebug($"switch camera to {destRoom}");
 
             warpPoint.activated = false;
             overWorld.readyForWarp = !useNormalWarpLoader;
@@ -46,7 +46,7 @@ namespace RainMeadow
         public static Watcher.WarpPoint? PerformWarpHelper(string? sourceRoomName, string warpData, bool useNormalWarpLoader, bool hackFixRoom)
         {
             if (!(RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game && game.manager.upcomingProcess is null)) return null;
-            RainMeadow.Debug($"Warp point? in {sourceRoomName}; data={warpData}, Loader={useNormalWarpLoader}");
+            RainMeadow.OLDDebug($"Warp point? in {sourceRoomName}; data={warpData}, Loader={useNormalWarpLoader}");
             // generate "local" warp point
             Watcher.WarpPoint.WarpPointData newWarpData = new(null);
             newWarpData.FromString(warpData);

@@ -201,11 +201,11 @@ namespace RainMeadow
             var pathFinder = creature.abstractCreature.abstractAI.RealAI.pathFinder;
             if (pathFinder.PathingCellAtWorldCoordinate(basecoord).reachable)
             {
-                if (localTrace) RainMeadow.Debug("pathable");
+                if (localTrace) RainMeadow.OLDDebug("pathable");
             }
             else
             {
-                if (localTrace) RainMeadow.Debug("unpathable");
+                if (localTrace) RainMeadow.OLDDebug("unpathable");
                 var wasWaterRelationship = template.waterRelationship; // could also be a hook but template helpers are such a hot-path...
                 template.waterRelationship = CreatureTemplate.WaterRelationship.Amphibious;
                 pathFinder.OutOfElement();

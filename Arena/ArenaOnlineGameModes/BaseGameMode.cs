@@ -125,17 +125,17 @@ namespace RainMeadow
             Creature killedCrit
         )
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
 
             if (!OnlineCreature.map.TryGetValue(player.abstractCreature, out var absPlayerCreature))
             {
-                RainMeadow.Error("Error getting abs Player Creature");
+                RainMeadow.OLDError("Error getting abs Player Creature");
                 return;
             }
 
             if (!OnlineCreature.map.TryGetValue(killedCrit.abstractCreature, out var onlineKilledCreature))
             {
-                RainMeadow.Error("Error getting targetAbsCreature");
+                RainMeadow.OLDError("Error getting targetAbsCreature");
                 return;
             }
 
@@ -161,7 +161,7 @@ namespace RainMeadow
                 // Tourney
                 if (killedCrit.Template.type == CreatureTemplate.Type.Slugcat)
                 {
-                    RainMeadow.Info($"RMEL;{absPlayerCreature.owner.id.DisplayName};KILLED;{onlineKilledCreature.owner.id.DisplayName}");
+                    RainMeadow.OLDInfo($"RMEL;{absPlayerCreature.owner.id.DisplayName};KILLED;{onlineKilledCreature.owner.id.DisplayName}");
                 }
                 if (killedCrit.IsLocal())
                 {
@@ -262,7 +262,7 @@ namespace RainMeadow
                     .playingAs == Watcher.WatcherEnums.SlugcatStatsName.Watcher
             )
             {
-                RainMeadow.Debug("Adding Watcher Camo Meter");
+                RainMeadow.OLDDebug("Adding Watcher Camo Meter");
                 self.AddPart(new Watcher.CamoMeter(self, null, self.fContainers[1]));
             }
             var psmh = new HUD.PlayerSpecificMultiplayerHud(self, session, session.Players.FirstOrDefault(x => x != null && x.IsLocal()));
@@ -373,9 +373,9 @@ namespace RainMeadow
             CreatureTemplate.Type templateType
         )
         {
-            RainMeadow.Debug("Trying to create an abstract creature");
-            RainMeadow.Debug($"RANDOM EXIT INDEX: {randomExitIndex}");
-            RainMeadow.Debug(
+            RainMeadow.OLDDebug("Trying to create an abstract creature");
+            RainMeadow.OLDDebug($"RANDOM EXIT INDEX: {randomExitIndex}");
+            RainMeadow.OLDDebug(
                 $"RANDOM START TILE INDEX: {room.ShortcutLeadingToNode(randomExitIndex).StartTile}"
             );
             RainMeadow.sSpawningAvatar = true;
@@ -391,7 +391,7 @@ namespace RainMeadow
                 randomExitIndex
             ).destNode;
             abstractCreature.Room.AddEntity(abstractCreature);
-            RainMeadow.Debug("assigned ac, registering");
+            RainMeadow.OLDDebug("assigned ac, registering");
             self.game.world.GetResource().ApoEnteringWorld(abstractCreature);
             RainMeadow.sSpawningAvatar = false;
             self.game.cameras[0].followAbstractCreature = abstractCreature;
@@ -411,7 +411,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Error("Could not get online owner for spawned player!");
+                RainMeadow.OLDError("Could not get online owner for spawned player!");
                 abstractCreature.state = new PlayerState(
                     abstractCreature,
                     0,
@@ -422,7 +422,7 @@ namespace RainMeadow
                 );
             }
 
-            RainMeadow.Debug("Arena: Realize Creature!");
+            RainMeadow.OLDDebug("Arena: Realize Creature!");
             abstractCreature.Realize();
             var shortCutVessel = new ShortcutHandler.ShortCutVessel(
                 room.ShortcutLeadingToNode(randomExitIndex).DestTile,
@@ -525,7 +525,7 @@ namespace RainMeadow
                 {
                     (abstractCreature.realizedCreature as Player).slugcatStats.throwingSkill =
                         arena.painCatThrowingSkill;
-                    RainMeadow.Debug(
+                    RainMeadow.OLDDebug(
                         "ENOT THROWING SKILL "
                             + (abstractCreature.realizedCreature as Player)
                                 .slugcatStats
@@ -683,7 +683,7 @@ namespace RainMeadow
                 == RainMeadow.Ext_SlugcatStatsName.OnlineOverseerSpectator
             )
             {
-                RainMeadow.Debug("Player spawned as overseer");
+                RainMeadow.OLDDebug("Player spawned as overseer");
                 // maybr add toggle later
                 if (arena.enableOverseer)
                 {
@@ -1004,10 +1004,10 @@ namespace RainMeadow
             ArenaSitting.ArenaPlayer B
         )
         {
-            RainMeadow.Debug(
+            RainMeadow.OLDDebug(
                 $"PlayerSittingResultSort Player A: Score: {A.score} - Wins: {A.wins} - All Kills: {A.allKills.Count} - Deaths: {A.deaths}"
             );
-            RainMeadow.Debug(
+            RainMeadow.OLDDebug(
                 $"PlayerSittingResultSort Player B: Score: {B.score} - Wins: {B.wins} - All Kills: {B.allKills.Count} - Deaths: {B.deaths}"
             );
 

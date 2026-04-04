@@ -19,39 +19,57 @@ namespace RainMeadow
         {
             Debug = 0,
             Info = 1,
-            Warn = 2,
-            Error = 3
+            Message = 2,
+            Warn = 3,
+            Error = 4,
+            Fatal = 5,
         }
         private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }
         private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
         private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
         // Note: we use Logger.Info because Bepinex ships with logging level info by default. We are promoting our debugs to infos here so they get through.
-        public static void Debug(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
-        {
-            if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Debug)
-                instance.Logger.LogInfo($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
-        }
         public static void DebugMe([CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
         {
             if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Debug)
                 instance.Logger.LogInfo($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}");
         }
-
-        public static void Info(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+        /// <summary> Used for engine-level logging events. </summary>
+        public static void LogDebug(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+        {
+            if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Debug)
+                instance.Logger.LogDebug($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
+        }
+        /// <summary> Used for method calls, and developer insight. </summary>
+        public static void LogInfo(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
         {
             if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Info)
                 instance.Logger.LogInfo($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
         }
-        public static void Warn(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+        /// <summary> Used for player insight. </summary>
+        public static void LogMessage(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+        {
+            if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Message)
+                instance.Logger.LogMessage($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
+        }
+        /// <summary> Used for failsafes or potential faults. </summary>
+        public static void LogWarning(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
         {
             if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Warn)
                 instance.Logger.LogWarning($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
         }
-        public static void Error(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+        /// <summary> Used for errors idk what you're expecting. </summary>
+        public static void LogError(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
         {
             if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Error)
 
                 instance.Logger.LogError($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
+        }
+        /// <summary> Used for uncaught, game-breaking exceptions. </summary>
+        public static void LogFatal(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+        {
+            if (RainMeadow.rainMeadowOptions.CurrentLogLevel.Value <= LogLevel.Fatal)
+
+                instance.Logger.LogFatal($"{LogDOT()}|{LogTime()}|{TrimCaller(callerFile)}.{callerName}:{data}");
         }
 
         [Conditional("TRACING")]

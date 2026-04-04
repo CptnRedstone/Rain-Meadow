@@ -76,10 +76,10 @@ namespace RainMeadow
         {
             if (creatureControllers.TryGetValue(self, out var c))
             {
-                if (Input.GetKey(KeyCode.L)) RainMeadow.Error("following connection: " + self.followingConnection);
-                if (Input.GetKey(KeyCode.L)) RainMeadow.Error("pre vel: " + self.mainBodyChunk.vel);
+                if (Input.GetKey(KeyCode.L)) RainMeadow.OLDError("following connection: " + self.followingConnection);
+                if (Input.GetKey(KeyCode.L)) RainMeadow.OLDError("pre vel: " + self.mainBodyChunk.vel);
                 orig(self, runSpeed);
-                if (Input.GetKey(KeyCode.L)) RainMeadow.Error("post vel: " + self.mainBodyChunk.vel);
+                if (Input.GetKey(KeyCode.L)) RainMeadow.OLDError("post vel: " + self.mainBodyChunk.vel);
                 return;
             }
             orig(self, runSpeed);
@@ -92,7 +92,7 @@ namespace RainMeadow
             {
                 if (self.followingConnection.distance == 0)
                 {
-                    if (Input.GetKey(KeyCode.L)) RainMeadow.Error("following null connection");
+                    if (Input.GetKey(KeyCode.L)) RainMeadow.OLDError("following null connection");
                     var originPos = self.room.GetWorldCoordinate(self.mainBodyChunk.pos);
                     self.followingConnection = new MovementConnection(MovementConnection.MovementType.Standard, originPos, WorldCoordinate.AddIntVector(originPos, new IntVector2(c.input[0].x, c.input[0].y)), 1);
                 }
@@ -130,7 +130,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -160,13 +160,13 @@ namespace RainMeadow
 
         private static void Lizard_Act(On.Lizard.orig_Act orig, Lizard self)
         {
-            if (Input.GetKey(KeyCode.L)) RainMeadow.Debug($"liz act pre");
+            if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug($"liz act pre");
             if (creatureControllers.TryGetValue(self, out var c) && c is LizardController l)
             {
                 l.ConsciousUpdate();
             }
             orig(self);
-            if (Input.GetKey(KeyCode.L)) RainMeadow.Debug($"liz act post");
+            if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug($"liz act post");
         }
 
         private static void LizardAI_Update(On.LizardAI.orig_Update orig, LizardAI self)
@@ -206,7 +206,7 @@ namespace RainMeadow
             {
                 if (originPos == self.destination || (actuallyFollowingThisPath && self.lookingForImpossiblePath))
                 {
-                    if (Input.GetKey(KeyCode.L) && actuallyFollowingThisPath) RainMeadow.Debug("returning override. lookingForImpossiblePath? " + self.lookingForImpossiblePath);
+                    if (Input.GetKey(KeyCode.L) && actuallyFollowingThisPath) RainMeadow.OLDDebug("returning override. lookingForImpossiblePath? " + self.lookingForImpossiblePath);
                     return new MovementConnection(MovementConnection.MovementType.Standard, originPos, self.destination, 1);
                 }
                 return orig(self, originPos, bodyDirection, actuallyFollowingThisPath);
@@ -294,7 +294,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -311,7 +311,7 @@ namespace RainMeadow
 
             var col = lizard.effectColor;
             customization.ModifyBodyColor(ref col);
-            RainMeadow.Debug($"{lizard} color from {lizard.effectColor} to {col}");
+            RainMeadow.OLDDebug($"{lizard} color from {lizard.effectColor} to {col}");
             lizard.effectColor = col;
 
             if(lizard.lizardParams.regainFootingCounter < 2)
@@ -424,7 +424,7 @@ namespace RainMeadow
                         if (jumpModule.actOnJump == null)
                         {
                             // start a new jump
-                            RainMeadow.Debug("JumpModule init");
+                            RainMeadow.OLDDebug("JumpModule init");
                             var jumpFinder = new LizardJumpModule.JumpFinder(creature.room, jumpModule, lizard.coord.Tile, false);
                             jumpFinder.currentJump.power = 0.5f;
                             jumpFinder.bestJump = jumpFinder.currentJump;

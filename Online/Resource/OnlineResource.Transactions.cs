@@ -7,7 +7,7 @@ namespace RainMeadow
         // I request this resource, so I can have either ownership or subscription
         private void Request()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isPending)
             {
                 throw new InvalidOperationException("pending");
@@ -20,7 +20,7 @@ namespace RainMeadow
             ClearIncommingBuffers();
             if (supervisor == null)
             {
-                RainMeadow.Debug("Resolving request with no supervisor");
+                RainMeadow.OLDDebug("Resolving request with no supervisor");
                 Available();
             }
             else if (!supervisor.hasLeft)
@@ -33,7 +33,7 @@ namespace RainMeadow
         // I no longer need this resource, supervisor can coordinate its transfer if needed
         private void Release()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isPending)
             {
                 throw new InvalidOperationException("pending");
@@ -49,7 +49,7 @@ namespace RainMeadow
 
             if (supervisor == null)
             {
-                RainMeadow.Debug("Resolving release with no supervisor");
+                RainMeadow.OLDDebug("Resolving release with no supervisor");
                 Unavailable();
             }
             else if (!supervisor.hasLeft)
@@ -74,7 +74,7 @@ namespace RainMeadow
         [RPCMethod]
         protected void Requested(RPCEvent request)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (canBeRequested && isSupervisor && !super.isReleasing)
             {
                 if (owner == null)
@@ -102,7 +102,7 @@ namespace RainMeadow
         [RPCMethod]
         private void Released(RPCEvent request)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isSupervisor && !super.isReleasing)
             {
                 request.from.QueueEvent(new GenericResult.Ok(request));
@@ -116,14 +116,14 @@ namespace RainMeadow
         [RPCMethod]
         private void Transfered(RPCEvent request)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isAvailable && !isReleasing && (isActive || participants.Count == 1) && request.from == supervisor) // I am a subscriber with a valid state who now owns this resource
             {
                 request.from.QueueEvent(new GenericResult.Ok(request));
                 return;
             }
 
-            RainMeadow.Error($"Transfer error : {isAvailable} {!isReleasing} {(isActive || participants.Count == 1)} {request.from == supervisor}");
+            RainMeadow.OLDError($"Transfer error : {isAvailable} {!isReleasing} {(isActive || participants.Count == 1)} {request.from == supervisor}");
             request.from.QueueEvent(new GenericResult.Error(request)); // super should retry with someone else
         }
 
@@ -133,11 +133,11 @@ namespace RainMeadow
             isRequesting = false;
             if (requestResult is GenericResult.Ok)
             {
-                RainMeadow.Debug("Joined resource: " + this);
+                RainMeadow.OLDDebug("Joined resource: " + this);
             }
             else if (requestResult is GenericResult.Error) // I should retry
             {
-                RainMeadow.Error("Request failed for " + this);
+                RainMeadow.OLDError("Request failed for " + this);
                 PerformRequests();
             }
         }
@@ -148,11 +148,11 @@ namespace RainMeadow
             isReleasing = false;
             if (releaseResult is GenericResult.Ok) // I've let go
             {
-                RainMeadow.Debug("Left resource: " + this);
+                RainMeadow.OLDDebug("Left resource: " + this);
             }
             else if (releaseResult is GenericResult.Error) // I should retry
             {
-                RainMeadow.Error("Release failed for " + this);
+                RainMeadow.OLDError("Release failed for " + this);
                 PerformRequests();
             }
         }
@@ -160,14 +160,14 @@ namespace RainMeadow
         // A pending transfer was asnwered to
         private void ResolveTransfer(GenericResult transferResult)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (transferResult is GenericResult.Ok) // New owner accepted it
             {
                 // no op
             }
             else if (transferResult is GenericResult.Error) // I should retry
             {
-                RainMeadow.Error("transfer failed for " + this);
+                RainMeadow.OLDError("transfer failed for " + this);
                 if (super.isActive && isSupervisor)
                 {
                     // re-add problematic guy at end of list so not picked again

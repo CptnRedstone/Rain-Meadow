@@ -285,13 +285,13 @@ namespace RainMeadow
             }
             if (UnityEngine.Input.GetKey(KeyCode.L))
             {
-                RainMeadow.Debug("skinIndex: " + skinIndex);
-                RainMeadow.Debug("valuecolor: " + colorpicker.valuecolor);
-                RainMeadow.Debug("tintAmount: " + tintAmount);
-                RainMeadow.Debug("personaSettings.skin: " + personaSettings.skin);
-                RainMeadow.Debug("personaSettings.tint: " + personaSettings.tint);
-                RainMeadow.Debug("personaSettings.tintAmount: " + personaSettings.tintAmount);
-                RainMeadow.Debug("personaSettings.eyeColor: " + eyeColorPicker.valuecolor);
+                RainMeadow.OLDDebug("skinIndex: " + skinIndex);
+                RainMeadow.OLDDebug("valuecolor: " + colorpicker.valuecolor);
+                RainMeadow.OLDDebug("tintAmount: " + tintAmount);
+                RainMeadow.OLDDebug("personaSettings.skin: " + personaSettings.skin);
+                RainMeadow.OLDDebug("personaSettings.tint: " + personaSettings.tint);
+                RainMeadow.OLDDebug("personaSettings.tintAmount: " + personaSettings.tintAmount);
+                RainMeadow.OLDDebug("personaSettings.eyeColor: " + eyeColorPicker.valuecolor);
 
             }
         }
@@ -397,7 +397,7 @@ namespace RainMeadow
                 // chaging from default tint, help noobs understand tint amount slider
                 if (tintAmount == 0f)
                 {
-                    RainMeadow.Debug("first-timer tint change");
+                    RainMeadow.OLDDebug("first-timer tint change");
                     tintAmount = 1f;
                     personaSettings.tintAmount = 1f;
                     MeadowProgression.progressionData.currentCharacterProgress.tintAmount = 1f;

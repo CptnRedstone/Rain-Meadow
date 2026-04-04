@@ -25,7 +25,7 @@ namespace RainMeadow
                 }
 
                 // Tell everyone else about them
-                RainMeadow.Debug("Telling client they got in.");
+                RainMeadow.OLDDebug("Telling client they got in.");
                 matchmaker.AcknoledgeLANPlayer(processingPlayer);
 
                 // Tell them they are in

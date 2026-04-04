@@ -48,22 +48,22 @@ namespace RainMeadow
             protected virtual void StoreSerializedObject(OnlinePhysicalObject onlinePhysicalObject)
             {
                 var serializedObject = onlinePhysicalObject.apo.ToString();
-                RainMeadow.Debug("Data is " + serializedObject);
+                RainMeadow.OLDDebug("Data is " + serializedObject);
                 int index = 0;
                 int count = ExtrasIndex;
                 for (int i = 0; i < count; i++) index = serializedObject.IndexOf("<oA>", index + 4); // the first X fields are already saved
                 if (index == -1) // no extra data
                 {
-                    RainMeadow.Debug("no extra");
+                    RainMeadow.OLDDebug("no extra");
                     extraData = "";
                 }
                 else
                 {
-                    RainMeadow.Debug("extra is  " + serializedObject.Substring(index + 4));
+                    RainMeadow.OLDDebug("extra is  " + serializedObject.Substring(index + 4));
                     SaveExtras(serializedObject.Substring(index + 4));
                 }
 
-                RainMeadow.Debug("resulting object would be: " + MakeSerializedObject(new AbstractPhysicalObjectState() { pos = onlinePhysicalObject.apo.pos }));
+                RainMeadow.OLDDebug("resulting object would be: " + MakeSerializedObject(new AbstractPhysicalObjectState() { pos = onlinePhysicalObject.apo.pos }));
             }
 
             protected virtual string MakeSerializedObjectNoExtras(AbstractPhysicalObjectState initialState)
@@ -104,7 +104,7 @@ namespace RainMeadow
         public static OnlinePhysicalObject RegisterPhysicalObject(AbstractPhysicalObject apo)
         {
             OnlinePhysicalObject newOe = NewFromApo(apo);
-            RainMeadow.Debug("Registered new entity - " + newOe.ToString());
+            RainMeadow.OLDDebug("Registered new entity - " + newOe.ToString());
             return newOe;
         }
 
@@ -115,14 +115,14 @@ namespace RainMeadow
             EntityId entityId = new OnlineEntity.EntityId(OnlineManager.mePlayer.inLobbyId, EntityId.IdType.apo, apo.ID.number);
             if (OnlineManager.recentEntities.ContainsKey(entityId))
             {
-                RainMeadow.Error($"entity with repeated ID: {entityId}");
+                RainMeadow.OLDError($"entity with repeated ID: {entityId}");
                 var origid = apo.ID;
                 var newid = apo.world.game.GetNewID();
                 newid.spawner = origid.spawner;
                 newid.altSeed = origid.RandomSeed;
                 apo.ID = newid;
                 entityId = new OnlineEntity.EntityId(OnlineManager.mePlayer.inLobbyId, EntityId.IdType.apo, apo.ID.number);
-                RainMeadow.Error($"set as: {entityId}");
+                RainMeadow.OLDError($"set as: {entityId}");
             }
 
             switch (apo)
@@ -135,7 +135,7 @@ namespace RainMeadow
                     if (IsTypeConsumable(apo.type)) return OnlineConsumableFromAcm(acm, entityId, OnlineManager.mePlayer, transferable);
                     else
                     {
-                        RainMeadow.Error("object has AbstractConsumable but type is not consumable: " + apo.type);
+                        RainMeadow.OLDError("object has AbstractConsumable but type is not consumable: " + apo.type);
                         goto default; // screw you, trader-spawned scavengerbomb
                     }
                 case AbstractSpear asp:
@@ -182,7 +182,7 @@ namespace RainMeadow
             World world = inResource is RoomSession rs ? rs.World : inResource is WorldSession ws ? ws.world : throw new InvalidProgrammerException("not room nor world");
 
             string serializedObject = newObjectEvent.MakeSerializedObject(initialState);
-            RainMeadow.Debug("serializedObject: " + serializedObject);
+            RainMeadow.OLDDebug("serializedObject: " + serializedObject);
             var apo = SaveState.AbstractPhysicalObjectFromString(world, serializedObject);
             apo.pos = initialState.pos; // game's really bad at parsing this huh specially arena or gates
             EntityID id = world.game.GetNewID();
@@ -265,13 +265,13 @@ namespace RainMeadow
             var poState = initialState as AbstractPhysicalObjectState;
             var topos = poState.pos;
 
-            RainMeadow.Debug($"{this} joining {inResource} at {poState.pos}");
+            RainMeadow.OLDDebug($"{this} joining {inResource} at {poState.pos}");
             try
             {
                 beingMoved = true;
                 if (inResource is WorldSession ws)
                 {
-                    RainMeadow.Debug($"world join");
+                    RainMeadow.OLDDebug($"world join");
                     apo.world = ws.world;
                     apo.pos = poState.pos;
                     ws.world.GetAbstractRoom(topos)?.AddEntity(apo);
@@ -280,9 +280,9 @@ namespace RainMeadow
                 }
                 else if (inResource is RoomSession newRoom)
                 {
-                    RainMeadow.Debug($"room join");
-                    RainMeadow.Debug($"topos Tile defined? {topos.TileDefined}");
-                    RainMeadow.Debug($"topos Node defined? {topos.NodeDefined}");
+                    RainMeadow.OLDDebug($"room join");
+                    RainMeadow.OLDDebug($"topos Tile defined? {topos.TileDefined}");
+                    RainMeadow.OLDDebug($"topos Node defined? {topos.NodeDefined}");
 
                     newRoom.absroom.AddEntity(apo);
 
@@ -291,7 +291,7 @@ namespace RainMeadow
                     {
                         if (apo is AbstractCreature ac && !ac.AllowedToExistInRoom(newRoom.absroom.realizedRoom))
                         {
-                            RainMeadow.Debug($"early creature");
+                            RainMeadow.OLDDebug($"early creature");
                             apo.MoveOnly(topos);
                             if (apo.realizedObject is PhysicalObject po)
                             {
@@ -317,18 +317,18 @@ namespace RainMeadow
                                 }
                                 if (newRoom.absroom.realizedRoom.shortCutsReady)
                                 {
-                                    RainMeadow.Debug($"spawning in room");
+                                    RainMeadow.OLDDebug($"spawning in room");
                                     apo.RealizeInRoom(); // placesinroom
                                 }
                                 else
                                 {
-                                    RainMeadow.Debug($"early entity"); // room loading will place it
+                                    RainMeadow.OLDDebug($"early entity"); // room loading will place it
                                 }
 
                             }
                             else
                             {
-                                RainMeadow.Debug("node defined");
+                                RainMeadow.OLDDebug("node defined");
                                 apo.MoveOnly(topos);
 
                                 bool inshortcuts = false;
@@ -339,11 +339,11 @@ namespace RainMeadow
 
                                 if (!inshortcuts && apo is AbstractCreature ac2) // Creature.ChangeRoom didn't run, so we do it manually
                                 {
-                                    RainMeadow.Debug("creature moved");
+                                    RainMeadow.OLDDebug("creature moved");
                                     ac2.realizedCreature?.RemoveFromShortcuts(); // just to make sure
                                     if (ac2.realizedCreature == null || !ac2.realizedCreature.inShortcut)
                                     {
-                                        RainMeadow.Debug($"spawning in shortcuts");
+                                        RainMeadow.OLDDebug($"spawning in shortcuts");
                                         ac2.Realize();
                                         if (ac2.world.GetAbstractRoom(topos).realizedRoom?.shortcuts?.Length > 0)
                                         {
@@ -358,13 +358,13 @@ namespace RainMeadow
                                     }
                                     else
                                     {
-                                        RainMeadow.Debug($"supposedly already spawning in shortcuts");
-                                        RainMeadow.Debug("found in shortcuts? " + (ac2.realizedCreature != null && apo.world.game.shortcuts.betweenRoomsWaitingLobby.Any(v => v.creature.abstractCreature.GetAllConnectedObjects().Any(o => o.realizedObject == ac2.realizedCreature))));
+                                        RainMeadow.OLDDebug($"supposedly already spawning in shortcuts");
+                                        RainMeadow.OLDDebug("found in shortcuts? " + (ac2.realizedCreature != null && apo.world.game.shortcuts.betweenRoomsWaitingLobby.Any(v => v.creature.abstractCreature.GetAllConnectedObjects().Any(o => o.realizedObject == ac2.realizedCreature))));
                                     }
                                 }
                                 else
                                 {
-                                    RainMeadow.Debug($"regular item, spawning off-room");
+                                    RainMeadow.OLDDebug($"regular item, spawning off-room");
                                     apo.Realize();
                                     // and lets leave it at that, some creature will connect to it and drag it in-room
                                 }
@@ -377,14 +377,14 @@ namespace RainMeadow
                     {
                         // shouldn't happen, swallowed item leaves room
                         // might happen for a few frames during leave transac though?
-                        RainMeadow.Error($"{this} in {newRoom} has room -1 assigned!");
+                        RainMeadow.OLDError($"{this} in {newRoom} has room -1 assigned!");
                     }
                 }
                 beingMoved = false;
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 beingMoved = false;
                 //throw;
             }
@@ -392,7 +392,7 @@ namespace RainMeadow
 
         public void RemoveEntityFromRoom(bool onlineaware = true)
         {
-            RainMeadow.Debug("Removing entity from room: " + this);
+            RainMeadow.OLDDebug("Removing entity from room: " + this);
             if (apo.realizedObject is PhysicalObject po)
             {
                 if (po.room is Room room)
@@ -402,7 +402,7 @@ namespace RainMeadow
                 }
                 if (po is Creature c && c.inShortcut && apo.Room is not null)
                 {
-                    RainMeadow.Debug("removing from shortcuts");
+                    RainMeadow.OLDDebug("removing from shortcuts");
                     c.RemoveFromShortcuts(apo.Room);
                 }
             }
@@ -424,7 +424,7 @@ namespace RainMeadow
         
         public void RemoveEntityFromGame(bool onlineaware = true)
         {
-            RainMeadow.Debug("Removing entity from game: " + this);
+            RainMeadow.OLDDebug("Removing entity from game: " + this);
             if (apo.stuckObjects != null)
             {
                 foreach (var stick in apo.stuckObjects.OfType<AbstractPhysicalObject.AbstractObjectStick>())
@@ -482,7 +482,7 @@ namespace RainMeadow
 
         protected override void LeaveImpl(OnlineResource inResource)
         {
-            RainMeadow.Debug($"{this} leaving {inResource}");
+            RainMeadow.OLDDebug($"{this} leaving {inResource}");
             try
             {
                 AllMoving(true);
@@ -498,7 +498,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 apo.realizedObject?.RemoveFromRoom();
                 (apo.realizedObject as Creature)?.RemoveFromShortcuts();
                 apo.world.GetAbstractRoom(apo.pos)?.RemoveEntity(apo);
@@ -510,7 +510,7 @@ namespace RainMeadow
         public override void Deregister()
         {
             base.Deregister();
-            RainMeadow.Debug("Removing entity from OnlinePhysicalObject.map: " + this);
+            RainMeadow.OLDDebug("Removing entity from OnlinePhysicalObject.map: " + this);
             map.Remove(apo);
             foreach (var item in apo.stuckObjects)
             {
@@ -581,12 +581,12 @@ namespace RainMeadow
                 result = null;
                 OnlinePhysicalObject? collision_obj = this.obj.FindEntity() as OnlinePhysicalObject;
                 if (collision_obj == null) {
-                    RainMeadow.Error("Invalid collision result");
+                    RainMeadow.OLDError("Invalid collision result");
                     return;
                 }
 
                 if (collision_obj.apo.realizedObject == null) {
-                    RainMeadow.Error("Object not realized");
+                    RainMeadow.OLDError("Object not realized");
                     return;
                 }
 
@@ -611,7 +611,7 @@ namespace RainMeadow
                     OnlinePhysicalObject? onlineResult = result.Value.obj.abstractPhysicalObject.GetOnlineObject();
                     if (OnlineManager.lobby != null && onlineResult != null && onlineResult.didParry)
                     {
-                        RainMeadow.Debug("Parried!");
+                        RainMeadow.OLDDebug("Parried!");
                         OnlineManager.RunDeferred(() => onlineResult.didParry = false);
                         HittingRemotely = false;
                         return;
@@ -645,7 +645,7 @@ namespace RainMeadow
                 case VultureGrub o:
                     o.InitiateSignal(); return;
                 default:
-                    RainMeadow.Error($"unknown trigger {this}"); return;
+                    RainMeadow.OLDError($"unknown trigger {this}"); return;
             }
         }
 
@@ -675,7 +675,7 @@ namespace RainMeadow
                 case Player arti:
                     arti.PyroDeath(); return;
                 default:
-                    RainMeadow.Error($"unknown explode {this}"); return;
+                    RainMeadow.OLDError($"unknown explode {this}"); return;
             }
         }
         [RPCMethod]

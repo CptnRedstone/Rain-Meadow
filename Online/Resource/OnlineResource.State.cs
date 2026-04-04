@@ -22,7 +22,7 @@ namespace RainMeadow
                 }
                 catch (Exception)
                 {
-                    RainMeadow.Error(this);
+                    RainMeadow.OLDError(this);
                     throw;
                 }
             }
@@ -56,8 +56,8 @@ namespace RainMeadow
                 }
                 if (incomingState.Count == 0 || newState.baseline != incomingState.Peek().tick)
                 {
-                    RainMeadow.Error($"Received unprocessable delta for {this} from {newState.from}, tick {newState.tick} referencing baseline {newState.baseline}");
-                    RainMeadow.Error($"Available ticks are: [{string.Join(", ", incomingState.Select(s => s.tick))}]");
+                    RainMeadow.OLDError($"Received unprocessable delta for {this} from {newState.from}, tick {newState.tick} referencing baseline {newState.baseline}");
+                    RainMeadow.OLDError($"Available ticks are: [{string.Join(", ", incomingState.Select(s => s.tick))}]");
                     if (!newState.from.OutgoingEvents.Any(e => e is RPCEvent rpc && rpc.IsIdentical(RPCs.DeltaReset, this, null)))
                     {
                         newState.from.InvokeRPC(RPCs.DeltaReset, this, null);
@@ -115,8 +115,8 @@ namespace RainMeadow
                             }
                             catch (Exception e)
                             {
-                                RainMeadow.Error($"Failed to read new remote entity in {resource} : {def}");
-                                RainMeadow.Error(e);
+                                RainMeadow.OLDError($"Failed to read new remote entity in {resource} : {def}");
+                                RainMeadow.OLDError(e);
                             }
                         }
                     }
@@ -140,8 +140,8 @@ namespace RainMeadow
                                     }
                                     catch (Exception e)
                                     {
-                                        RainMeadow.Error($"Failed to join with entity in {resource} : {ent}");
-                                        RainMeadow.Error(e);
+                                        RainMeadow.OLDError($"Failed to join with entity in {resource} : {ent}");
+                                        RainMeadow.OLDError(e);
                                     }
                                 }
                                 else
@@ -151,7 +151,7 @@ namespace RainMeadow
                             }
                             else
                             {
-                                RainMeadow.Error($"Entity in resource {this} missing: " + entityJoin.entityId);
+                                RainMeadow.OLDError($"Entity in resource {this} missing: " + entityJoin.entityId);
                             }
                         }
                     }
@@ -167,8 +167,8 @@ namespace RainMeadow
                             }
                             catch (Exception e)
                             {
-                                RainMeadow.Error($"Failed to leave with entity in {resource} : {kvp.Key.FindEntity()}");
-                                RainMeadow.Error(e);
+                                RainMeadow.OLDError($"Failed to leave with entity in {resource} : {kvp.Key.FindEntity()}");
+                                RainMeadow.OLDError(e);
                             }
                         }
                     }
@@ -179,7 +179,7 @@ namespace RainMeadow
                         {
                             if (def.owner != ent.owner.inLobbyId && OnlineManager.lobby.PlayerFromId(def.owner) is OnlinePlayer newOwner)
                             {
-                                RainMeadow.Debug("new owner for " + ent);
+                                RainMeadow.OLDDebug("new owner for " + ent);
                                 try
                                 {
                                     if (newOwner.isMe) ent.ReadState(entityStates.lookup[ent.id], resource);
@@ -187,14 +187,14 @@ namespace RainMeadow
                                 }
                                 catch (Exception e)
                                 {
-                                    RainMeadow.Error($"Failed assign new owner to entity in {resource} : {ent}");
-                                    RainMeadow.Error(e);
+                                    RainMeadow.OLDError($"Failed assign new owner to entity in {resource} : {ent}");
+                                    RainMeadow.OLDError(e);
                                 }
                             }
                         }
                         else
                         {
-                            RainMeadow.Error($"Entity in resource {this} missing: " + def.entityId);
+                            RainMeadow.OLDError($"Entity in resource {this} missing: " + def.entityId);
                         }
                     }
 
@@ -205,7 +205,7 @@ namespace RainMeadow
                             var entity = entityState.entityId.FindEntity();
                             if (entity == null)
                             {
-                                RainMeadow.Error("got state for missing onlineEntity " + entityState.entityId);
+                                RainMeadow.OLDError("got state for missing onlineEntity " + entityState.entityId);
                                 continue;
                             }
                             if (!entity.isMine && !entity.isTransfering)
@@ -224,15 +224,15 @@ namespace RainMeadow
                                     }
                                     catch (Exception e)
                                     {
-                                        RainMeadow.Error($"Failed to read state to entity in {resource} : {entity}");
-                                        RainMeadow.Error(e);
+                                        RainMeadow.OLDError($"Failed to read state to entity in {resource} : {entity}");
+                                        RainMeadow.OLDError(e);
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            RainMeadow.Error("got null state, maybe it was not an EntityState");
+                            RainMeadow.OLDError("got null state, maybe it was not an EntityState");
                         }
                     }
                 }

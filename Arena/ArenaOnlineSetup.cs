@@ -35,7 +35,7 @@ namespace RainMeadow
         {
             if (!isSavingNonSessionOnly)
             {
-                RainMeadow.Debug("Saving everything!");
+                RainMeadow.OLDDebug("Saving everything!");
                 return origText;
             }
             string newSaveString = "";

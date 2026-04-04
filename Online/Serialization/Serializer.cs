@@ -64,7 +64,7 @@ namespace RainMeadow
 
         private void AbortRead()
         {
-            RainMeadow.Debug("aborted read");
+            RainMeadow.OLDDebug("aborted read");
             currPlayer = null;
             IsReading = false;
             IsDelta = false;
@@ -126,7 +126,7 @@ namespace RainMeadow
             var pos = (int)scratchpad.Position;
             scratchpad.stream.Seek(0, SeekOrigin.Begin);
             var zippedState = new DeflateState(scratchpad.stream, pos);
-            RainMeadow.Debug($"zipping state {state}, was {pos} became ~{zippedState.bytes.Length}");
+            RainMeadow.OLDDebug($"zipping state {state}, was {pos} became ~{zippedState.bytes.Length}");
             return WriteState(zippedState);
         }
 
@@ -236,7 +236,7 @@ namespace RainMeadow
             PlayerHeaders();
             if (Aborted)
             {
-                RainMeadow.Debug("skipped packet");
+                RainMeadow.OLDDebug("skipped packet");
                 return;
             }
 
@@ -276,8 +276,8 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Error($"WriteEvent failed for {e}");
-                    RainMeadow.Error("no space for events");
+                    RainMeadow.OLDError($"WriteEvent failed for {e}");
+                    RainMeadow.OLDError("no space for events");
                     break;
                 }
             }
@@ -298,7 +298,7 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Error($"State overflow writing to player {toPlayer}, {s.state} not sent");
+                    RainMeadow.OLDError($"State overflow writing to player {toPlayer}, {s.state} not sent");
                     s.Failed();
                 }
                 StateProfiler.Instance?.Pop(s.state.GetType());
@@ -696,7 +696,7 @@ namespace RainMeadow
             {
                 var inLobbyId = reader.ReadUInt16();
                 player = OnlineManager.lobby?.PlayerFromId(inLobbyId);
-                if (player == null) RainMeadow.Error("Player not found! " + inLobbyId);
+                if (player == null) RainMeadow.OLDError("Player not found! " + inLobbyId);
             }
         }
 

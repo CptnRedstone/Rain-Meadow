@@ -31,7 +31,7 @@ namespace RainMeadow
 
         internal void Activated()
         {
-            RainMeadow.Debug(online);
+            RainMeadow.OLDDebug(online);
             NowCollected();
         }
     }

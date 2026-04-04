@@ -68,7 +68,7 @@ namespace RainMeadow
 
             if (packet == null) {
                 // throw new Exception($"Undetermined packet type ({type}) received");
-                RainMeadow.Error("Bad Packet Type Recieved");
+                RainMeadow.OLDError("Bad Packet Type Recieved");
                 return;
             } 
 

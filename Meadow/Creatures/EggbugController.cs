@@ -156,7 +156,7 @@ namespace RainMeadow
                         self.mainBodyChunk.vel += 1.2f * controller.inputDir; // here some help
                     }
 
-                    if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("overriding");
+                    if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("overriding");
                     return false;
                 }
                 return true;
@@ -166,13 +166,13 @@ namespace RainMeadow
 
         private static void EggBug_Swim(On.EggBug.orig_Swim orig, EggBug self)
         {
-            if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("swim");
+            if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("swim");
             orig(self);
         }
 
         private static void EggBug_Run(On.EggBug.orig_Run orig, EggBug self, MovementConnection followingConnection)
         {
-            if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("run: " + followingConnection);
+            if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("run: " + followingConnection);
             if (creatureControllers.TryGetValue(self, out var c))
             {
                 if (followingConnection.startCoord == self.abstractCreature.abstractAI.destination)

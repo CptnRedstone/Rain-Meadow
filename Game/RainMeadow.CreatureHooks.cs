@@ -139,7 +139,7 @@ namespace RainMeadow
                 OnlineCreature? oc = self.abstractCreature.GetOnlineCreature();
                 if (oc is null)
                 {
-                    RainMeadow.Error($"grabbing entity does not exist in online space {obj.abstractPhysicalObject}");
+                    RainMeadow.OLDError($"grabbing entity does not exist in online space {obj.abstractPhysicalObject}");
                     return ret;
                 }
 

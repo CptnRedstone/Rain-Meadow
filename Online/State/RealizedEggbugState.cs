@@ -17,7 +17,7 @@ namespace RainMeadow
             base.ReadTo(onlineEntity);
             if ((onlineEntity as OnlineCreature).apo.realizedObject is not EggBug bug)
             {
-                RainMeadow.Error("target not realized: " + onlineEntity);
+                RainMeadow.OLDError("target not realized: " + onlineEntity);
                 return;
             }
             bug.eggsLeft = eggsLeft;

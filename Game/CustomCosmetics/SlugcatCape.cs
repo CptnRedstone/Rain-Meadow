@@ -62,14 +62,14 @@ namespace RainMeadow
                 {
                     if (line.Contains("refs/heads/master"))
                     {
-                        RainMeadow.Debug(line);
+                        RainMeadow.OLDDebug(line);
                         // Line format: <length><sha1> refs/heads/master
                         // Strip off the first 4 chars (pkt-line length)
                         string trimmed = line.Length > 4 ? line.Substring(4) : line;
                         string[] parts = trimmed.Split(' ');
                         if (parts.Length > 0)
                         {
-                            RainMeadow.Debug($"recieved the hash latest commit: {parts[0]}");
+                            RainMeadow.OLDDebug($"recieved the hash latest commit: {parts[0]}");
                             return parts[0];
                         }
                     }
@@ -108,7 +108,7 @@ namespace RainMeadow
                     // Only download the new capes when we hashes don't match.
                     if (commithash != commithashlocal)
                     {
-                        RainMeadow.Debug("Local hash doesn't match, downloading remote.");
+                        RainMeadow.OLDDebug("Local hash doesn't match, downloading remote.");
                         using (FileStream stream = File.Create(cape_hash_file))
                         using (StreamWriter writer = new(stream))
                         {
@@ -155,7 +155,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 

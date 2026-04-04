@@ -212,7 +212,7 @@ public class LobbyCreateMenu : SmartMenu
     private void UpdateMeadowTimeline()
     {
         meadowTimeline = SlugcatStats.SlugcatToTimeline(new SlugcatStats.Name(meadowTimelineDropdown.value)).value;
-        RainMeadow.Debug($"Selected Meadow Timeline: {meadowTimeline}");
+        RainMeadow.OLDDebug($"Selected Meadow Timeline: {meadowTimeline}");
     }
     public void CreateElementBindings()
     {
@@ -234,7 +234,7 @@ public class LobbyCreateMenu : SmartMenu
     {
         ShowLoadingDialog("Creating lobby...");
         ApplyLobbyLimit();
-        RainMeadow.Debug($"Creating a lobby with a max player limit of {maxPlayerCount}");
+        RainMeadow.OLDDebug($"Creating a lobby with a max player limit of {maxPlayerCount}");
         RequestLobbyCreate();
     }
 

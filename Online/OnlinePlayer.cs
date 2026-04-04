@@ -50,7 +50,7 @@ namespace RainMeadow
             e.eventId = this.nextOutgoingEvent;
             e.to = this;
             e.from = OnlineManager.mePlayer;
-            RainMeadow.Debug($"{e} for {this}");
+            RainMeadow.OLDDebug($"{e} for {this}");
             nextOutgoingEvent++;
             OutgoingEvents.Enqueue(e);
             return e;
@@ -106,7 +106,7 @@ namespace RainMeadow
             while (OutgoingEvents.Count > 0 && EventMath.IsNewerOrEqual(lastAck, OutgoingEvents.Peek().eventId))
             {
                 var e = OutgoingEvents.Dequeue();
-                RainMeadow.Debug($"{this} ackd {e}");
+                RainMeadow.OLDDebug($"{this} ackd {e}");
                 recentlyAckedEvents.Add(e);
             }
         }
@@ -149,7 +149,7 @@ namespace RainMeadow
                 var e = toBeAborted.Dequeue();
                 if (OutgoingEvents.Contains(e))
                 {
-                    RainMeadow.Debug($"Aborting: {e}");
+                    RainMeadow.OLDDebug($"Aborting: {e}");
                     e.Abort();
 
                     //OutgoingEvents.Remove(e);

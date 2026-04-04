@@ -174,7 +174,7 @@ namespace RainMeadow
             {
                 if (story.rippleLevel < vector.y)
                 {
-                    RainMeadow.Debug($"Raising Ripple Level from: {story.rippleLevel} to {vector.y}");
+                    RainMeadow.OLDDebug($"Raising Ripple Level from: {story.rippleLevel} to {vector.y}");
                     if (!(RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game && game.session is StoryGameSession storyGameSession && game.manager.upcomingProcess is null)) return;
                     story.rippleLevel = vector.y;
                     storyGameSession.saveState.deathPersistentSaveData.minimumRippleLevel = vector.x;
@@ -210,7 +210,7 @@ namespace RainMeadow
             Watcher.WarpPoint? warpPoint = StoryHelpers.PerformWarpHelper(sourceRoomName, warpData, false, true);
             if (warpPoint != null && RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game)
             {
-                RainMeadow.Debug($"warp of kind echo executed; going to win screen warp={warpData}");
+                RainMeadow.OLDDebug($"warp of kind echo executed; going to win screen warp={warpData}");
                 warpPoint.placedObject.pos = pos;
                 var storySession = game.GetStorySession;
                 if (!storySession.saveState.deathPersistentSaveData.spinningTopEncounters.Contains(spinningTopID))
@@ -219,7 +219,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Error($"warp of kind echo FAILED because upcoming process exists");
+                RainMeadow.OLDError($"warp of kind echo FAILED because upcoming process exists");
             }
         }
 
@@ -228,7 +228,7 @@ namespace RainMeadow
         {
             if (rpc != null && OnlineManager.lobby.owner != rpc.from) return;
             if (!(RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game && game.manager.upcomingProcess is null)) return;
-            RainMeadow.Debug($"setting infection of {roomName} to {amount}");
+            RainMeadow.OLDDebug($"setting infection of {roomName} to {amount}");
             // fill if does not exist - otherwise simply set :)
             int regionNumber = game.overWorld.activeWorld.region.regionNumber;
             if (!game.GetStorySession.saveState.regionStates[regionNumber].sentientRotProgression.ContainsKey(roomName))
@@ -264,7 +264,7 @@ namespace RainMeadow
         {
             if (!(RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game && game.manager.upcomingProcess is null)) return;
             var script = game.FirstAnyPlayer.Room.realizedRoom.updateList.OfType<MoreSlugcats.MSCRoomSpecificScript.LC_FINAL>().FirstOrDefault();
-            if (script is null) { RainMeadow.Error($"trigger not found in room {game.FirstAnyPlayer.Room}"); return; }
+            if (script is null) { RainMeadow.OLDError($"trigger not found in room {game.FirstAnyPlayer.Room}"); return; }
             ;
 
             script.TriggerFadeToEnding();
@@ -304,12 +304,12 @@ namespace RainMeadow
                             shelter.shelterDoor.Close();
                             i++;
                         }
-                        RainMeadow.Error($"Closed {i} Shelters.");
+                        RainMeadow.OLDError($"Closed {i} Shelters.");
                     }
                 }
                 else
                 {
-                    RainMeadow.Error("Denied closing shelter because sender is not host");
+                    RainMeadow.OLDError("Denied closing shelter because sender is not host");
                 }
             }
             finally

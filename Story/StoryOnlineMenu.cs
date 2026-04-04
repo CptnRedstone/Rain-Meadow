@@ -323,7 +323,7 @@ namespace RainMeadow
 
             if (storyGameMode.needMenuSaveUpdate)
             {
-                RainMeadow.Debug("page refresh");
+                RainMeadow.OLDDebug("page refresh");
                 storyGameMode.needMenuSaveUpdate = false;
                 RefreshPages();
             }
@@ -517,7 +517,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Debug($"Error getting region name: {e}");
+                RainMeadow.OLDDebug($"Error getting region name: {e}");
             }
             return "";
         }

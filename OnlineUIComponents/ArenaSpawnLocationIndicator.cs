@@ -12,7 +12,7 @@ public class ArenaSpawnLocationIndicator : HudPart
     public ArenaSpawnLocationIndicator(HUD.HUD hud, RoomCamera camera) : base(hud)
     {
         this.camera = camera;
-        if (!RainMeadow.isArenaMode(out ArenaOnlineGameMode arena)) RainMeadow.Error("ArenaSpawnPositionIndicator was constructed outside of an arena game");
+        if (!RainMeadow.isArenaMode(out ArenaOnlineGameMode arena)) RainMeadow.OLDError("ArenaSpawnPositionIndicator was constructed outside of an arena game");
         clientSettings = arena.clientSettings;
     }
 

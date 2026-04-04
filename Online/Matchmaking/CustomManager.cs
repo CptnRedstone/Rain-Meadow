@@ -96,7 +96,7 @@ namespace RainMeadow
                 var customClientSettings = (CustomClientSettings)data;
                 if (keys.Count > 32) // Enforce a max list length of 32
                 {
-                    RainMeadow.Debug($"Tried syncing {keys.Count} custom packet keys. Capping at 32.");
+                    RainMeadow.OLDDebug($"Tried syncing {keys.Count} custom packet keys. Capping at 32.");
                     keys.RemoveRange(32, keys.Count - 32);
                 }
                 customClientSettings.keys = keys.Select(s => s.Substring(0, Math.Min(CustomManager.maxLength, s.Length))).ToList(); // Enforce a max string length of 12

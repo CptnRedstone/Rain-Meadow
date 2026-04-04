@@ -193,7 +193,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -292,7 +292,7 @@ namespace RainMeadow
         {
             if (mouse.footingCounter < 10)
             {
-                RainMeadow.Debug("gripped");
+                RainMeadow.OLDDebug("gripped");
                 creature.room.PlaySound(SoundID.Mouse_Scurry, creature.mainBodyChunk);
                 creature.bodyChunks[0].vel *= 0.2f;
                 creature.bodyChunks[1].vel *= 0.3f;
@@ -345,12 +345,12 @@ namespace RainMeadow
             base.ConsciousUpdate();
             if (mouse.specialMoveCounter > 0 && !mouse.room.aimap.TileAccessibleToCreature(mouse.mainBodyChunk.pos, mouse.Template) && !mouse.room.aimap.TileAccessibleToCreature(mouse.bodyChunks[1].pos, mouse.Template))
             {
-                RainMeadow.Debug("lose footing!");
+                RainMeadow.OLDDebug("lose footing!");
                 mouse.footingCounter = 0;
             }
             else if (mouse.footingCounter > 0 && mouse.footingCounter < 10 && (mouse.room.aimap.TileAccessibleToCreature(mouse.mainBodyChunk.pos, mouse.Template) || mouse.room.aimap.TileAccessibleToCreature(mouse.bodyChunks[1].pos, mouse.Template)))
             {
-                RainMeadow.Debug("regain footing");
+                RainMeadow.OLDDebug("regain footing");
                 mouse.footingCounter = 10; // faster initial regain
             }
             else

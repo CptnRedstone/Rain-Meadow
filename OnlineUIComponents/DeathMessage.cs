@@ -197,7 +197,7 @@ public static class DeathMessage
         }
         catch (Exception e)
         {
-            RainMeadow.Error("Error displaying death message. " + e);
+            RainMeadow.OLDError("Error displaying death message. " + e);
         }
     }
     public static void PlayerKillPlayer(OnlinePhysicalObject killer, OnlinePhysicalObject target, PvPContext context)
@@ -233,7 +233,7 @@ public static class DeathMessage
         }
         catch (Exception e)
         {
-            RainMeadow.Error("Error displaying death message. " + e);
+            RainMeadow.OLDError("Error displaying death message. " + e);
         }
     }
 
@@ -263,7 +263,7 @@ public static class DeathMessage
         }
         catch (Exception e)
         {
-            RainMeadow.Error("Error displaying death message. " + e);
+            RainMeadow.OLDError("Error displaying death message. " + e);
         }
     }
 
@@ -308,7 +308,7 @@ public static class DeathMessage
         }
         catch (Exception e)
         {
-            RainMeadow.Error("Error displaying death message. " + e);
+            RainMeadow.OLDError("Error displaying death message. " + e);
         }
     }
 

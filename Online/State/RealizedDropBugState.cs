@@ -18,7 +18,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if ((onlineEntity as OnlineCreature).apo.realizedObject is not DropBug bug) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if ((onlineEntity as OnlineCreature).apo.realizedObject is not DropBug bug) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             bug.AI.ceilingModule.ceilingPos = ceilingPos;
             bug.AI.ceilingModule.stayAwayFromPos = stayAwayFromPos;

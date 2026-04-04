@@ -23,7 +23,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if (((OnlineCreature)onlineEntity).apo.realizedObject is not TentaclePlant plant) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if (((OnlineCreature)onlineEntity).apo.realizedObject is not TentaclePlant plant) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             plant.AI.mostInterestingItem = mostInterestingItem?.apo.realizedObject;
             plant.idlePos = idlePos;

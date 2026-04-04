@@ -39,7 +39,7 @@ namespace RainMeadow.UI.Components
                 IPartOfButtonScroller? scrollButton = getPlayerButton?.Invoke(this, isLargeDisplay, onlinePlayers[i], GetIdealPosWithScrollForButton(scrollButtons.Count));
                 if (scrollButton == null)
                 {
-                    RainMeadow.Debug("Player button gotten was null!");
+                    RainMeadow.OLDDebug("Player button gotten was null!");
                     continue;
                 }
                 scrollButtons.Add(scrollButton);

@@ -83,7 +83,7 @@ namespace RainMeadow
                 else if (!this.requiresRestart)
                 {
                     //loading mods without a restart required (e.g: loading/unloading MSC or Remix)
-                    RainMeadow.Debug("Finalizing mod reordering");
+                    RainMeadow.OLDDebug("Finalizing mod reordering");
                     menu.PlaySound(SoundID.MENU_Switch_Page_Out);
                     manager.RequestMainProcessSwitch(RainMeadow.Ext_ProcessID.LobbySelectMenu); //requires a process switch to finalize mods
                     Thread.Sleep(1000); //wait for mod finalization to begin

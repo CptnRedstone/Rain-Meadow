@@ -85,7 +85,7 @@ namespace RainMeadow
         [RPCMethod]
         public static void AskNowLeave(RPCEvent rpcEvent)
         {
-            RainMeadow.Debug($"{rpcEvent.from} is asking to leave");
+            RainMeadow.OLDDebug($"{rpcEvent.from} is asking to leave");
             if (!OnlineManager.lobby.isOwner) return;
 
             var lmd = OnlineManager.lobby.GetData<LobbyMusicData>();
@@ -96,18 +96,18 @@ namespace RainMeadow
         [RPCMethod]
         public static void BroadcastInterruption(RPCEvent rpcEvent, string song = "")
         {
-            RainMeadow.Debug($"{rpcEvent.from} is trying to broadcast an interruption");
+            RainMeadow.OLDDebug($"{rpcEvent.from} is trying to broadcast an interruption");
             //A double check if this guy really is a host
             var mgrr = OnlineManager.lobby.GetData<LobbyMusicData>();
             var from = rpcEvent.from.inLobbyId;
             var itsgroup = mgrr.playerGroups[from];
             if (mgrr.groupHosts[itsgroup] != from) return;
-            RainMeadow.Debug("It is a host");
+            RainMeadow.OLDDebug("It is a host");
             //ok they are, interupt the song of everyone in their group
             foreach(var player in mgrr.playerGroups.Where(p => p.Value == itsgroup))
             {
                 if (player.Key == from) continue;
-                RainMeadow.Debug("Sending an rpc to " + player.Key + " of the song: " + song);
+                RainMeadow.OLDDebug("Sending an rpc to " + player.Key + " of the song: " + song);
                 OnlineManager.lobby.PlayerFromId(player.Key).InvokeRPC(InteruptSong, song);
             }
         }
@@ -115,7 +115,7 @@ namespace RainMeadow
         [RPCMethod]
         static void InteruptSong(string song)
         {
-            RainMeadow.Debug("Im getting my song interrupted");
+            RainMeadow.OLDDebug("Im getting my song interrupted");
             var game = (RWCustom.Custom.rainWorld.processManager.currentMainLoop as RainWorldGame);
             if (game == null) return; //if not in game, don't do this
             QueueSong(game.manager.musicPlayer, song);
@@ -126,34 +126,34 @@ namespace RainMeadow
         {
             var mgrr = OnlineManager.lobby.GetData<LobbyMusicData>();
             var from = rpcEvent.from;
-            RainMeadow.Debug($"{from} is asking to join another Player named " + other);
-            if (from == other) { RainMeadow.Error("they're the same you goof??"); return; }
+            RainMeadow.OLDDebug($"{from} is asking to join another Player named " + other);
+            if (from == other) { RainMeadow.OLDError("they're the same you goof??"); return; }
             
             var groupA = mgrr.playerGroups[from.inLobbyId];
             var groupB = mgrr.playerGroups[other.inLobbyId];
 
             if (groupA == 0 && groupB == 0)
             {
-                RainMeadow.Debug("new group for both");
+                RainMeadow.OLDDebug("new group for both");
                 var newId = mgrr.NextGroupId();
-                RainMeadow.Debug("newid: " + newId);
+                RainMeadow.OLDDebug("newid: " + newId);
                 mgrr.playerGroups[from.inLobbyId] = newId;
                 mgrr.playerGroups[other.inLobbyId] = newId;
                 mgrr.groupHosts[newId] = from.inLobbyId;
             }
             else if (groupA == 0)
             {
-                RainMeadow.Debug("A joined B's: " + groupB);
+                RainMeadow.OLDDebug("A joined B's: " + groupB);
                 mgrr.playerGroups[from.inLobbyId] = groupB;
             } 
             else if (groupB == 0)
             {
-                RainMeadow.Debug("B joined A's: " + groupA);
+                RainMeadow.OLDDebug("B joined A's: " + groupA);
                 mgrr.playerGroups[other.inLobbyId] = groupA;
             }
             else if(groupA != groupB)
             {
-                RainMeadow.Debug($"A left own group ({groupA}) and joined B's: " + groupB);
+                RainMeadow.OLDDebug($"A left own group ({groupA}) and joined B's: " + groupB);
                 // A leaves to join B
                 mgrr.PlayerLeaveGroups(from.inLobbyId);
                 mgrr.playerGroups[from.inLobbyId] = groupB;
@@ -161,26 +161,26 @@ namespace RainMeadow
             else
             {
                 // already in same group
-                RainMeadow.Debug("already in the same group");
+                RainMeadow.OLDDebug("already in the same group");
             }
         }
 
         [RPCMethod]
         static void AskNowSquashPlayers(RPCEvent rpcEvent, ushort[] playersinquestion)
         {
-            RainMeadow.Debug("A player is asking to squash an array of folks together");
+            RainMeadow.OLDDebug("A player is asking to squash an array of folks together");
             
             //make unique ID and feed it to all the people
             var lmd = OnlineManager.lobby.GetData<LobbyMusicData>();
             var newid = lmd.NextGroupId();
-            RainMeadow.Debug("newid: " + newid);
+            RainMeadow.OLDDebug("newid: " + newid);
             for (int j = 0; j < playersinquestion.Length; j++)
             {
-                RainMeadow.Debug("player: " + playersinquestion[j]);
+                RainMeadow.OLDDebug("player: " + playersinquestion[j]);
                 lmd.PlayerLeaveGroups(playersinquestion[j]);
                 lmd.playerGroups[playersinquestion[j]] = newid;
             }
-            RainMeadow.Debug("host: " + playersinquestion[0]);
+            RainMeadow.OLDDebug("host: " + playersinquestion[0]);
             lmd.groupHosts[newid] = playersinquestion[0];
         }
     }

@@ -5,7 +5,7 @@
         // I request, to someone else
         public void Request()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isMine) throw new InvalidProgrammerException("this entity is already mine");
             if (!isTransferable) throw new InvalidProgrammerException("cannot be transfered");
             if (isPending) throw new InvalidProgrammerException("this entity has a pending request");
@@ -22,7 +22,7 @@
             }
             else
             {
-                RainMeadow.Debug("Not transfering");
+                RainMeadow.OLDDebug("Not transfering");
             }
         }
 
@@ -30,8 +30,8 @@
         [RPCMethod]
         public void Requested(RPCEvent request)
         {
-            RainMeadow.Debug(this);
-            RainMeadow.Debug("Requested by : " + request.from.id);
+            RainMeadow.OLDDebug(this);
+            RainMeadow.OLDDebug("Requested by : " + request.from.id);
             if (isTransferable && this.isMine)
             {
                 request.from.QueueEvent(new GenericResult.Ok(request)); // your request was well received, now please be patient while I transfer it
@@ -44,8 +44,8 @@
             }
             else
             {
-                if (!isTransferable) RainMeadow.Debug("Denied because not transferable");
-                else if (!isMine) RainMeadow.Debug("Denied because not mine");
+                if (!isTransferable) RainMeadow.OLDDebug("Denied because not transferable");
+                else if (!isMine) RainMeadow.OLDDebug("Denied because not mine");
                 request.from.QueueEvent(new GenericResult.Error(request));
             }
         }
@@ -53,9 +53,9 @@
         // my request has been answered to
         public virtual void ResolveRequest(GenericResult requestResult)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (requestResult.referencedEvent == pendingRequest) pendingRequest = null;
-            else RainMeadow.Error($"Weird event situation, pending is {pendingRequest} and referenced is {requestResult.referencedEvent}");
+            else RainMeadow.OLDError($"Weird event situation, pending is {pendingRequest} and referenced is {requestResult.referencedEvent}");
             if (requestResult is GenericResult.Ok) // I'm the new owner of this entity
             {
                 // no op, comes as state in the same tick
@@ -63,7 +63,7 @@
             else if (requestResult is GenericResult.Error) // Something went wrong, I should retry
             {
                 // todo retry logic
-                RainMeadow.Error("request failed for " + this);
+                RainMeadow.OLDError("request failed for " + this);
                 isTransfering = false;
             }
             if (isMine) JoinOrLeavePending(); // keep ticking
@@ -72,7 +72,7 @@
         // I release this entity (to room host or world host)
         public void Release()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (!isMine) throw new InvalidProgrammerException("not mine");
             if (!isTransferable) throw new InvalidProgrammerException("cannot be transfered");
             if (isPending) throw new InvalidProgrammerException("this entity has a pending request");
@@ -80,7 +80,7 @@
 
             if (primaryResource.isOwner)
             {
-                RainMeadow.Debug("Staying as supervisor");
+                RainMeadow.OLDDebug("Staying as supervisor");
             }
             else if (primaryResource.owner != null)
             {
@@ -93,8 +93,8 @@
         [RPCMethod]
         public void Released(RPCEvent rpcEvent, OnlineResource inResource)
         {
-            RainMeadow.Debug(this);
-            RainMeadow.Debug("Released by : " + rpcEvent.from.id);
+            RainMeadow.OLDDebug(this);
+            RainMeadow.OLDDebug("Released by : " + rpcEvent.from.id);
             if (isTransferable && this.owner == rpcEvent.from && this.primaryResource.isOwner) // theirs and I can transfer
             {
                 rpcEvent.from.QueueEvent(new GenericResult.Ok(rpcEvent)); // ok to them
@@ -109,10 +109,10 @@
             }
             else
             {
-                if (!isTransferable) RainMeadow.Error("Denied because not transferable");
-                else if (owner != rpcEvent.from) RainMeadow.Error("Denied because not theirs");
-                else if (!primaryResource.isOwner) RainMeadow.Error("Denied because I don't supervise it");
-                else if (isPending) RainMeadow.Error("Denied because pending");
+                if (!isTransferable) RainMeadow.OLDError("Denied because not transferable");
+                else if (owner != rpcEvent.from) RainMeadow.OLDError("Denied because not theirs");
+                else if (!primaryResource.isOwner) RainMeadow.OLDError("Denied because I don't supervise it");
+                else if (isPending) RainMeadow.OLDError("Denied because pending");
                 rpcEvent.from.QueueEvent(new GenericResult.Error(rpcEvent));
             }
         }
@@ -120,16 +120,16 @@
         // got an answer back from my release
         public void ResolveRelease(GenericResult result)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (result.referencedEvent == pendingRequest) pendingRequest = null;
-            else RainMeadow.Error($"Weird event situation, pending is {pendingRequest} and referenced is {result.referencedEvent}");
+            else RainMeadow.OLDError($"Weird event situation, pending is {pendingRequest} and referenced is {result.referencedEvent}");
             if (result is GenericResult.Ok)
             {
                 // no op
             }
             else if (result is GenericResult.Error) // Something went wrong, I should retry
             {
-                RainMeadow.Error("request failed for " + this);
+                RainMeadow.OLDError("request failed for " + this);
                 isTransfering = false;
                 if (isTransferable && isMine && !isPending)
                 {

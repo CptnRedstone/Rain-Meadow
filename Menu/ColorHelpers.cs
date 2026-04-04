@@ -51,12 +51,12 @@ namespace RainMeadow
         {
             if (!progression.miscProgressionData.colorChoices.ContainsKey(id.value))
             {
-                RainMeadow.Debug("WARNING! Failed to save color choices due to slugcat not saved");
+                RainMeadow.OLDDebug("WARNING! Failed to save color choices due to slugcat not saved");
                 return;
             }
             if (progression.miscProgressionData.colorChoices[id.value].Count <= bodyIndex)
             {
-                RainMeadow.Debug("WARNING! Failed to save color choices due to index being more than body count!");
+                RainMeadow.OLDDebug("WARNING! Failed to save color choices due to index being more than body count!");
                 return;
             }
             progression.miscProgressionData.colorChoices[id.value][bodyIndex] = hslString;

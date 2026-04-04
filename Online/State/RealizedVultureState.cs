@@ -34,7 +34,7 @@ namespace RainMeadow
         {
             base.ReadTo(onlineEntity);
 
-            if (((OnlineCreature)onlineEntity).apo.realizedObject is not Vulture vulture) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if (((OnlineCreature)onlineEntity).apo.realizedObject is not Vulture vulture) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             neck.ReadTo(vulture.neck);
             vulture.snapAt = snapAt?.ToBodyChunk();

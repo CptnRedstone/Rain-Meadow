@@ -73,7 +73,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if ((onlineEntity as OnlineCreature).apo.realizedObject is not DaddyLongLegs dll) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if ((onlineEntity as OnlineCreature).apo.realizedObject is not DaddyLongLegs dll) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             for (var i = 0; i < tentacles.Length; i++) tentacles[i].ReadTo(dll.tentacles[i]);
             dll.moveDirection = moveDirection;

@@ -104,7 +104,7 @@ public class TabContainer : RectangularMenuObject
             int index = registeredTabButtons.FindIndex(x => x.Item1 == tab);
             if (index < 0)
             {
-                RainMeadow.Error("Unable to find specific tab");
+                RainMeadow.OLDError("Unable to find specific tab");
                 return;
             }
             int previousOffset = CurrentOffset;

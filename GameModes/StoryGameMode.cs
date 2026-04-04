@@ -211,7 +211,7 @@ namespace RainMeadow
 
                 if (!readyForWin && inGameClientsData.Any(scs => scs.readyForWin) && inGameClientsData.All(scs => scs.readyForWin || scs.isDead))
                 {
-                    RainMeadow.Debug("ready for win!");
+                    RainMeadow.OLDDebug("ready for win!");
                     readyForWin = true;
                 }
 
@@ -225,7 +225,7 @@ namespace RainMeadow
                         if (rooms.Distinct().Count() == 1)
                         {
                             RainWorld.roomIndexToName.TryGetValue(rooms.First(), out gateRoom);
-                            RainMeadow.Debug($"ready for gate {gateRoom}!");
+                            RainMeadow.OLDDebug($"ready for gate {gateRoom}!");
                             readyForTransition = ReadyForTransition.Opening;
                         }
                     }
@@ -237,7 +237,7 @@ namespace RainMeadow
                         || (gateRoom is not null && !inGameAvatarOPOs.Select(opo => opo.apo.Room?.name).Contains(gateRoom))  // HACK: AllPlayersThroughToOtherSide may not get called if warp, which softlocks gates
                         )
                     {
-                        RainMeadow.Debug($"all through gate {gateRoom}!");
+                        RainMeadow.OLDDebug($"all through gate {gateRoom}!");
                         readyForTransition = ReadyForTransition.Closed;
                     }
                 }
@@ -276,7 +276,7 @@ namespace RainMeadow
 
         public override AbstractCreature SpawnAvatar(RainWorldGame self, WorldCoordinate location)
         {
-            RainMeadow.Debug(self.StoryPlayerCount);
+            RainMeadow.OLDDebug(self.StoryPlayerCount);
             AbstractCreature MainAvatar = null!;
             AbstractCreature abstractCreature;
 
@@ -306,7 +306,7 @@ namespace RainMeadow
             {
                 avatarsettings_index = playerState.playerNumber;
             }
-            else RainMeadow.Error("No Player State for playerNumber?");
+            else RainMeadow.OLDError("No Player State for playerNumber?");
 
             onlineCreature.AddData(avatarSettings[avatarsettings_index]);
             avatarSettings[avatarsettings_index].overlaySkin = AvatarData.ConfigureOverlay(onlineCreature);
@@ -316,7 +316,7 @@ namespace RainMeadow
         {
             if (oc.TryGetData<SlugcatCustomization>(out var data))
             {
-                RainMeadow.Debug(oc);
+                RainMeadow.OLDDebug(oc);
                 RainMeadow.creatureCustomizations.GetValue(creature, (c) => data);
             }
         }

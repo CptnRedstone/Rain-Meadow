@@ -47,7 +47,7 @@ namespace RainMeadow
         [RPCMethod]
         public static void DeltaReset(RPCEvent rpcEvent, OnlineResource onlineResource, OnlineEntity.EntityId entity)
         {
-            RainMeadow.Debug($"from {rpcEvent.from} resource {onlineResource} entity {entity}");
+            RainMeadow.OLDDebug($"from {rpcEvent.from} resource {onlineResource} entity {entity}");
             if (entity != null)
             {
                 foreach (var feed in OnlineManager.feeds)
@@ -77,7 +77,7 @@ namespace RainMeadow
         {
             string incomingUsername = rpc.from.id.name;
 
-            RainMeadow.Debug("Incoming: " + incomingUsername + ": " + lastSentMessage);
+            RainMeadow.OLDDebug("Incoming: " + incomingUsername + ": " + lastSentMessage);
 
             if (OnlineManager.lobby.gameMode.mutedPlayers.Contains(incomingUsername)) return;
             if (RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game)
@@ -99,7 +99,7 @@ namespace RainMeadow
         [RPCMethod]
         public static void KickToLobby(RPCEvent rpc)
         {
-            RainMeadow.Debug($"{rpc.from} is trying to kick {rpc.to}");
+            RainMeadow.OLDDebug($"{rpc.from} is trying to kick {rpc.to}");
             if (OnlineManager.lobby.owner != rpc.from) return; // Only respond if its the host kicking the player
             if ((RWCustom.Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game && game.manager.upcomingProcess is not null))
             {

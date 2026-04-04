@@ -24,13 +24,13 @@ namespace RainMeadow
                 _ = Emote.emoteHello;
                 currentTestSkin = Skin.Lizard_Pink;
 
-                RainMeadow.Debug($"characters loaded: {Character.values.Count}");
-                RainMeadow.Debug($"skins loaded: {Skin.values.Count}");
-                RainMeadow.Debug($"emotes loaded: {Emote.values.Count}");
+                RainMeadow.OLDDebug($"characters loaded: {Character.values.Count}");
+                RainMeadow.OLDDebug($"skins loaded: {Skin.values.Count}");
+                RainMeadow.OLDDebug($"emotes loaded: {Emote.values.Count}");
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -811,7 +811,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                RainMeadow.Error(ex);
+                RainMeadow.OLDError(ex);
             }
             if (progressionData == null) LoadDefaultProgression();
             lastSaved = UnityEngine.Time.realtimeSinceStartup;

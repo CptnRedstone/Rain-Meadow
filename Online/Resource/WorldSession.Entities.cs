@@ -10,7 +10,7 @@ namespace RainMeadow
         // Something entered this resource, check if it needs registering
         public void ApoEnteringWorld(AbstractPhysicalObject apo)
         {
-            if (!isAvailable) RainMeadow.Error($"Apo {apo} moving in unavailable resource {this}");
+            if (!isAvailable) RainMeadow.OLDError($"Apo {apo} moving in unavailable resource {this}");
             if (!OnlineManager.lobby.gameMode.ShouldSyncAPOInWorld(this, apo)) return;
             if (OnlinePhysicalObject.map.TryGetValue(apo, out var oe))
             {
@@ -20,13 +20,13 @@ namespace RainMeadow
             {
                 if (isActive)
                 {
-                    RainMeadow.Debug($"{this} - registering {apo}");
+                    RainMeadow.OLDDebug($"{this} - registering {apo}");
                     oe = OnlinePhysicalObject.RegisterPhysicalObject(apo);
                     oe.EnterResource(this);
                 }
                 else // world population generates before this can be activated // can't we simply mark it as active earlier?
                 {
-                    RainMeadow.Debug($"{this} - queuing up for later {apo}");
+                    RainMeadow.OLDDebug($"{this} - queuing up for later {apo}");
                     this.earlyApos.Add(apo);
                     return;
                 }
@@ -43,7 +43,7 @@ namespace RainMeadow
             {
                 if (OnlineManager.lobby.gameMode.ShouldSyncAPOInWorld(this, apo))
                 {
-                    RainMeadow.Error($"Unregistered entity leaving {this} : {apo} - {Environment.StackTrace}");
+                    RainMeadow.OLDError($"Unregistered entity leaving {this} : {apo} - {Environment.StackTrace}");
                 }
             }
         }

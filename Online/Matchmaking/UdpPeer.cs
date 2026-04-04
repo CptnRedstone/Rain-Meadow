@@ -590,7 +590,7 @@ namespace RainMeadow
 
                 if (!socket.IsBound) throw new Exception("Could not find port for UDP connection");
             } catch (SocketException except) {
-                RainMeadow.Error(except.SocketErrorCode);
+                RainMeadow.OLDError(except.SocketErrorCode);
                 throw except;
             }
 
@@ -626,7 +626,7 @@ namespace RainMeadow
                     adapter_interface_addresses = adapter_interface_addresses.Append(IPAddress.Loopback);
                 interface_addresses = adapter_interface_addresses.ToArray();
                 foreach(var addr in interface_addresses) {
-                    RainMeadow.Debug(addr);
+                    RainMeadow.OLDDebug(addr);
                 }
             }
 
@@ -687,7 +687,7 @@ namespace RainMeadow
         {
             string[] parts = name.Split(':');
             if (parts.Length != 2) {
-                RainMeadow.Debug("Invalid IP format without colon: " + name);
+                RainMeadow.OLDDebug("Invalid IP format without colon: " + name);
                 parts = new string[2];
                 parts[0] = name;
                 parts[1] = "8720"; //default port
@@ -708,7 +708,7 @@ namespace RainMeadow
             }
 
             if (!ushort.TryParse(parts[1], out ushort port)) {
-                RainMeadow.Debug("Invalid port format: " + parts[1]);
+                RainMeadow.OLDDebug("Invalid port format: " + parts[1]);
                 return null;
             }
 
@@ -721,7 +721,7 @@ namespace RainMeadow
                 if (packet_type == PacketType.Reliable) {
                     peer.wanted_acknowledgement += 1;
                     if (begin_conversation && !peer.need_begin_conversation_ack) {
-                        RainMeadow.Debug("redundant begin_conversation flag? adding this flag to the next Reliable packet sent, which might not be the one currently queued.");
+                        RainMeadow.OLDDebug("redundant begin_conversation flag? adding this flag to the next Reliable packet sent, which might not be the one currently queued.");
                         peer.need_begin_conversation_ack = true;
                     }
                     peer.outgoingpacket.Enqueue(packet);
@@ -731,7 +731,7 @@ namespace RainMeadow
                 } else {
                     SendRaw(packet, peer, packet_type);
                 }
-            } else RainMeadow.Error("Failed to get remote peer");
+            } else RainMeadow.OLDError("Failed to get remote peer");
         }
 
         public void SendRaw(byte[] packet, RemotePeer peer, PacketType packet_type, bool begin_conversation = false) {
@@ -844,7 +844,7 @@ namespace RainMeadow
                     buffer = new byte[socket.Available];
                     len = socket.ReceiveFrom(buffer, ref sender);
                 } catch (Exception except) {
-                    RainMeadow.Error(except);
+                    RainMeadow.OLDError(except);
                     return null;
                 }
 
@@ -868,9 +868,9 @@ namespace RainMeadow
 
                         if (type != PacketType.UnreliableBroadcast) // If it's a broadcast, we don't need to start a converstation.
                         if (peer == null) {
-                            RainMeadow.Debug("Recieved packet from peer we haven't started a conversation with.");
-                            RainMeadow.Debug(ipsender.ToString());
-                            RainMeadow.Debug(Enum.GetName(typeof(PacketType), type));
+                            RainMeadow.OLDDebug("Recieved packet from peer we haven't started a conversation with.");
+                            RainMeadow.OLDDebug(ipsender.ToString());
+                            RainMeadow.OLDDebug(Enum.GetName(typeof(PacketType), type));
                             return null;
                         }
 
@@ -914,8 +914,8 @@ namespace RainMeadow
                                 return null; // Ignore it.
                         }
                     } catch (Exception except) {
-                        RainMeadow.Debug(except);
-                        RainMeadow.Debug($"Error: {except.Message}");
+                        RainMeadow.OLDDebug(except);
+                        RainMeadow.OLDDebug($"Error: {except.Message}");
                         return null;
                     }
                 }

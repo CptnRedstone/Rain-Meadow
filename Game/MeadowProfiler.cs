@@ -60,12 +60,12 @@ namespace RainMeadow
         {
             Instance = this;
             mainThread = Thread.CurrentThread.ManagedThreadId;
-            RainMeadow.Debug($"MeadowProfiler started.");
+            RainMeadow.OLDDebug($"MeadowProfiler started.");
         }
 
         public void Destroy()
         {
-            RainMeadow.Debug($"MeadowProfiler stopped.");
+            RainMeadow.OLDDebug($"MeadowProfiler stopped.");
             Instance = null;
         }
 
@@ -100,7 +100,7 @@ namespace RainMeadow
                         }
                         catch (Exception ex)
                         {
-                            RainMeadow.Error($"MeadowProfiler failed to hook in class {t.FullName}");
+                            RainMeadow.OLDError($"MeadowProfiler failed to hook in class {t.FullName}");
                             return null;
                         }
                     }
@@ -124,12 +124,12 @@ namespace RainMeadow
                 }
                 catch(Exception ex)
                 {
-                    RainMeadow.Error($"MeadowProfiler failed to hook {hit.FullDescription()}");
+                    RainMeadow.OLDError($"MeadowProfiler failed to hook {hit.FullDescription()}");
                 }
             }
 
             patched = true;
-            RainMeadow.Debug("Advanced Profiling Enabled");
+            RainMeadow.OLDDebug("Advanced Profiling Enabled");
         }
 
         public void Update()

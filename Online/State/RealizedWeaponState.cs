@@ -33,7 +33,7 @@ namespace RainMeadow
             base.ReadTo(onlineEntity);
             if (onlineEntity.isTransfering)
             {
-                RainMeadow.Debug($"Transferring {onlineEntity}, not updating state!");
+                RainMeadow.OLDDebug($"Transferring {onlineEntity}, not updating state!");
                 return;
             }
 
@@ -42,7 +42,7 @@ namespace RainMeadow
             
             if (weapon.room != null && weapon.mode != newMode)
             {
-                RainMeadow.Debug($"{onlineEntity} new mode : {newMode}");
+                RainMeadow.OLDDebug($"{onlineEntity} new mode : {newMode}");
                 weapon.ChangeMode(newMode);
                 weapon.throwModeFrames = -1; // not synched, behaves as "infinite"
             }

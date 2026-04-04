@@ -409,11 +409,11 @@ namespace RainMeadow
                     i++;
                 }
                 sw.Stop();
-                RainMeadow.Debug($"Replacec {i} SU_C04 physical object references in {sw.Elapsed.TotalSeconds}s");
+                RainMeadow.OLDDebug($"Replacec {i} SU_C04 physical object references in {sw.Elapsed.TotalSeconds}s");
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 
@@ -449,11 +449,11 @@ namespace RainMeadow
                     i++;
                 }
                 sw.Stop();
-                RainMeadow.Debug($"Replace {i} Jolly CoOP checks in {context.Method.Name} in {sw.Elapsed.TotalSeconds}s");
+                RainMeadow.OLDDebug($"Replace {i} Jolly CoOP checks in {context.Method.Name} in {sw.Elapsed.TotalSeconds}s");
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 
@@ -483,11 +483,11 @@ namespace RainMeadow
                     i++;
                 }
                 sw.Stop();
-                RainMeadow.Debug($"Replace {i} Jolly CoOP checks in {context.Method.Name} in {sw.Elapsed.TotalSeconds}s");
+                RainMeadow.OLDDebug($"Replace {i} Jolly CoOP checks in {context.Method.Name} in {sw.Elapsed.TotalSeconds}s");
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 
@@ -614,14 +614,14 @@ namespace RainMeadow
                     {
                         if (isStoryMode(out var story))
                         {
-                            RainMeadow.Debug(story.avatarSettings[index].bodyColor);
+                            RainMeadow.OLDDebug(story.avatarSettings[index].bodyColor);
                             return story.avatarSettings[index].bodyColor;
                         }
 
                     }
                     catch (Exception except)
                     {
-                        RainMeadow.Error(except);
+                        RainMeadow.OLDError(except);
                     }
                     return orig_color;
                 });
@@ -630,7 +630,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 
@@ -655,7 +655,7 @@ namespace RainMeadow
                         }
                         catch (Exception except)
                         {
-                            RainMeadow.Error(except);
+                            RainMeadow.OLDError(except);
                         }
                         return orig_color;
                     });
@@ -666,7 +666,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 
@@ -692,7 +692,7 @@ namespace RainMeadow
                         }
                         catch (Exception except)
                         {
-                            RainMeadow.Error(except);
+                            RainMeadow.OLDError(except);
                         }
                         return orig_color;
                     });
@@ -702,7 +702,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 

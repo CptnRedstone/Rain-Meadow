@@ -32,7 +32,7 @@ namespace RainMeadow.UI.Components
             tabWrapper = new(menu, this);
             if (GetGameTypeSetup.gameType != ArenaSetup.GameTypeID.Competitive)
             {
-                RainMeadow.Error("THIS IS NOT COMPETITIVE MODE!");
+                RainMeadow.OLDError("THIS IS NOT COMPETITIVE MODE!");
             }
             float textWidthOfSpearHit = 95;
 

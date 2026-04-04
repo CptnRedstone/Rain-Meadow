@@ -34,7 +34,7 @@ namespace RainMeadow
             {
                 if (spectatorOverlay == null)
                 {
-                    RainMeadow.Debug("Creating spectator overlay");
+                    RainMeadow.OLDDebug("Creating spectator overlay");
                     spectatorOverlay = new SpectatorOverlay(game.manager, game, camera);
                     if (SpecialEvents.EventActiveInLobby<SpecialEvents.AprilFools>())
                     {
@@ -44,7 +44,7 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug("Spectate destroy!");
+                    RainMeadow.OLDDebug("Spectate destroy!");
                     spectatorOverlay.ShutDownProcess();
                     if (holidayStoreOverlay != null)
                     {
@@ -92,7 +92,7 @@ namespace RainMeadow
                     if (opo.owner == OnlineManager.mePlayer)
                     {
                         return_to_player = ac;
-                        RainMeadow.Debug(
+                        RainMeadow.OLDDebug(
                             $"Me Player: Setting return to player to: {return_to_player}"
                         );
                         break;
@@ -105,7 +105,7 @@ namespace RainMeadow
 
             if (return_to_player?.Room == null)
             {
-                RainMeadow.Debug($"spectatee {return_to_player} not in room!");
+                RainMeadow.OLDDebug($"spectatee {return_to_player} not in room!");
             }
             else
             {
@@ -138,7 +138,7 @@ namespace RainMeadow
                         || game.manager.upcomingProcess != null
                     )
                     {
-                        RainMeadow.Debug(
+                        RainMeadow.OLDDebug(
                             "Shutting down spectator overlay due to another process request"
                         );
                         spectatorOverlay.ShutDownProcess();
@@ -169,7 +169,7 @@ namespace RainMeadow
                 camera.followAbstractCreature = spectatee;
                 if (spectatee.Room == null)
                 {
-                    RainMeadow.Debug($"spectatee {spectatee} not in room!");
+                    RainMeadow.OLDDebug($"spectatee {spectatee} not in room!");
                 }
                 else
                 {

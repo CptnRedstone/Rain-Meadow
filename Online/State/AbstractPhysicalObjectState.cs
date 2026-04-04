@@ -20,7 +20,7 @@ namespace RainMeadow
         public AbstractPhysicalObjectState(OnlinePhysicalObject onlineEntity, OnlineResource inResource, uint ts) : base(onlineEntity, inResource, ts)
         {
             var realizedState = inResource is RoomSession;
-            if (realizedState && onlineEntity.isMine && onlineEntity.apo.realizedObject != null && !onlineEntity.realized) { RainMeadow.Error($"have realized object, but entity not marked as realized??: {onlineEntity} in resource {inResource}"); }
+            if (realizedState && onlineEntity.isMine && onlineEntity.apo.realizedObject != null && !onlineEntity.realized) { RainMeadow.OLDError($"have realized object, but entity not marked as realized??: {onlineEntity} in resource {inResource}"); }
             if (realizedState && onlineEntity.isMine && !onlineEntity.realized)
             {
                 RainMeadow.Trace($"asked for realized state, not realized: {onlineEntity} in resource {inResource}");
@@ -28,7 +28,7 @@ namespace RainMeadow
             }
             if (realizedState && onlineEntity.apo.realizedObject == null)
             {
-                RainMeadow.Error($"asked for realized state, not realized: {onlineEntity} in resource {inResource}");
+                RainMeadow.OLDError($"asked for realized state, not realized: {onlineEntity} in resource {inResource}");
                 realizedState = false;
             }
             RainMeadow.Trace($"{onlineEntity} sending realized state? {realizedState} entity realized ? {onlineEntity.realized}");
@@ -84,7 +84,7 @@ namespace RainMeadow
                 {
                     if (inDen)
                     {
-                        RainMeadow.Debug("moving to den: " + onlineObject);
+                        RainMeadow.OLDDebug("moving to den: " + onlineObject);
                         if (!apo.pos.NodeDefined && apo.world.game.session is StoryGameSession storyGameSession)
                         {
                             storyGameSession.RemovePersistentTracker(apo);
@@ -93,7 +93,7 @@ namespace RainMeadow
                     }
                     else
                     {
-                        RainMeadow.Debug("moving out of den: " + onlineObject);
+                        RainMeadow.OLDDebug("moving out of den: " + onlineObject);
                         if (!apo.pos.NodeDefined && apo.world.game.session is StoryGameSession storyGameSession
                             && ModManager.MMF && MoreSlugcats.MMF.cfgKeyItemTracking.Value && AbstractPhysicalObject.UsesAPersistantTracker(apo))
                         {
@@ -123,7 +123,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error($"{onlineEntity} failed to move from {wasPos} to {pos}, hard-setting position: " + e);
+                RainMeadow.OLDError($"{onlineEntity} failed to move from {wasPos} to {pos}, hard-setting position: " + e);
                 if (apo.world.IsRoomInRegion(apo.pos.room)) apo.world.GetAbstractRoom(apo.pos).RemoveEntity(apo);
                 apo.pos = pos;
                 if (apo.world.IsRoomInRegion(pos.room)) apo.world.GetAbstractRoom(pos).AddEntity(apo);

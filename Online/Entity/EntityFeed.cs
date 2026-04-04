@@ -25,7 +25,7 @@ namespace RainMeadow
             if (!resource.isAvailable) return; // unloading
             if (resource.isOwner)
             {
-                RainMeadow.Error($"Self-feeding entity {entity} for resource {resource}");
+                RainMeadow.OLDError($"Self-feeding entity {entity} for resource {resource}");
                 return;
             }
             if (resource.owner != player) // they don't know
@@ -68,8 +68,8 @@ namespace RainMeadow
 
         public void ResetDeltas()
         {
-            RainMeadow.Debug($"delta reset for {entity} in {resource} -> {player}");
-            RainMeadow.Debug($"recent states were [{string.Join(", ", OutgoingStates.Select(s => s.sentAsDelta ? $"{s.tick}d{s.baseline}" : $"{s.tick}"))}]");
+            RainMeadow.OLDDebug($"delta reset for {entity} in {resource} -> {player}");
+            RainMeadow.OLDDebug($"recent states were [{string.Join(", ", OutgoingStates.Select(s => s.sentAsDelta ? $"{s.tick}d{s.baseline}" : $"{s.tick}"))}]");
             lastAcknoledgedState = null;
             OutgoingStates = new Queue<OnlineStateMessage>(OutgoingStates.Where(x => !x.sentAsDelta && x.tick > player.latestTickAck));
         }

@@ -22,7 +22,7 @@ namespace RainMeadow
             if (bodyChunk is null) return null;
             if (!OnlinePhysicalObject.map.TryGetValue(bodyChunk.owner.abstractPhysicalObject, out var oe))
             {
-                RainMeadow.Error("body chunk owner doesn't exist in online space! " + bodyChunk.owner.abstractPhysicalObject);
+                RainMeadow.OLDError("body chunk owner doesn't exist in online space! " + bodyChunk.owner.abstractPhysicalObject);
                 return null;
             }
             return new BodyChunkRef(oe, bodyChunk.index);

@@ -294,7 +294,7 @@ namespace RainMeadow.UI
             }
             if (resultShownCounter >= 10 && continueButton.signalText != "CONTINUE")
             {
-                RainMeadow.Debug("Changed continue button to CONTINUE");
+                RainMeadow.OLDDebug("Changed continue button to CONTINUE");
                 continueButton.menuLabel.text = Translate("CONTINUE");
                 continueButton.signalText = "CONTINUE";
                 continueButton.buttonBehav.greyedOut = false;

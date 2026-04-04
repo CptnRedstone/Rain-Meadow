@@ -95,7 +95,7 @@ namespace RainMeadow
 
                 if (!mouseMode && !colorPicker.held)
                 {
-                    RainMeadow.Debug("lost focus, not held");
+                    RainMeadow.OLDDebug("lost focus, not held");
                     this.Signal(this);
                 }
             }
@@ -110,7 +110,7 @@ namespace RainMeadow
             }
             if (loseFocusCounter >= focusTimeout)
             {
-                RainMeadow.Debug("lost focus!");
+                RainMeadow.OLDDebug("lost focus!");
                 this.Signal(this);
             }
         }

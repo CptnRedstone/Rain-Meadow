@@ -37,7 +37,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Error("target not realized: " + onlineEntity);
+                RainMeadow.OLDError("target not realized: " + onlineEntity);
             }
         }
     }

@@ -118,8 +118,8 @@ namespace RainMeadow
         {
             try
             {
-                RainMeadow.Debug($"required: [ {string.Join(", ", requiredMods)} ]");
-                RainMeadow.Debug($"banned:   [ {string.Join(", ", bannedMods)} ]");
+                RainMeadow.OLDDebug($"required: [ {string.Join(", ", requiredMods)} ]");
+                RainMeadow.OLDDebug($"banned:   [ {string.Join(", ", bannedMods)} ]");
                 var active = ModManager.ActiveMods.Select(mod => mod.id).ToList();
                 bool reorder = true; //or change mods whatsoever
                 var disable = GetRequiredMods().Union(bannedMods).Except(requiredMods).Intersect(active).ToList();
@@ -145,27 +145,27 @@ namespace RainMeadow
                                 int modIdx = ModManager.ActiveMods.FindIndex(mod => requiredMods[i] == mod.id);
                                 if (modIdx < 0)
                                 {
-                                    RainMeadow.Debug($"Couldn't find {requiredMods[i]} in ActiveMods");
+                                    RainMeadow.OLDDebug($"Couldn't find {requiredMods[i]} in ActiveMods");
                                     continue;
                                 }
                                 int loadOrder = ModManager.ActiveMods[modIdx].loadOrder;
                                 if (loadOrder < prevIdx)
                                 {
                                     reorder = true;
-                                    RainMeadow.Debug($"Reorder necessary. Idx: {i}");
+                                    RainMeadow.OLDDebug($"Reorder necessary. Idx: {i}");
                                     break;
                                 }
                                 prevIdx = loadOrder;
                             }
                         }
-                        catch (Exception ex) { RainMeadow.Error(ex); }
+                        catch (Exception ex) { RainMeadow.OLDError(ex); }
                     }
                 }
 
-                RainMeadow.Debug($"active:  [ {string.Join(", ", active)} ]");
-                RainMeadow.Debug($"enable:  [ {string.Join(", ", enable)} ]");
-                RainMeadow.Debug($"disable: [ {string.Join(", ", disable)} ]");
-                RainMeadow.Debug($"reorder: {reorder}");
+                RainMeadow.OLDDebug($"active:  [ {string.Join(", ", active)} ]");
+                RainMeadow.OLDDebug($"enable:  [ {string.Join(", ", enable)} ]");
+                RainMeadow.OLDDebug($"disable: [ {string.Join(", ", disable)} ]");
+                RainMeadow.OLDDebug($"reorder: {reorder}");
 
                 if (!reorder) {
                     onFinish?.Invoke();
@@ -204,7 +204,7 @@ namespace RainMeadow
                     int index = ModManager.InstalledMods.FindIndex(mod => mod.id == id);
                     if (index < 0)
                     {
-                        RainMeadow.Debug($"Couldn't find instance of {id} in InstalledMods??");
+                        RainMeadow.OLDDebug($"Couldn't find instance of {id} in InstalledMods??");
                         continue;
                     }
                     pendingEnabled[index] = false;
@@ -225,13 +225,13 @@ namespace RainMeadow
                     {
                         int idx = ModManager.InstalledMods.FindIndex(mod => mod.id == requiredMods[i]);
                         if (idx >= 0) pendingLoadOrder[idx] = i - requiredMods.Length + lowestLoadIdx;
-                        else RainMeadow.Debug($"Couldn't find instance of {requiredMods[i]} in InstalledMods");
+                        else RainMeadow.OLDDebug($"Couldn't find instance of {requiredMods[i]} in InstalledMods");
                     }
 
                     string loadOrderString = "Load Order: "; //log the load order
                     for (int i = 0; i < pendingLoadOrder.Count; i++)
                         if (pendingEnabled[i]) loadOrderString += pendingLoadOrder[i] + "-" + ModManager.InstalledMods[i].id + ", ";
-                    RainMeadow.Debug(loadOrderString);
+                    RainMeadow.OLDDebug(loadOrderString);
                 }
 
                 //check for missing DLC
@@ -246,7 +246,7 @@ namespace RainMeadow
                 
                 Task.Run(() =>
                 {
-                    RainMeadow.Debug("Showing mod check popups");
+                    RainMeadow.OLDDebug("Showing mod check popups");
                     if (missingDLC.Count > 0)
                         modApplier.ShowMissingDLCMessage(missingDLC);
                     else if (enable.Any() || disable.Any() || missingMods.Count > 0)
@@ -256,29 +256,29 @@ namespace RainMeadow
 
                     modApplier.OnFinish += (ModApplier modApplyer) =>
                     {
-                        RainMeadow.Debug("Finished applying");
+                        RainMeadow.OLDDebug("Finished applying");
 
                         if (modApplier.requiresRestart || 
                         modsRequiringForcedRestart
                                 .Intersect(ModManager.InstalledMods.Select(mod => mod.id))
                                 .Any())
                         {
-                            RainMeadow.Debug($"Restarting game with code {restartCode}");
+                            RainMeadow.OLDDebug($"Restarting game with code {restartCode}");
                             Utils.Restart(restartCode);
                         }
                         else if (modApplier.WasSuccessful())
                         {
-                            RainMeadow.Debug("Successfully applied mods");
+                            RainMeadow.OLDDebug("Successfully applied mods");
                             onFinish?.Invoke();
                         }
                         else
-                            RainMeadow.Debug("Error in mod applier; unsuccessful");
+                            RainMeadow.OLDDebug("Error in mod applier; unsuccessful");
                     };
                 });
             }
             catch (Exception ex)
             {
-                RainMeadow.Error(ex);
+                RainMeadow.OLDError(ex);
             }
         }
 
@@ -286,7 +286,7 @@ namespace RainMeadow
         {
             if (ModManager.MMF)
             {
-                RainMeadow.Debug("Restoring config settings");
+                RainMeadow.OLDDebug("Restoring config settings");
 
                 var mmfOptions = MachineConnector.GetRegisteredOI(MoreSlugcats.MMF.MOD_ID);
                 MachineConnector.ReloadConfig(mmfOptions);

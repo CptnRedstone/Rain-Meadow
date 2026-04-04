@@ -77,16 +77,16 @@ namespace RainMeadow
                         }
                         catch (Exception e)
                         {
-                            RainMeadow.Error(assembly.FullName + ":" + type.FullName);
+                            RainMeadow.OLDError(assembly.FullName + ":" + type.FullName);
                             if (isMain || hasState) throw e;
-                            RainMeadow.Error(e);
+                            RainMeadow.OLDError(e);
                         }
                     }
                 }
                 catch (Exception e)
                 {
                     if (isMain || hasState) throw e;
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             }
         }
@@ -101,8 +101,8 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error($"Error serializing {this.GetType()}");
-                RainMeadow.Error(e);
+                RainMeadow.OLDError($"Error serializing {this.GetType()}");
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -126,8 +126,8 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error($"Error Delta {this.GetType()}");
-                RainMeadow.Error(e);
+                RainMeadow.OLDError($"Error Delta {this.GetType()}");
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -155,8 +155,8 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error($"Error ApplyDelta {this.GetType()}");
-                RainMeadow.Error(e);
+                RainMeadow.OLDError($"Error ApplyDelta {this.GetType()}");
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -287,7 +287,7 @@ namespace RainMeadow
             // Welcome to Expression Trees hell
             public StateHandler(OnlineState.StateType stateType, Type type)
             {
-                RainMeadow.Debug($"Registering " + type.FullName);
+                RainMeadow.OLDDebug($"Registering " + type.FullName);
                 try
                 {
                     if (!type.IsValueType && !type.IsClass) throw new InvalidProgrammerException("not class or struct");
@@ -295,7 +295,7 @@ namespace RainMeadow
                     this.type = type;
                     this.deltaSupport = type.GetCustomAttribute<DeltaSupportAttribute>()?.level ?? DeltaSupport.None;
 
-                    if (deltaSupport == DeltaSupport.None) RainMeadow.Debug("No delta support for type: " + type.Name);
+                    if (deltaSupport == DeltaSupport.None) RainMeadow.OLDDebug("No delta support for type: " + type.Name);
 
                     BindingFlags anyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
@@ -303,17 +303,17 @@ namespace RainMeadow
                     var t = type; while (t != null) { tresults.AddRange(t.GetFields(anyInstance | BindingFlags.DeclaredOnly).Where(f => f.GetCustomAttribute<OnlineFieldAttribute>() != null)); t = t.BaseType; }
                     if (type.GetCustomAttribute<OmitFieldsAttribute>() is OmitFieldsAttribute omitFields)
                     {
-                        RainMeadow.Debug("omitting fields: " + string.Join(" ", omitFields.fields));
+                        RainMeadow.OLDDebug("omitting fields: " + string.Join(" ", omitFields.fields));
                         tresults = tresults.Where(f => !omitFields.fields.Contains(f.Name)).ToList();
                     }
                     var fields = tresults.ToArray();
-                    RainMeadow.Debug($"found {fields.Length} fields");
-                    if (fields.Length > 0) RainMeadow.Debug(fields.Select(f => $"{f.FieldType.Name} {f.Name}").Aggregate((a, b) => a + "\n" + b));
+                    RainMeadow.OLDDebug($"found {fields.Length} fields");
+                    if (fields.Length > 0) RainMeadow.OLDDebug(fields.Select(f => $"{f.FieldType.Name} {f.Name}").Aggregate((a, b) => a + "\n" + b));
                     else throw new InvalidProgrammerException($"Type {type} has no online fields");
                     var keys = fields.Where(o => o.GetCustomAttribute<OnlineFieldAttribute>().always).ToList();
                     Dictionary<string, List<FieldInfo>> deltaGroups = fields.Where(o => !o.GetCustomAttribute<OnlineFieldAttribute>().always).GroupBy(o => o.GetCustomAttribute<OnlineFieldAttribute>().group).ToDictionary(g => g.Key, g => g.ToList());
                     ngroups = deltaGroups.Count;
-                    RainMeadow.Debug($"found {ngroups} groups");
+                    RainMeadow.OLDDebug($"found {ngroups} groups");
 
                     var valueFlagsAcessor = typeof(OnlineState).GetField(nameof(OnlineState.valueFlags), anyInstance);
                     var isDeltaProperty = typeof(OnlineState).GetProperty(nameof(OnlineState.IsDelta), anyInstance);
@@ -591,14 +591,14 @@ namespace RainMeadow
 
                         expressions.Add(output); // return
 
-                        RainMeadow.Debug(Expression.Block(new[] { selfConverted, incomingConverted, output }, expressions).ToString());
-                        RainMeadow.Debug(Expression.Lambda<Func<OnlineState, OnlineState, OnlineState>>(Expression.Block(new[] { selfConverted, incomingConverted, output }, expressions), self, incoming).ToString());
+                        RainMeadow.OLDDebug(Expression.Block(new[] { selfConverted, incomingConverted, output }, expressions).ToString());
+                        RainMeadow.OLDDebug(Expression.Lambda<Func<OnlineState, OnlineState, OnlineState>>(Expression.Block(new[] { selfConverted, incomingConverted, output }, expressions), self, incoming).ToString());
                         applydelta = Expression.Lambda<Func<OnlineState, OnlineState, OnlineState>>(Expression.Block(new[] { selfConverted, incomingConverted, output }, expressions), self, incoming).Compile();
                     }
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                     throw;
                 }
             }

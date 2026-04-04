@@ -64,7 +64,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Debug("Requesting lobby");
+                RainMeadow.OLDDebug("Requesting lobby");
                 RequestLobby(password);
             }
 
@@ -74,7 +74,7 @@ namespace RainMeadow
 
         public void RequestLobby(string? key)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isPending) throw new InvalidOperationException("pending");
             if (isAvailable) throw new InvalidOperationException("available");
             ClearIncommingBuffers();
@@ -106,7 +106,7 @@ namespace RainMeadow
 
         public void ResolveLobbyRequest(GenericResult requestResult)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             isRequesting = false;
             if (requestResult is GenericResult.Ok)
             {
@@ -122,13 +122,13 @@ namespace RainMeadow
             }
             else if (requestResult is GenericResult.Fail) // I didn't have the right key for this resource
             {
-                RainMeadow.Error("locked request for " + this);
+                RainMeadow.OLDError("locked request for " + this);
                 MatchmakingManager.currentInstance.JoinLobby(false);
             }
             else if (requestResult is GenericResult.Error) // I should retry
             {
                 RequestLobby((requestResult.referencedEvent as RPCEvent).args[0] as string);
-                RainMeadow.Error("request failed for " + this);
+                RainMeadow.OLDError("request failed for " + this);
             }
         }
 
@@ -235,12 +235,12 @@ namespace RainMeadow
 
                     if (MatchmakingManager.currentInstance.GetPlayer(players.list[i]) is OnlinePlayer p)
                     {
-                        if (p.inLobbyId != inLobbyIds.list[i]) RainMeadow.Debug($"Setting player {p} to lobbyId {inLobbyIds.list[i]}");
+                        if (p.inLobbyId != inLobbyIds.list[i]) RainMeadow.OLDDebug($"Setting player {p} to lobbyId {inLobbyIds.list[i]}");
                         p.inLobbyId = inLobbyIds.list[i];
                     }
                     else
                     {
-                        RainMeadow.Error("Player not found! " + players.list[i]);
+                        RainMeadow.OLDError("Player not found! " + players.list[i]);
                     }
 
 
@@ -310,7 +310,7 @@ namespace RainMeadow
             if (isOwner)
             {
                 player.inLobbyId = nextId;
-                RainMeadow.Debug($"Assigned inLobbyId of {nextId} to player {player}");
+                RainMeadow.OLDDebug($"Assigned inLobbyId of {nextId} to player {player}");
                 nextId++;
                 // todo overflows and repeats (unrealistic but it's a ushort)
             }

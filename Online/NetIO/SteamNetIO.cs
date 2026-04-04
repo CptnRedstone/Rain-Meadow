@@ -30,7 +30,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                     OnlineManager.serializer.EndWrite();
                     throw;
                 }
@@ -55,7 +55,7 @@ namespace RainMeadow
                     }
                     if (buffer == null)
                     {
-                        RainMeadow.Error("There was an error writing the Custom Data buffer.");
+                        RainMeadow.OLDError("There was an error writing the Custom Data buffer.");
                         return;
                     }
                     var steamNetId = (toPlayer.id as SteamMatchmakingManager.SteamPlayerId).oid;
@@ -74,7 +74,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                     throw;
                 }
             }
@@ -115,7 +115,7 @@ namespace RainMeadow
                                 var fromPlayer = (MatchmakingManager.instances[MatchmakingManager.MatchMakingDomain.Steam] as SteamMatchmakingManager).GetPlayerSteam(message.m_identityPeer.GetSteamID().m_SteamID);
                                 if (fromPlayer == null)
                                 {
-                                    RainMeadow.Error("player not found: " + message.m_identityPeer + " " + message.m_identityPeer.GetSteamID());
+                                    RainMeadow.OLDError("player not found: " + message.m_identityPeer + " " + message.m_identityPeer.GetSteamID());
                                     continue;
                                 }
                                 //RainMeadow.Debug($"Receiving message from {fromPlayer}");
@@ -125,8 +125,8 @@ namespace RainMeadow
                         }
                         catch (Exception e)
                         {
-                            RainMeadow.Error("Error reading packet from player : " + message.m_identityPeer.GetSteamID());
-                            RainMeadow.Error(e);
+                            RainMeadow.OLDError("Error reading packet from player : " + message.m_identityPeer.GetSteamID());
+                            RainMeadow.OLDError(e);
                             OnlineManager.serializer.EndRead();
                             //throw;
                         }
@@ -152,7 +152,7 @@ namespace RainMeadow
                                 var fromPlayer = (MatchmakingManager.instances[MatchmakingManager.MatchMakingDomain.Steam] as SteamMatchmakingManager).GetPlayerSteam(message.m_identityPeer.GetSteamID().m_SteamID);
                                 if (fromPlayer == null)
                                 {
-                                    RainMeadow.Error("player not found: " + message.m_identityPeer + " " + message.m_identityPeer.GetSteamID());
+                                    RainMeadow.OLDError("player not found: " + message.m_identityPeer + " " + message.m_identityPeer.GetSteamID());
                                     continue;
                                 }
                                 //RainMeadow.Debug($"Receiving message from {fromPlayer}");
@@ -163,8 +163,8 @@ namespace RainMeadow
                         }
                         catch (Exception e)
                         {
-                            RainMeadow.Error("Error reading custom packet from player : " + message.m_identityPeer.GetSteamID());
-                            RainMeadow.Error(e);
+                            RainMeadow.OLDError("Error reading custom packet from player : " + message.m_identityPeer.GetSteamID());
+                            RainMeadow.OLDError(e);
                             //throw;
                         }
                         finally

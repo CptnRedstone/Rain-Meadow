@@ -13,7 +13,7 @@ namespace RainMeadow
 
         public MeadowPlant(AbstractPhysicalObject abstractPhysicalObject) : base(abstractPhysicalObject)
         {
-            RainMeadow.Debug("MeadowPlant");
+            RainMeadow.OLDDebug("MeadowPlant");
             this.LoadFile("meadowPlant");
             this.mgm = OnlineManager.lobby.gameMode as MeadowGameMode;
             avatarCreature = mgm.avatars[0].creature.realizedCreature;
@@ -86,7 +86,7 @@ namespace RainMeadow
 
         public void InitiateSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
         {
-            RainMeadow.Debug("MeadowPlantGraphics.InitiateSprites");
+            RainMeadow.OLDDebug("MeadowPlantGraphics.InitiateSprites");
             sLeaser.sprites = new FSprite[3];
             sLeaser.sprites[0] = new FSprite("meadowPlant");
             sLeaser.sprites[0].shader = rCam.game.rainWorld.Shaders["RM_LeveIltem"];

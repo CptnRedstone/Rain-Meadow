@@ -12,7 +12,7 @@ namespace RainMeadow
         public void BindOverworld(OverWorld overWorld)
         {
             RainMeadow.DebugMe();
-            if (this.overWorld is not null) RainMeadow.Error("overWorld is not null, Overriding...");
+            if (this.overWorld is not null) RainMeadow.OLDError("overWorld is not null, Overriding...");
             this.overWorld = overWorld;
         }
 

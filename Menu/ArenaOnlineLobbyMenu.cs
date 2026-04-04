@@ -340,11 +340,11 @@ public class ArenaOnlineLobbyMenu : SmartMenu
             Arena.externalArenaGameMode = Arena
                 .registeredGameModes.FirstOrDefault(kvp => kvp.Key == Arena.currentGameMode)
                 .Value;
-            RainMeadow.Debug($"Playing GameMode: {Arena.externalArenaGameMode}");
+            RainMeadow.OLDDebug($"Playing GameMode: {Arena.externalArenaGameMode}");
         }
         else
         {
-            RainMeadow.Error("Could not find game mode in list! Setting to FFA as a fallback");
+            RainMeadow.OLDError("Could not find game mode in list! Setting to FFA as a fallback");
             Arena.externalArenaGameMode = Arena
                 .registeredGameModes.FirstOrDefault(kvp => kvp.Key == FFA.FFAMode.value)
                 .Value;

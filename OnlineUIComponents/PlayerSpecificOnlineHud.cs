@@ -59,7 +59,7 @@ namespace RainMeadow
 
         public PlayerSpecificOnlineHud(OnlineHUD owner, RoomCamera camera, OnlineGameMode onlineGameMode, ClientSettings clientSettings, OnlineEntity.EntityId playerId) : base(owner.hud)
         {
-            RainMeadow.Debug("Adding PlayerSpecificOnlineHud for " + clientSettings.owner);
+            RainMeadow.OLDDebug("Adding PlayerSpecificOnlineHud for " + clientSettings.owner);
             this.owner = owner;
             this.camera = camera;
             camrect = new Rect(Vector2.zero, this.camera.sSize).CloneWithExpansion(-30f);
@@ -149,7 +149,7 @@ namespace RainMeadow
             }
             if (this.playerDisplay == null && customization != null)
             {
-                RainMeadow.Debug("adding player arrow for " + clientSettings.owner);
+                RainMeadow.OLDDebug("adding player arrow for " + clientSettings.owner);
                 this.playerDisplay = new OnlinePlayerDisplay(this, customization, clientSettings.owner);
                 this.parts.Add(this.playerDisplay);
             }

@@ -291,7 +291,7 @@ namespace RainMeadow
                     {
                         if (!self.abstractPhysicalObject.GetOnlineObject(out var opo))
                         {
-                            Error($"Entity {self} doesn't exist in online space!");
+                            OLDError($"Entity {self} doesn't exist in online space!");
                             return true;
                         }
                         if (opo.roomSession.isOwner && (opo.isMine || RPCEvent.currentRPCEvent is not null || self is not Player))
@@ -329,7 +329,7 @@ namespace RainMeadow
                     {
                         if (!self.abstractPhysicalObject.GetOnlineObject(out var opo))
                         {
-                            Error($"Entity {self} doesn't exist in online space!");
+                            OLDError($"Entity {self} doesn't exist in online space!");
                             return true;
                         }
                         if (opo.roomSession.isOwner && (opo.isMine || RPCEvent.currentRPCEvent is not null || self is not Player))
@@ -406,57 +406,57 @@ namespace RainMeadow
                         // try transfer "grabbed" side
                         if (!opoB.isMine)
                         {
-                            RainMeadow.Debug("my object connecting to group that isn't mine");
+                            RainMeadow.OLDDebug("my object connecting to group that isn't mine");
                             var bentities = B.GetAllConnectedObjects().Select(o => OnlinePhysicalObject.map.TryGetValue(o, out var opo) ? opo : null).Where(o => o != null).ToList();
                             bool btransferable = bentities.All(e => e.isTransferable);
                             if (btransferable)
                             {
-                                RainMeadow.Debug("requesting all connected objects");
+                                RainMeadow.OLDDebug("requesting all connected objects");
                                 foreach (var item in bentities)
                                 {
                                     if (!item.isPending) item.Request();
                                     else
                                     {
-                                        RainMeadow.Debug($"can't request {item} because pending");
+                                        RainMeadow.OLDDebug($"can't request {item} because pending");
                                     }
                                 }
                             }
                             else
                             {
-                                RainMeadow.Debug("can't request object because group not transferable");
+                                RainMeadow.OLDDebug("can't request object because group not transferable");
                             }
                         } // else: both groups mine nothing to do
                     }
                     else if (opoB.isMine) // A not mine, B mine
                     {
-                        RainMeadow.Debug("grabbed group is mine");
+                        RainMeadow.OLDDebug("grabbed group is mine");
                         // grabber isn't mine, THEY need to request me tho
                         var bentities = B.GetAllConnectedObjects().Select(o => OnlinePhysicalObject.map.TryGetValue(o, out var opo) ? opo : null).Where(o => o != null).ToList();
                         bool btransferable = bentities.All(e => e.isTransferable);
                         if (btransferable)
                         {
-                            RainMeadow.Debug("grabbed group is transferable"); // other will request
+                            RainMeadow.OLDDebug("grabbed group is transferable"); // other will request
                         }
                         else
                         {
-                            RainMeadow.Debug("grabbed group is NOT transferable");
+                            RainMeadow.OLDDebug("grabbed group is NOT transferable");
                             var aentities = A.GetAllConnectedObjects().Select(o => OnlinePhysicalObject.map.TryGetValue(o, out var opo) ? opo : null).Where(o => o != null).ToList();
                             bool atransferable = aentities.All(e => e.isTransferable);
                             if (atransferable)
                             {
-                                RainMeadow.Debug("requesting all connected objects");
+                                RainMeadow.OLDDebug("requesting all connected objects");
                                 foreach (var item in aentities)
                                 {
                                     if (!item.isPending) item.Request();
                                     else
                                     {
-                                        RainMeadow.Debug($"can't request {item} because pending");
+                                        RainMeadow.OLDDebug($"can't request {item} because pending");
                                     }
                                 }
                             }
                             else
                             {
-                                RainMeadow.Debug("can't request grabber group because group not transferable");
+                                RainMeadow.OLDDebug("can't request grabber group because group not transferable");
                             }
                         }
                     }
@@ -518,13 +518,13 @@ namespace RainMeadow
             OnlinePhysicalObject.map.TryGetValue(result.obj.abstractPhysicalObject, out var onlineHit);
             if (onlineHit == null)
             {
-                RainMeadow.Debug($"Object hit by weapon not found in online space. object: {onlineHit}, weapon: {WeaponOnline}");
+                RainMeadow.OLDDebug($"Object hit by weapon not found in online space. object: {onlineHit}, weapon: {WeaponOnline}");
                 return orig(self, result, eu);
             }
 
             if (WeaponOnline == null)
             {
-                RainMeadow.Debug($"weapon that hit object not found in online space. object: {onlineHit}, weapon: {WeaponOnline}");
+                RainMeadow.OLDDebug($"weapon that hit object not found in online space. object: {onlineHit}, weapon: {WeaponOnline}");
                 return orig(self, result, eu);
             }
 
@@ -790,7 +790,7 @@ namespace RainMeadow
                     }
                     if (self.bodyChunks[0].pos.y < num && (!self.room.water || self.room.waterInverted || self.room.defaultWaterLevel < -10) && (!self.Template.canFly || self.Stunned || self.dead) && (self is Player || !self.room.game.IsArenaSession || self.room.game.GetArenaGameSession.chMeta == null || !self.room.game.GetArenaGameSession.chMeta.oobProtect))
                     {
-                        RainMeadow.Debug("fall out of world prevention: " + self);
+                        RainMeadow.OLDDebug("fall out of world prevention: " + self);
                         var room = self.room;
                         self.RemoveFromRoom();
                         room.CleanOutObjectNotInThisRoom(self); // we need it this frame
@@ -826,7 +826,7 @@ namespace RainMeadow
 
                         //DeathMessage.EnvironmentalDeathMessage(self as Player, DeathMessage.DeathType.Abyss);
                         DeathMessage.EnvironmentalRPC(self as Player, DeathMessage.DeathType.Abyss);
-                        RainMeadow.Debug("prevent abstract creature destroy: " + self); // need this so that we don't release the world session on death
+                        RainMeadow.OLDDebug("prevent abstract creature destroy: " + self); // need this so that we don't release the world session on death
                         self.Die();
                         self.State.alive = false;
                     }
@@ -875,7 +875,7 @@ namespace RainMeadow
             }
             if (!OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var onlineApo) || onlineApo is not OnlineCreature onlineCreature)
             {
-                Error($"Target {self} doesn't exist in online space!");
+                OLDError($"Target {self} doesn't exist in online space!");
                 orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
                 return;
             }
@@ -899,7 +899,7 @@ namespace RainMeadow
                             onlineCreature.RPCCreatureViolence(onlineVillain, hitChunk?.index, hitAppendage, directionAndMomentum, type, damage, stunBonus);
                             return;
                         }
-                        Error($"True villain {trueVillain} - {trueVillain.abstractPhysicalObject.ID} doesn't exist in online space!");
+                        OLDError($"True villain {trueVillain} - {trueVillain.abstractPhysicalObject.ID} doesn't exist in online space!");
                         orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
                         return;
                     }
@@ -910,7 +910,7 @@ namespace RainMeadow
                             OnlinePhysicalObject onlineVillain = null;
                             if (source != null && !OnlinePhysicalObject.map.TryGetValue(source.owner.abstractPhysicalObject, out onlineVillain))
                             {
-                                Error($"Source {source.owner} - {source.owner.abstractPhysicalObject.ID} doesn't exist in online space!");
+                                OLDError($"Source {source.owner} - {source.owner.abstractPhysicalObject.ID} doesn't exist in online space!");
                                 orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
                                 return;
                             }
@@ -936,7 +936,7 @@ namespace RainMeadow
             }
             if (!OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var onlineApo) || onlineApo is not OnlineCreature onlineCreature)
             {
-                Error($"Target {self} doesn't exist in online space!");
+                OLDError($"Target {self} doesn't exist in online space!");
                 orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
                 return;
             }
@@ -960,7 +960,7 @@ namespace RainMeadow
                             onlineCreature.RPCCreatureViolence(onlineVillain, hitChunk?.index, hitAppendage, directionAndMomentum, type, damage, stunBonus);
                             return;
                         }
-                        Error($"True villain {trueVillain} - {trueVillain.abstractPhysicalObject.ID} doesn't exist in online space!");
+                        OLDError($"True villain {trueVillain} - {trueVillain.abstractPhysicalObject.ID} doesn't exist in online space!");
                         orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
                         return;
                     }
@@ -969,7 +969,7 @@ namespace RainMeadow
                         OnlinePhysicalObject onlineVillain = null;
                         if (source != null && !OnlinePhysicalObject.map.TryGetValue(source.owner.abstractPhysicalObject, out onlineVillain))
                         {
-                            Error($"Source {source.owner} - {source.owner.abstractPhysicalObject.ID} doesn't exist in online space!");
+                            OLDError($"Source {source.owner} - {source.owner.abstractPhysicalObject.ID} doesn't exist in online space!");
                             orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
                             return;
                         }

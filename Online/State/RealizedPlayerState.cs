@@ -81,7 +81,7 @@ namespace RainMeadow
 
         public void ReadTo(Player player)
         {
-            if (onlineDeer?.apo.realizedObject is not Deer deer) { RainMeadow.Error("deer not found: " + onlineDeer); return; }
+            if (onlineDeer?.apo.realizedObject is not Deer deer) { RainMeadow.OLDError("deer not found: " + onlineDeer); return; }
             if (player.playerInAntlers is not null && player.playerInAntlers.deer != deer)  // we are on the wrong deer
             {
                 player.playerInAntlers.playerDisconnected = true;
@@ -257,7 +257,7 @@ namespace RainMeadow
 
         override public bool ShouldPosBeLenient(PhysicalObject po)
         {
-            if (po is not Player p) { RainMeadow.Error("target is wrong type: " + po); return false; }
+            if (po is not Player p) { RainMeadow.OLDError("target is wrong type: " + po); return false; }
 
             if (p.onBack != null) return true;
             if (vinePosState is not null && p.animation == Player.AnimationIndex.VineGrab) return true;
@@ -273,7 +273,7 @@ namespace RainMeadow
             var oc = onlineEntity as OnlineCreature;
             var p = oc?.apo.realizedObject as Player;
             base.ReadTo(onlineEntity);
-            if (p is null) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if (p is null) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             //watcher
             p.isCamo = isCamo;

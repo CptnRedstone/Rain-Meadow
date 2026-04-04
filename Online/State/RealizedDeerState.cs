@@ -23,7 +23,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if ((onlineEntity as OnlineCreature).apo.realizedObject is not Deer deer) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if ((onlineEntity as OnlineCreature).apo.realizedObject is not Deer deer) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             deer.moveDirection = moveDirection;
             deer.flipDir = flipDir;

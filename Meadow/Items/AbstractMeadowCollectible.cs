@@ -36,7 +36,7 @@ namespace RainMeadow
 
             if (Expired && online.isMine)
             {
-                RainMeadow.Debug("Expired:" + online);
+                RainMeadow.OLDDebug("Expired:" + online);
                 this.Destroy();
                 this.Room.entities.Remove(this);
             }
@@ -45,7 +45,7 @@ namespace RainMeadow
         public void Collect()
         {
             if (collectedLocally) { return; }
-            RainMeadow.Debug("Collected locally:" + online);
+            RainMeadow.OLDDebug("Collected locally:" + online);
             collectedLocally = true;
             MeadowProgression.ItemCollected(this);
             if (SpecialEvents.EventActiveInLobby<SpecialEvents.AprilFools>())
@@ -87,7 +87,7 @@ namespace RainMeadow
         {
             if (!online.isMine) { throw new InvalidProgrammerException("not owner: " + online); }
             if (collected) { return; }
-            RainMeadow.Debug("Collected:" + online);
+            RainMeadow.OLDDebug("Collected:" + online);
             collected = true;
             collectedAt = world.game.clock;
             if (world.GetResource() is WorldSession ws)
@@ -100,14 +100,14 @@ namespace RainMeadow
         [RPCMethod]
         public static void CollectRemote(OnlinePhysicalObject online)
         {
-            RainMeadow.Debug("Collect remote!:" + online);
+            RainMeadow.OLDDebug("Collect remote!:" + online);
             if (online != null && online.isMine && online.apo is AbstractMeadowCollectible amc)
             {
                 amc.NowCollected();
             }
             else
             {
-                RainMeadow.Error($"{online != null} && {online?.isMine} && {online?.apo is AbstractMeadowCollectible}");
+                RainMeadow.OLDError($"{online != null} && {online?.isMine} && {online?.apo is AbstractMeadowCollectible}");
             }
         }
 

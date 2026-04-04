@@ -52,15 +52,15 @@ public class ArenaSlugcatSelectPage : PositionedMenuObject, SelectOneButton.Sele
         slugcatSelectNamePages = new List<SlugcatStats.Name[]>();
 
         int RequiredPages = (int)Mathf.Ceil((float)ArenaHelpers.selectableSlugcats.Count / maxScugsPerPage);
-        RainMeadow.Debug("Need " + RequiredPages + " pages for " + ArenaHelpers.selectableSlugcats.Count + " scugs (@" + maxScugsPerPage + "/page):");
+        RainMeadow.OLDDebug("Need " + RequiredPages + " pages for " + ArenaHelpers.selectableSlugcats.Count + " scugs (@" + maxScugsPerPage + "/page):");
         for (int i=0; i< RequiredPages; i++)
         {
             slugcatSelectNamePages.Add(new SlugcatStats.Name[Math.Min(maxScugsPerPage, ArenaHelpers.selectableSlugcats.Count - (i * maxScugsPerPage))]);
-            RainMeadow.Debug("  Page " + i + " should hold " + slugcatSelectNamePages[i].Length + " scugs:");
+            RainMeadow.OLDDebug("  Page " + i + " should hold " + slugcatSelectNamePages[i].Length + " scugs:");
             for (int j=0; j<slugcatSelectNamePages[i].Length; j++)
             {
                 slugcatSelectNamePages[i][j] = ArenaHelpers.selectableSlugcats[(i*(maxScugsPerPage))+j];
-                RainMeadow.Debug("    " + j + ": " + slugcatSelectNamePages[i][j]);
+                RainMeadow.OLDDebug("    " + j + ": " + slugcatSelectNamePages[i][j]);
             }
         }
 
@@ -103,7 +103,7 @@ public class ArenaSlugcatSelectPage : PositionedMenuObject, SelectOneButton.Sele
                 Arena.watcherRippleLevel = 9; // somehow that happened and broke everything
             }
             SlugcatStats.Name? savedSlugcat = ArenaMenu.GetArenaSetup.playerClass[0];
-            RainMeadow.Debug($"Saved Slugcat: {savedSlugcat?.value ?? "NULL"}");
+            RainMeadow.OLDDebug($"Saved Slugcat: {savedSlugcat?.value ?? "NULL"}");
             SwitchSelectedSlugcat(savedSlugcat);
             ArenaMenu.ChangeScene();
         }

@@ -463,7 +463,7 @@ public class RainMeadowOptions : OptionInterface
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             };
 
@@ -476,7 +476,7 @@ public class RainMeadowOptions : OptionInterface
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             };
             opTab.AddItems(GeneralUIArrPlayerOptions);
@@ -570,7 +570,7 @@ public class RainMeadowOptions : OptionInterface
 
         catch (Exception ex)
         {
-            RainMeadow.Error("Error opening RainMeadow Options Menu" + ex);
+            RainMeadow.OLDError("Error opening RainMeadow Options Menu" + ex);
         }
     }
 

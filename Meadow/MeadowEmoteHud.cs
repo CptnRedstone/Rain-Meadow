@@ -87,7 +87,7 @@ namespace RainMeadow
             var emotes = MeadowProgression.AllAvailableEmotes(customization.character);
             var symbols = MeadowProgression.symbolEmotes;
 
-            RainMeadow.Debug($"MeadowEmoteHud for {owner}, oc is {creatureController.onlineCreature}");
+            RainMeadow.OLDDebug($"MeadowEmoteHud for {owner}, oc is {creatureController.onlineCreature}");
 
             Emote? newemote = MeadowProgressionHud.newEmote;
             // grid
@@ -95,7 +95,7 @@ namespace RainMeadow
             var emoteColumns = (emotes.Count - 1) / iconsPerColumn + 1;
             var symbolColumns = (symbols.Count - 1) / iconsPerColumn + 1;
 
-            RainMeadow.Debug($"grid: {iconsPerColumn} by {emoteColumns}+{symbolColumns}");
+            RainMeadow.OLDDebug($"grid: {iconsPerColumn} by {emoteColumns}+{symbolColumns}");
             gridEmotes = new Emote[iconsPerColumn, emoteColumns + symbolColumns];
 
             for (int i = 0; i < emoteColumns; i++)
@@ -159,7 +159,7 @@ namespace RainMeadow
             uiNeeded = 240;
             uiFade = 1f;
 
-            RainMeadow.Debug($"grid: done");
+            RainMeadow.OLDDebug($"grid: done");
 
             // radial
 
@@ -170,7 +170,7 @@ namespace RainMeadow
             var emotePages = (emotes.Count - 1) / emotesPerPage + 1;
             var symbolPages = (symbols.Count - 1) / emotesPerPage + 1;
             radialPagesCount = 1 + emotePages + symbolPages;
-            RainMeadow.Debug($"emotePages: {emotePages}; symbolPages:{symbolPages}");
+            RainMeadow.OLDDebug($"emotePages: {emotePages}; symbolPages:{symbolPages}");
 
             radialEmotes = new Emote[radialPagesCount][];
             radialEmotes[0] = new Emote[emotesPerPage];
@@ -669,10 +669,10 @@ namespace RainMeadow
 
         public void EmotePressed(Emote emoteType)
         {
-            RainMeadow.Debug(emoteType);
+            RainMeadow.OLDDebug(emoteType);
             if (displayer.AddEmoteLocal(emoteType))
             {
-                RainMeadow.Debug("emote added");
+                RainMeadow.OLDDebug("emote added");
                 hud.owner.PlayHUDSound(SoundID.MENU_Checkbox_Check);
             }
         }

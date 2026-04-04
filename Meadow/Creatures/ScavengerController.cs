@@ -75,7 +75,7 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 //throw; // noncritical
             }
         }
@@ -362,7 +362,7 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw e;
             }
         }
@@ -450,13 +450,13 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
 
             if (Input.GetKey(KeyCode.L))
             {
-                RainMeadow.Debug("postupdate");
+                RainMeadow.OLDDebug("postupdate");
                 RainMeadow.Dump(self);
                 for (int i = 0; i < 3; i++)
                 {
-                    RainMeadow.Debug($"{i}:pos:{self.bodyChunks[i].pos}:vel:{self.bodyChunks[i].vel}");
+                    RainMeadow.OLDDebug($"{i}:pos:{self.bodyChunks[i].pos}:vel:{self.bodyChunks[i].vel}");
                 }
-                RainMeadow.Debug("connections:\n" + string.Join("\n", self.connections.Select(m => $"{m.startCoord.Tile} -> {m.destinationCoord.Tile}")));
+                RainMeadow.OLDDebug("connections:\n" + string.Join("\n", self.connections.Select(m => $"{m.startCoord.Tile} -> {m.destinationCoord.Tile}")));
             }
         }
 
@@ -490,7 +490,7 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
                     }
                     else
                     {
-                        if (localtrace) RainMeadow.Debug("clearing overshot");
+                        if (localtrace) RainMeadow.OLDDebug("clearing overshot");
                         scavenger.commitToMoveCounter = -5;
                     }
                 }
@@ -507,14 +507,14 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
 
             if (forceNoFooting > 0)
             {
-                if (localtrace) RainMeadow.Debug("nofooting");
+                if (localtrace) RainMeadow.OLDDebug("nofooting");
                 forceNoFooting--;
                 groundFooting = 0;
                 scavenger.footingCounter = 0;
                 if (forceNoFooting > 5)
                 {
-                    if (localtrace) RainMeadow.Debug("nofooting hard");
-                    if (localtrace) RainMeadow.Debug("knuckles were: " + scavenger.knucklePos);
+                    if (localtrace) RainMeadow.OLDDebug("nofooting hard");
+                    if (localtrace) RainMeadow.OLDDebug("knuckles were: " + scavenger.knucklePos);
                     scavenger.swingPos = null;
                     scavenger.nextSwingPos = null;
                     scavenger.knucklePos = null;
@@ -573,13 +573,13 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
 
             if (localtrace)
             {
-                RainMeadow.Debug("preupdate");
+                RainMeadow.OLDDebug("preupdate");
                 RainMeadow.Dump(scavenger);
                 for (int i = 0; i < 3; i++)
                 {
-                    RainMeadow.Debug($"{i}:pos:{creature.bodyChunks[i].pos}:vel:{creature.bodyChunks[i].vel}");
+                    RainMeadow.OLDDebug($"{i}:pos:{creature.bodyChunks[i].pos}:vel:{creature.bodyChunks[i].vel}");
                 }
-                RainMeadow.Debug("connections:\n" + string.Join("\n", scavenger.connections.Select(m => $"{m.startCoord.Tile} -> {m.destinationCoord.Tile}")));
+                RainMeadow.OLDDebug("connections:\n" + string.Join("\n", scavenger.connections.Select(m => $"{m.startCoord.Tile} -> {m.destinationCoord.Tile}")));
             }
         }
 
@@ -666,7 +666,7 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
         {
             if (groundFooting > 5 || scavenger.Submersion > 0)
             {
-                if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("do override");
+                if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("do override");
                 scavenger.commitedToMove = movementConnection;
                 scavenger.commitToMoveCounter = 5;
                 scavenger.commitedMoveFollowChunk = creature.mainBodyChunk.submersion > 0 ? 0 : 1;
@@ -678,7 +678,7 @@ i => i.MatchCallvirt(typeof(Creature).GetProperty(nameof(Creature.mainBodyChunk)
             }
             else
             {
-                if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("override fail");
+                if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("override fail");
             }
             //if (HasFooting || scavenger.Submersion > 0)
             //{

@@ -41,7 +41,7 @@ namespace RainMeadow
             }
             if (key.Length > 16 || data.Length > 32768)
             {
-                RainMeadow.Error($"Custom Packet was too large, the maximum size is 32768");
+                RainMeadow.OLDError($"Custom Packet was too large, the maximum size is 32768");
                 return;
             }
             MatchmakingManager.currentInstance.RecieveCustomPacket(processingPlayer, this);

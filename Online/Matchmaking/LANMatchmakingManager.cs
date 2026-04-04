@@ -142,7 +142,7 @@ namespace RainMeadow {
         public void addLobby(LANLobbyInfo lobby) {
             var updating_lobby = lobbyinfo.FirstOrDefault(x => UDPPeerManager.CompareIPEndpoints(x.endPoint, lobby.endPoint));
             if (updating_lobby is null) {
-                RainMeadow.Debug($"Added lobby {lobby}");
+                RainMeadow.OLDDebug($"Added lobby {lobby}");
                 lobbyinfo.Add(lobby);
             } else {
                 updating_lobby.hasPassword = lobby.hasPassword;
@@ -220,7 +220,7 @@ namespace RainMeadow {
             OnlineManager.players.Add(joiningPlayer);
             HandleJoin(joiningPlayer);
             (OnlineManager.netIO as LANNetIO)?.SendAcknoledgement(joiningPlayer);
-            RainMeadow.Debug($"Added {joiningPlayer} to the lobby matchmaking player list");
+            RainMeadow.OLDDebug($"Added {joiningPlayer} to the lobby matchmaking player list");
 
             if (OnlineManager.lobby != null && OnlineManager.lobby.isOwner)
             {
@@ -246,7 +246,7 @@ namespace RainMeadow {
         public void RemoveLANPlayer(OnlinePlayer leavingPlayer)
         {
             StackTrace stackTrace = new();
-            RainMeadow.Debug(stackTrace.ToString());
+            RainMeadow.OLDDebug(stackTrace.ToString());
 
 
             if (leavingPlayer.isMe) return; 
@@ -277,28 +277,28 @@ namespace RainMeadow {
                 var lobbyInfo = (LANLobbyInfo)lobby;
                 if (lobbyInfo.endPoint == null)
                 {
-                    RainMeadow.Debug("Failed to join local game...");
+                    RainMeadow.OLDDebug("Failed to join local game...");
                     return;
                 }
                 
-                RainMeadow.Debug("Sending Request to join lobby...");
+                RainMeadow.OLDDebug("Sending Request to join lobby...");
                 OnlineManager.netIO.SendP2P(new OnlinePlayer(new LANPlayerId(lobbyInfo.endPoint)), 
                     new RequestJoinPacket(OnlineManager.mePlayer.id.name), NetIO.SendType.Reliable, true);
             } else {
-                RainMeadow.Error("Invalid lobby type");
+                RainMeadow.OLDError("Invalid lobby type");
             }
         }
 
         public override void JoinLobby(bool success) {
             if (success)
             {
-                RainMeadow.Debug("Joining lobby");
+                RainMeadow.OLDDebug("Joining lobby");
                 OnLobbyJoinedEvent(true);
             }
             else
             {
                 OnlineManager.LeaveLobby();
-                RainMeadow.Debug("Failed to join local game. Wrong Password");
+                RainMeadow.OLDDebug("Failed to join local game. Wrong Password");
                 OnLobbyJoinedEvent(false, Utils.Translate("Wrong password!"));
             }
         }
@@ -307,11 +307,11 @@ namespace RainMeadow {
         {
             if (args.Length >= 2 && long.TryParse(args[0], out var address) && int.TryParse(args[1], out var port))
             {
-                RainMeadow.Debug($"joining lobby with address {address} and port {port} from the command line");
+                RainMeadow.OLDDebug($"joining lobby with address {address} and port {port} from the command line");
                 RequestJoinLobby(new LANLobbyInfo(new IPEndPoint(address, port), "", "", 0, false, 4), args.Length > 2 ? args[2] : null);
             }
             else
-                RainMeadow.Error($"invalid address and port: {string.Join(" ", args)}");
+                RainMeadow.OLDError($"invalid address and port: {string.Join(" ", args)}");
         }
 
         public override void LeaveLobby() {

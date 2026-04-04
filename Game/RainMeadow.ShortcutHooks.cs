@@ -32,10 +32,10 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby != null && self.game != null && self.updateList.Contains(obj))
             {
-                Debug($"Object {obj} - {(obj is PhysicalObject po ? po.abstractPhysicalObject.ID : obj)} already in the update list! Skipping...");
+                OLDDebug($"Object {obj} - {(obj is PhysicalObject po ? po.abstractPhysicalObject.ID : obj)} already in the update list! Skipping...");
                 var stackTrace = Environment.StackTrace;
                 if (!stackTrace.Contains("AbstractSpaceVisualizer")) // We know about this
-                    Error(Environment.StackTrace); // Log cases that we still haven't found 
+                    OLDError(Environment.StackTrace); // Log cases that we still haven't found 
                 return;
             }
             orig(self, obj);
@@ -88,7 +88,7 @@ namespace RainMeadow
                 c.Emit(OpCodes.Ldloc, inbetween_room_index_loc);
                 c.Emit(OpCodes.Ldloc, newCoord_loc);
                 c.EmitDelegate((ShortcutHandler handler, int inbetween_room_index, WorldCoordinate cord) => {
-                    Debug($"{handler}, {inbetween_room_index}, {cord}");
+                    OLDDebug($"{handler}, {inbetween_room_index}, {cord}");
                     if (OnlineManager.lobby != null) {
                         var creature = handler.betweenRoomsWaitingLobby[inbetween_room_index].creature?.abstractCreature;
                         if (creature?.GetOnlineCreature() is OnlineCreature oc) {
@@ -102,7 +102,7 @@ namespace RainMeadow
                             }
                             catch (Exception except)
                             {
-                                RainMeadow.Debug(except);
+                                RainMeadow.OLDDebug(except);
                             }
                             
                             return true;
@@ -144,7 +144,7 @@ namespace RainMeadow
                     }
                 }
             } catch (Exception err) {
-                RainMeadow.Error(err);
+                RainMeadow.OLDError(err);
             }
 
             orig(self);
@@ -162,7 +162,7 @@ namespace RainMeadow
             var absCrit = vessel.creature.abstractCreature;
             if (!OnlinePhysicalObject.map.TryGetValue(absCrit, out var onlineEntity))
             {
-                RainMeadow.Error($"Untracked entity: " + absCrit);
+                RainMeadow.OLDError($"Untracked entity: " + absCrit);
                 return result;
             }
 
@@ -205,8 +205,8 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Error($"Untracked entity: " + apo);
-                    RainMeadow.Error($"connected to: {absCrit} {onlineEntity}");
+                    RainMeadow.OLDError($"Untracked entity: " + apo);
+                    RainMeadow.OLDError($"connected to: {absCrit} {onlineEntity}");
                 }
             }
 
@@ -224,7 +224,7 @@ namespace RainMeadow
 
             if (!OnlinePhysicalObject.map.TryGetValue(creature.abstractCreature, out var onlineEntity))
             {
-                Error($"Entity {creature} - {creature.abstractCreature.ID} doesn't exist in online space!");
+                OLDError($"Entity {creature} - {creature.abstractCreature.ID} doesn't exist in online space!");
                 orig(self, creature, type, start, dest);
                 return;
             }
@@ -233,7 +233,7 @@ namespace RainMeadow
 
             if (onlineCreature.isMine)
             {
-                RainMeadow.Debug($"{onlineCreature} took flight");
+                RainMeadow.OLDDebug($"{onlineCreature} took flight");
                 onlineCreature.BroadcastRPCInRoom(onlineCreature.TookFlight, type, start, dest);
             }
             else if (onlineCreature.enteringShortCut) // If this call was from a processing event
@@ -242,7 +242,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Error($"Remote entity trying to take flight: {onlineCreature} at {onlineCreature.roomSession}");
+                RainMeadow.OLDError($"Remote entity trying to take flight: {onlineCreature} at {onlineCreature.roomSession}");
                 return;
             }
             orig(self, creature, type, start, dest);
@@ -268,7 +268,7 @@ namespace RainMeadow
 
             if (!OnlinePhysicalObject.map.TryGetValue(self.abstractCreature, out var onlineEntity))
             {
-                Error($"Entity {self} - {self.abstractCreature.ID} doesn't exist in online space!");
+                OLDError($"Entity {self} - {self.abstractCreature.ID} doesn't exist in online space!");
                 orig(self, entrancePos, carriedByOther);
                 return;
             }
@@ -276,12 +276,12 @@ namespace RainMeadow
             var onlineCreature = (OnlineCreature)onlineEntity;
             if (self.inShortcut)
             {
-                RainMeadow.Error($"{onlineCreature} was already in shortcuts");
+                RainMeadow.OLDError($"{onlineCreature} was already in shortcuts");
             }
 
             if (onlineCreature.enteringShortCut) // If this call was from a processing event
             {
-                RainMeadow.Debug($"{onlineCreature} sucked into shortcut from remote");
+                RainMeadow.OLDDebug($"{onlineCreature} sucked into shortcut from remote");
 
                 if (!IsTakingUnmoveableObject(self, entrancePos)) {
                     orig(self, entrancePos, carriedByOther);
@@ -297,7 +297,7 @@ namespace RainMeadow
             {
                 if (!IsTakingUnmoveableObject(self, entrancePos)) {
                     orig(self, entrancePos, carriedByOther);
-                    RainMeadow.Debug($"{onlineCreature} sucked into shortcut locally");
+                    RainMeadow.OLDDebug($"{onlineCreature} sucked into shortcut locally");
                     
                     if (room.isOwner) // now broadcast
                     {
@@ -327,7 +327,7 @@ namespace RainMeadow
 
             if (!self.abstractCreature.GetOnlineCreature(out var onlineEntity))
             {
-                Error($"Entity {self} - {self.abstractCreature.ID} doesn't exist in online space!");
+                OLDError($"Entity {self} - {self.abstractCreature.ID} doesn't exist in online space!");
                 return;
             }
             

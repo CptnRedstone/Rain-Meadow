@@ -52,12 +52,12 @@ namespace RainMeadow
             get
             {
                 var contents = GUIUtility.systemCopyBuffer;
-                RainMeadow.Debug($"Clipboard was accessed! Reading {contents.Length} chars from system clipboard!");
+                RainMeadow.OLDDebug($"Clipboard was accessed! Reading {contents.Length} chars from system clipboard!");
                 return contents;
             }
             set
             {
-                RainMeadow.Debug($"Clipboard was accessed! Writing {value.Length} chars to system clipboard!");
+                RainMeadow.OLDDebug($"Clipboard was accessed! Writing {value.Length} chars to system clipboard!");
                 GUIUtility.systemCopyBuffer = value;
             }
         }
@@ -266,7 +266,7 @@ namespace RainMeadow
                 {
                     if (MultiView) HandleDeselect();
                     menu.PlaySound(SoundID.MENY_Already_Selected_MultipleChoice_Clicked);
-                    RainMeadow.Debug("Could not send lastSentMessage because it had no text or only had whitespaces");
+                    RainMeadow.OLDDebug("Could not send lastSentMessage because it had no text or only had whitespaces");
                     if (MultiView) return;
                 }
                 // only resets the chat text box if in a story lobby menu, otherwise the text box is just destroyed
@@ -617,7 +617,7 @@ namespace RainMeadow
             var paste = string.Copy(Clipboard);
             if (string.IsNullOrEmpty(paste))
             {
-                RainMeadow.Debug("Clipboard was empty.");
+                RainMeadow.OLDDebug("Clipboard was empty.");
                 return msg;
             }
 
@@ -628,7 +628,7 @@ namespace RainMeadow
             if (space <= 0) return msg;
             if (paste.Length > space) paste = paste.Substring(0, space);
 
-            RainMeadow.Debug($"Pasted {paste.Length} chars from clipboard.");
+            RainMeadow.OLDDebug($"Pasted {paste.Length} chars from clipboard.");
             return msg.Insert(Mathf.Clamp(cursorPos, 0, msg.Length), paste);
         }
 

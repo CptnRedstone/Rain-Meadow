@@ -67,7 +67,7 @@ namespace RainMeadow
             {
                 if (originPos == self.destination || (actuallyFollowingThisPath && self.lookingForImpossiblePath))
                 {
-                    if (Input.GetKey(KeyCode.L)) RainMeadow.Debug($"returning override {originPos} -> {self.destination}");
+                    if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug($"returning override {originPos} -> {self.destination}");
                     return new MovementConnection(MovementConnection.MovementType.Standard, originPos, self.destination, 1);
                 }
                 return orig(self, originPos, actuallyFollowingThisPath);
@@ -99,7 +99,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -134,8 +134,8 @@ namespace RainMeadow
                 {
                     self.Act();
 
-                    if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("flying? " + self.flying);
-                    if (Input.GetKey(KeyCode.L)) RainMeadow.Debug("sitting? " + self.AtSitDestination);
+                    if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("flying? " + self.flying);
+                    if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug("sitting? " + self.AtSitDestination);
 
                     if (self.Submersion == 1f)
                     {
@@ -228,7 +228,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
 
@@ -297,7 +297,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
 
@@ -334,7 +334,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
                 throw;
             }
         }
@@ -423,11 +423,11 @@ namespace RainMeadow
             cicada.AI.swooshToPos = null;
             if (this.input[0].jmp)
             {
-                if (localTrace) RainMeadow.Debug("jump input");
+                if (localTrace) RainMeadow.OLDDebug("jump input");
                 // cicada.room.aimap.getTerrainProximity(cicada.mainBodyChunk.pos) > 1 &&  // we now allow to fly in 2-wide corridors Ig
                 if (cicada.stamina > 0.5f) // cada.flying && 
                 {
-                    if (localTrace) RainMeadow.Debug("flight");
+                    if (localTrace) RainMeadow.OLDDebug("flight");
                     cicada.AI.swooshToPos = cicada.mainBodyChunk.pos + this.inputDir * 40f + new Vector2(0, 4f);
                     cicada.flyingPower = Mathf.Lerp(cicada.flyingPower, 1f, 0.05f);
                     preventStaminaRegen = true;
@@ -492,7 +492,7 @@ namespace RainMeadow
             {
                 dest.y -= cicada.mainBodyChunk.vel.y * 2f;
             }
-            if (UnityEngine.Input.GetKey(KeyCode.L)) RainMeadow.Debug($"pathfinding {basepos} -> {dest}");
+            if (UnityEngine.Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug($"pathfinding {basepos} -> {dest}");
             toPos = cicada.room.GetWorldCoordinate(dest);
             magnitude = inputDir.magnitude;
             return true;

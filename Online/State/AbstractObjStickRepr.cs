@@ -32,7 +32,7 @@ namespace RainMeadow
         {
             _b = b;
             B = b.id;
-            RainMeadow.Debug("new stick! " + this);
+            RainMeadow.OLDDebug("new stick! " + this);
         }
 
         public override string ToString()
@@ -45,7 +45,7 @@ namespace RainMeadow
             OnlinePhysicalObject b = null;
             if (!OnlinePhysicalObject.map.TryGetValue(stick.A, out var a) || !OnlinePhysicalObject.map.TryGetValue(stick.B, out b))
             {
-                RainMeadow.Error($"skipping stick because creatures not found online: {stick.A} {a} {stick.B} {b}");
+                RainMeadow.OLDError($"skipping stick because creatures not found online: {stick.A} {a} {stick.B} {b}");
                 return null;
             }
             switch (stick)
@@ -68,7 +68,7 @@ namespace RainMeadow
                 case AbstractPhysicalObject.CreatureGripStick s:
                     return new CreatureGripStick(b, s);
                 default:
-                    RainMeadow.Error($"stick not implemented: {stick.ToString()}");
+                    RainMeadow.OLDError($"stick not implemented: {stick.ToString()}");
                     return null;
             }
         }
@@ -77,7 +77,7 @@ namespace RainMeadow
 
         public void Release(AbstractPhysicalObject.AbstractObjectStick abstractObjectStick)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             abstractObjectStick.Deactivate();
         }
 
@@ -105,7 +105,7 @@ namespace RainMeadow
 
             public override void MakeStick(AbstractPhysicalObject A)
             {
-                RainMeadow.Debug(this);
+                RainMeadow.OLDDebug(this);
                 if (OnlinePhysicalObject.map.TryGetValue(A, out OnlinePhysicalObject a) && a.owner == b.owner && !a.isPending && !b.isPending)
                 {
                     var stick = new AbstractPhysicalObject.AbstractSpearStick(a.apo, b.apo, chunk, bodyPart, angle);
@@ -137,7 +137,7 @@ namespace RainMeadow
 
             public override void MakeStick(AbstractPhysicalObject A)
             {
-                RainMeadow.Debug(this);
+                RainMeadow.OLDDebug(this);
                 if (OnlinePhysicalObject.map.TryGetValue(A, out OnlinePhysicalObject a) && a.owner == b.owner && !a.isPending && !b.isPending)
                 {
                     var stick = new AbstractPhysicalObject.AbstractSpearAppendageStick(a.apo, b.apo, appendage, prevSeg, distanceToNext, angle);
@@ -162,7 +162,7 @@ namespace RainMeadow
 
             public override void MakeStick(AbstractPhysicalObject A)
             {
-                RainMeadow.Debug(this);
+                RainMeadow.OLDDebug(this);
                 if (OnlinePhysicalObject.map.TryGetValue(A, out OnlinePhysicalObject a) && a.owner == b.owner && !a.isPending && !b.isPending)
                 {
                     var stick = new AbstractPhysicalObject.ImpaledOnSpearStick(a.apo, b.apo, chunk, onSpearPosition);
@@ -187,7 +187,7 @@ namespace RainMeadow
 
             public override void MakeStick(AbstractPhysicalObject A)
             {
-                RainMeadow.Debug(this);
+                RainMeadow.OLDDebug(this);
                 if (OnlinePhysicalObject.map.TryGetValue(A, out OnlinePhysicalObject a) && a.owner == b.owner && !a.isPending && !b.isPending)
                 {
                     var stick = new Player.AbstractOnBackStick(a.apo, b.apo);
@@ -206,7 +206,7 @@ namespace RainMeadow
 
             public override void MakeStick(AbstractPhysicalObject A)
             {
-                RainMeadow.Debug(this);
+                RainMeadow.OLDDebug(this);
                 if (OnlinePhysicalObject.map.TryGetValue(A, out OnlinePhysicalObject a) && a.owner != b.owner && !a.isPending && !b.isPending)
                 {
                     var stick = new Player.AbstractOnBackStick(a.apo, b.apo);
@@ -231,7 +231,7 @@ namespace RainMeadow
 
             public override void MakeStick(AbstractPhysicalObject A)
             {
-                RainMeadow.Debug(this);
+                RainMeadow.OLDDebug(this);
                 if (OnlinePhysicalObject.map.TryGetValue(A, out OnlinePhysicalObject a) && a.owner == b.owner && !a.isPending && !b.isPending)
                 {
                     var stick = new AbstractPhysicalObject.CreatureGripStick((AbstractCreature)a.apo, b.apo, grasp, carry);

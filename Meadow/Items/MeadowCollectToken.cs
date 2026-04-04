@@ -190,7 +190,7 @@ namespace RainMeadow
                         }
 
                         // we want the collectible gone but the abstract must stay
-                        RainMeadow.Debug("RemoveFromRoom: " + abstractCollectible.online);
+                        RainMeadow.OLDDebug("RemoveFromRoom: " + abstractCollectible.online);
                         this.RemoveFromRoom();
 
                         // feedback would be here but better done from progression

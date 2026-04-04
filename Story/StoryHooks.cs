@@ -161,7 +161,7 @@ namespace RainMeadow
                 }
                 catch (System.IndexOutOfRangeException e)
                 {
-                    RainMeadow.Error($"conversation error (watcher echo likely) {e}");
+                    RainMeadow.OLDError($"conversation error (watcher echo likely) {e}");
                     //throw; nonfatal
                 }
             };
@@ -189,7 +189,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Error("Failed to hook restartAvailable in SlugcatSelectMenu!");
+                RainMeadow.OLDError("Failed to hook restartAvailable in SlugcatSelectMenu!");
             }
         }
 
@@ -229,7 +229,7 @@ namespace RainMeadow
                         if (rooms.Distinct().Count() == 1 && inGameAvatarOPOs.First().apo.Room == self.room.abstractRoom && isTransportable)
                         { // make sure they're at the same room
                             RainWorld.roomIndexToName.TryGetValue(rooms.First(), out var gateRoom);
-                            RainMeadow.Debug($"ready for warp {gateRoom}!");
+                            RainMeadow.OLDDebug($"ready for warp {gateRoom}!");
                             storyGameMode.readyForTransition = StoryGameMode.ReadyForTransition.MeetRequirement;
                         }
                         else
@@ -289,11 +289,11 @@ namespace RainMeadow
             //Even if ascended, it is called to spawn the remaining echos the player missed so lets not surprise them with teleportation. Especially when echo's room is loaded before they visit the actual room
             if (OnlineManager.lobby != null && !self.Ascended)
             {
-                Debug("getting warp point from echo");
+                OLDDebug("getting warp point from echo");
                 Watcher.SpinningTopData specialData = self.SpecialData;
                 if (specialData == null)
                 {
-                    Debug("Special data is null!");
+                    OLDDebug("Special data is null!");
                     return;
                 }
                 int spinningTopID = specialData.spawnIdentifier;
@@ -306,7 +306,7 @@ namespace RainMeadow
                 //new warppoint shouldnt spawn unless a mod edits orig warppoint's destination room in il, which is evil so we be evil too
                 if (warpPoint == null)
                 {
-                    Debug("Warp point is null!");
+                    OLDDebug("Warp point is null!");
                     return;
                 }
                 placedObject.pos = warpPoint.pos;
@@ -469,7 +469,7 @@ namespace RainMeadow
                 c.EmitDelegate(delegate (Watcher.WarpPoint.WarpPointData data, Watcher.WarpPoint roomWarpPoint)
                 {
                     if (OnlineManager.lobby == null || !OnlineManager.lobby.isOwner) return;
-                    Debug($"SpawnBackupWarpPoint existing warpPoint found.");
+                    OLDDebug($"SpawnBackupWarpPoint existing warpPoint found.");
                     //If two way echo warp is saved as host, it is saved as oneway and you cant seal the portal
                     //thus softlocking you from 3rd ending
                     //Although two way is added now, i guess we give a chance to hosts having existing saves and replace the saved echo warp data to spinning top's warp data
@@ -479,7 +479,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                OLDError(ex);
             }
         }
         public void WarpPoint_PerformWarp(On.Watcher.WarpPoint.orig_PerformWarp orig, Watcher.WarpPoint self)
@@ -490,7 +490,7 @@ namespace RainMeadow
             AbstractRoom absRoom = room.abstractRoom;
 
             if (!RoomSession.map.TryGetValue(absRoom, out var roomSession)) return; //turns out deactivating world session is evil
-            Debug($"Removing entities in abstract room, {absRoom.name}");
+            OLDDebug($"Removing entities in abstract room, {absRoom.name}");
             var entities = absRoom.entities;
             for (int i = entities.Count - 1; i >= 0; i--)
             {
@@ -500,7 +500,7 @@ namespace RainMeadow
                     if (!oe.isMine)
                     {
                         // not-online-aware removal
-                        Debug("removing remote entity from game " + oe);
+                        OLDDebug("removing remote entity from game " + oe);
                         oe.beingMoved = true;
 
                         if (oe.apo.realizedObject is Creature c && c.inShortcut)
@@ -520,7 +520,7 @@ namespace RainMeadow
                     }
                     else
                     {
-                        Debug("removing my entity from online " + oe);
+                        OLDDebug("removing my entity from online " + oe);
                         oe.ExitResource(roomSession);
                         oe.ExitResource(roomSession.worldSession);
                     }
@@ -537,7 +537,7 @@ namespace RainMeadow
             if (OnlineManager.lobby != null)
             {
                 int newValue = self.prince.room.game.GetStorySession.saveState.miscWorldSaveData.highestPrinceConversationSeen;
-                RainMeadow.Debug("prince yap acknowledged");
+                RainMeadow.OLDDebug("prince yap acknowledged");
                 if (OnlineManager.lobby.isOwner)
                 {
                     foreach (var player in OnlineManager.players)
@@ -698,7 +698,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                RainMeadow.Error(ex);
+                RainMeadow.OLDError(ex);
             }
         }
 
@@ -883,8 +883,8 @@ namespace RainMeadow
                 c.EmitDelegate((Room room) =>
                 {
                     if (OnlineManager.lobby == null) return false;
-                    RainMeadow.Debug($"existing oracle in room? {room.abstractRoom.GetResource().activeEntities.FirstOrDefault(x => x is OnlinePhysicalObject opo && opo.apo.type == AbstractPhysicalObject.AbstractObjectType.Oracle)}");
-                    RainMeadow.Debug($"existing oracle in world? {room.world.GetResource().activeEntities.FirstOrDefault(x => x is OnlinePhysicalObject opo && opo.apo.type == AbstractPhysicalObject.AbstractObjectType.Oracle)}");
+                    RainMeadow.OLDDebug($"existing oracle in room? {room.abstractRoom.GetResource().activeEntities.FirstOrDefault(x => x is OnlinePhysicalObject opo && opo.apo.type == AbstractPhysicalObject.AbstractObjectType.Oracle)}");
+                    RainMeadow.OLDDebug($"existing oracle in world? {room.world.GetResource().activeEntities.FirstOrDefault(x => x is OnlinePhysicalObject opo && opo.apo.type == AbstractPhysicalObject.AbstractObjectType.Oracle)}");
                     return room.world.GetResource().activeEntities.Any(x => x is OnlinePhysicalObject opo && opo.apo.type == AbstractPhysicalObject.AbstractObjectType.Oracle);
                 });
                 //c.EmitDelegate((Room room) => OnlineManager.lobby != null && room.abstractRoom.GetResource().activeEntities.Any(x => x is OnlinePhysicalObject opo && opo.apo.type == AbstractPhysicalObject.AbstractObjectType.Oracle));
@@ -1401,7 +1401,7 @@ namespace RainMeadow
                                     self.pupBars.Add(foodMeter);
                                     num++;
                                 }
-                                else RainMeadow.Error("Pup wasn't a realized player");
+                                else RainMeadow.OLDError("Pup wasn't a realized player");
                             }
                     }
                     return;
@@ -1744,28 +1744,28 @@ namespace RainMeadow
                 var s = saveState.SaveToString();
                 saveState.objectTrackers = objectTrackers;
 
-                RainMeadow.Debug($"origSaveState[{s.Length}]:{s}");
+                RainMeadow.OLDDebug($"origSaveState[{s.Length}]:{s}");
                 if (saveStateStringFilter.Count > 0)
                 {
                     foreach (var del in saveStateStringFilter) s = del(s);
-                    RainMeadow.Debug($"filtSaveState[{s.Length}]:{s}");
+                    RainMeadow.OLDDebug($"filtSaveState[{s.Length}]:{s}");
                 }
                 s = Regex.Replace(s, @"(?<=>)(TUTMESSAGES|SONGSPLAYRECORDS|LINEAGES|OBJECTS|OBJECTTRACKERS|POPULATION|STICKS|RESPAWNS|WAITRESPAWNS|COMMUNITIES|SWALLOWEDITEMS|UNRECOGNIZEDSWALLOWED|FLOWERPOS)<(.*?)B>.*?<\2A>", "");
-                RainMeadow.Debug($"trimSaveState[{s.Length}]:{s}");
+                RainMeadow.OLDDebug($"trimSaveState[{s.Length}]:{s}");
                 s = DeflateJoarXML(s);
-                RainMeadow.Debug($"abbrSaveState[{s.Length}]");
+                RainMeadow.OLDDebug($"abbrSaveState[{s.Length}]");
                 return s;
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
             }
             return null;
         }
 
         private void SaveStateHandler(PlayerProgression self, StoryGameMode storyGameMode, RainWorldGame game)
         {
-            RainMeadow.Debug("story: found loaded game state");
+            RainMeadow.OLDDebug("story: found loaded game state");
             // Begin story meadow insertion
             inVoidSea = false;
             if (OnlineManager.lobby.isOwner)
@@ -1778,8 +1778,8 @@ namespace RainMeadow
                 self.currentSaveState.LoadGame(InflateJoarXML(storyGameMode.saveStateString ?? ""), game);
             }
 
-            RainMeadow.Debug($"START DENPOS save:{self.currentSaveState.denPosition} last:{storyGameMode.myLastDenPos} lobby:{storyGameMode.defaultDenPos}");
-            RainMeadow.Debug($"START WARPPOS save:{self.currentSaveState.warpPointTargetAfterWarpPointSave} last:{storyGameMode.myLastWarp}");
+            RainMeadow.OLDDebug($"START DENPOS save:{self.currentSaveState.denPosition} last:{storyGameMode.myLastDenPos} lobby:{storyGameMode.defaultDenPos}");
+            RainMeadow.OLDDebug($"START WARPPOS save:{self.currentSaveState.warpPointTargetAfterWarpPointSave} last:{storyGameMode.myLastWarp}");
 
             if (OnlineManager.lobby.isOwner)
             {
@@ -1811,13 +1811,13 @@ namespace RainMeadow
                 }
             }
 
-            RainMeadow.Debug($"FINAL DENPOS save:{self.currentSaveState.denPosition}");
-            RainMeadow.Debug($"FINAL WARPPOS save:{self.currentSaveState.warpPointTargetAfterWarpPointSave}");
+            RainMeadow.OLDDebug($"FINAL DENPOS save:{self.currentSaveState.denPosition}");
+            RainMeadow.OLDDebug($"FINAL WARPPOS save:{self.currentSaveState.warpPointTargetAfterWarpPointSave}");
             if (OnlineManager.lobby.isOwner && storyGameMode.currentCampaign == Watcher.WatcherEnums.SlugcatStatsName.Watcher && self.currentSaveState.deathPersistentSaveData != null)
             {
-                RainMeadow.Debug($"ripple level was: {storyGameMode.rippleLevel}");
+                RainMeadow.OLDDebug($"ripple level was: {storyGameMode.rippleLevel}");
                 storyGameMode.rippleLevel = self.currentSaveState.deathPersistentSaveData.rippleLevel;
-                RainMeadow.Debug($"ripple level now: {storyGameMode.rippleLevel}");
+                RainMeadow.OLDDebug($"ripple level now: {storyGameMode.rippleLevel}");
 
             }
             // end story meadow insertion
@@ -1830,7 +1830,7 @@ namespace RainMeadow
             }
             if (RainMeadow.isStoryMode(out var storyGameMode))
             {
-                RainMeadow.Debug("story: initiating save state!");
+                RainMeadow.OLDDebug("story: initiating save state!");
                 if (self.currentSaveState == null && self.starvedSaveState != null && game != null && (!ModManager.MSC || game.manager.artificerDreamNumber == -1))
                 {
                     Custom.Log("LOADING STARVED STATE");
@@ -1845,7 +1845,7 @@ namespace RainMeadow
                     {
                         self.SaveDeathPersistentDataOfCurrentState(saveAsIfPlayerDied: true, saveAsIfPlayerQuit: true);
                     }
-                    RainMeadow.Debug("story: save state was not null and equals this save state number, returning save state!");
+                    RainMeadow.OLDDebug("story: save state was not null and equals this save state number, returning save state!");
                     SaveStateHandler(self, storyGameMode, game);
                     return self.currentSaveState;
                 }
@@ -1948,7 +1948,7 @@ namespace RainMeadow
             if (OnlineManager.lobby != null && self.warpPointTargetAfterWarpPointSave != null)
             {
                 string destRoom = self.warpPointTargetAfterWarpPointSave.destRoom;
-                RainMeadow.Debug($"hijacking denpos to be {destRoom}");
+                RainMeadow.OLDDebug($"hijacking denpos to be {destRoom}");
                 return destRoom;
             }
             return orig(self);
@@ -1964,7 +1964,7 @@ namespace RainMeadow
                 }
                 catch (System.NullReferenceException e) // happens in riv ending
                 {
-                    RainMeadow.Debug("NOTE: rivulet hackfix null ref exception is bad!");
+                    RainMeadow.OLDDebug("NOTE: rivulet hackfix null ref exception is bad!");
                 }
             }
             orig(self, game);
@@ -1984,11 +1984,11 @@ namespace RainMeadow
                 {
                     if (OnlineManager.lobby.isOwner)
                     {
-                        RainMeadow.Debug("Continue - host");
+                        RainMeadow.OLDDebug("Continue - host");
                     }
                     else
                     {
-                        RainMeadow.Debug("Continue - client");
+                        RainMeadow.OLDDebug("Continue - client");
                     }
                 }
             }
@@ -2203,7 +2203,7 @@ namespace RainMeadow
                         if (!ac.IsLocal() && opo.apo.realizedObject.Submersion > 0.5f)
                         {
                             Vector2 position = ac.realizedCreature.bodyChunks[0].pos;
-                            RainMeadow.Debug("Removed onlinePlayer avatar on submersion at pos: " + position);
+                            RainMeadow.OLDDebug("Removed onlinePlayer avatar on submersion at pos: " + position);
                             opo.apo.realizedObject.room.AddObject(new ShockWave(position, 300f, 0.2f, 15, false));
                             opo.apo.realizedObject.room.PlaySound(SoundID.MENU_Karma_Ladder_Hit_Upper_Cap, 0f, 3f, 1f);
                             opo.apo.realizedObject.RemoveFromRoom();

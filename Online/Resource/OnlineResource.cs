@@ -95,7 +95,7 @@ namespace RainMeadow
         // The online resource has been leased by the supervisor, now owner needs to send a feed
         protected void WaitingForState()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isAvailable) { throw new InvalidOperationException("Resource is already available"); }
             isRequesting = false;
             isWaitingForState = true;
@@ -108,7 +108,7 @@ namespace RainMeadow
         // The online resource has been leased and its state is available
         protected void Available()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isAvailable) { throw new InvalidOperationException("Resource is already available"); }
             isRequesting = false;
             isWaitingForState = false;
@@ -126,7 +126,7 @@ namespace RainMeadow
         // The game resource this corresponds to has loaded, and subresources can be enumerated
         public void Activate()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (isActive) { throw new InvalidOperationException("Resource is already active"); }
             isActive = true;
             subresources = new List<OnlineResource>();
@@ -157,7 +157,7 @@ namespace RainMeadow
             }
             else if (!isOwner)
             {
-                RainMeadow.Error($"Active but no state available! {this}");
+                RainMeadow.OLDError($"Active but no state available! {this}");
             }
 
             OnlineManager.lobby.gameMode.ResourceActive(this);
@@ -168,7 +168,7 @@ namespace RainMeadow
         // The online resource has been unleased
         protected void Unavailable()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (!isAvailable) { throw new InvalidOperationException("resource is already not available"); }
             if (isActive && subresources.Any(s => s.isAvailable)) throw new InvalidOperationException("has available subresources");
             isAvailable = false;
@@ -199,7 +199,7 @@ namespace RainMeadow
         // The game resource this corresponds needs to be unloaded
         public void Deactivate()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (!isActive) { throw new InvalidOperationException("resource is already inactive"); }
 
             foreach (var res in subresources)
@@ -244,7 +244,7 @@ namespace RainMeadow
 
         protected void NewOwner(OnlinePlayer newOwner)
         {
-            RainMeadow.Debug($"{this} - '{(newOwner != null ? newOwner : "null")}'");
+            RainMeadow.OLDDebug($"{this} - '{(newOwner != null ? newOwner : "null")}'");
             if (newOwner == owner && newOwner != null)
             {
                 throw new InvalidOperationException("Re-assigned to the same owner");
@@ -259,7 +259,7 @@ namespace RainMeadow
             if (owner != null) NewParticipant(owner);
             else if (isAvailable || isPending) // cannot operate resource without an owner
             {
-                RainMeadow.Debug($"Resource cannot be operated, releasing");
+                RainMeadow.OLDDebug($"Resource cannot be operated, releasing");
                 NotNeeded();
             }
 
@@ -338,7 +338,7 @@ namespace RainMeadow
         private void NewParticipant(OnlinePlayer newParticipant)
         {
             if (participants.Contains(newParticipant) || newParticipant.hasLeft) return;
-            RainMeadow.Debug($"{this}-{newParticipant}");
+            RainMeadow.OLDDebug($"{this}-{newParticipant}");
             participants.Add(newParticipant);
             LeaseModified();
             if (isAvailable && isOwner && !newParticipant.isMe)
@@ -365,7 +365,7 @@ namespace RainMeadow
         private void ParticipantLeft(OnlinePlayer participant)
         {
             if (!participants.Contains(participant)) return;
-            RainMeadow.Debug($"{this}-{participant}");
+            RainMeadow.OLDDebug($"{this}-{participant}");
             participants.Remove(participant);
             LeaseModified();
             if (isSupervisor && participant == owner)
@@ -389,7 +389,7 @@ namespace RainMeadow
 
         protected void SanitizeSubresources()
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (!isActive) throw new InvalidOperationException("not active");
             if (!isOwner) throw new InvalidOperationException("not owner");
             foreach (var resource in subresources) // I'm responsible for the lease of these
@@ -404,7 +404,7 @@ namespace RainMeadow
 
                 if (resource.owner != null && resource.owner.hasLeft) // abandoned
                 {
-                    RainMeadow.Debug($"Abandoned resource: {resource}");
+                    RainMeadow.OLDDebug($"Abandoned resource: {resource}");
                     resource.ParticipantLeft(resource.owner);
                 }
             }
@@ -415,7 +415,7 @@ namespace RainMeadow
                 OnlineEntity ent = entities[i];
                 if (ent.owner.hasLeft || !participants.Contains(ent.owner)) // abandoned
                 {
-                    RainMeadow.Debug($"Abandoned entity: {ent}");
+                    RainMeadow.OLDDebug($"Abandoned entity: {ent}");
                     if (ent.isTransferable && !OnlineManager.mePlayer.isActuallySpectating)
                     {
                         if (!ent.primaryResource.participants.Contains(ent.owner) || ent.owner.hasLeft) // owner really just left if behind
@@ -431,7 +431,7 @@ namespace RainMeadow
                         }
                         else
                         {
-                            RainMeadow.Error("Couldn't request entitity because pending: " + ent);
+                            RainMeadow.OLDError("Couldn't request entitity because pending: " + ent);
                         }
                     }
                     else // untransferable, kick it out
@@ -447,7 +447,7 @@ namespace RainMeadow
             //RainMeadow.Debug(this);
             if (this is Lobby lobby && owner == player) // lobby owner has left
             {
-                RainMeadow.Debug($"Lobby owner {player} left!!!");
+                RainMeadow.OLDDebug($"Lobby owner {player} left!!!");
                 NewOwner(MatchmakingManager.currentInstance.GetLobbyOwner());
             }
 
@@ -456,14 +456,14 @@ namespace RainMeadow
             // transfer this resource if possible
             if (isSupervisor && owner != null && owner.hasLeft)
             {
-                RainMeadow.Debug($"Transfering abandoned resource {this}");
+                RainMeadow.OLDDebug($"Transfering abandoned resource {this}");
                 PickNewOwner();
             }
 
             // transfer subresources after (we might be super and it might be easier)
             if (isActive && subresources.Count > 0) // has subresources, check when this one is sorted
             {
-                RainMeadow.Debug($"Checking subresources for {this}");
+                RainMeadow.OLDDebug($"Checking subresources for {this}");
                 for (int i = 0; i < subresources.Count; i++)
                 {
                     subresources[i].OnPlayerDisconnect(player);
@@ -500,7 +500,7 @@ namespace RainMeadow
 
         private void Subscribed(OnlinePlayer player)
         {
-            RainMeadow.Debug(this.ToString() + " - " + player.ToString());
+            RainMeadow.OLDDebug(this.ToString() + " - " + player.ToString());
             if (!isAvailable) throw new InvalidOperationException("not available");
             if (!isOwner) throw new InvalidOperationException("not owner");
             if (player.isMe) throw new InvalidOperationException("Can't subscribe to self");
@@ -510,7 +510,7 @@ namespace RainMeadow
 
         private void Unsubscribed(OnlinePlayer player)
         {
-            RainMeadow.Debug(this.ToString() + " - " + player);
+            RainMeadow.OLDDebug(this.ToString() + " - " + player);
             if (player.isMe) throw new InvalidOperationException("Can't unsubscribe from self");
 
             OnlineManager.RemoveSubscription(this, player);

@@ -73,7 +73,7 @@ namespace RainMeadow
             standStillOnMapButton = creature.abstractCreature.world.game.IsStorySession;
             flipDirection = 1;
 
-            RainMeadow.Debug(this + " added!");
+            RainMeadow.OLDDebug(this + " added!");
 
             if (oc.isMine && template.AI && creature.abstractCreature.world.GetAbstractRoom(creature.abstractCreature.pos) != null)
             {
@@ -913,24 +913,24 @@ namespace RainMeadow
                 {
                     if (FindDestination(basecoord, out var toPos, out float magnitude))
                     {
-                        if (localTrace) RainMeadow.Debug($"moving: {toPos.Tile}");
+                        if (localTrace) RainMeadow.OLDDebug($"moving: {toPos.Tile}");
                         Moving(magnitude);
                         mcd.moveSpeed = magnitude;
                         if (template.AI && toPos != creature.abstractCreature.abstractAI.RealAI.pathFinder.destination)
                         {
-                            if (localTrace) RainMeadow.Debug($"new destination {toPos.Tile}");
+                            if (localTrace) RainMeadow.OLDDebug($"new destination {toPos.Tile}");
                             this.ForceAIDestination(toPos);
                             mcd.destination = toPos;
                         }
                     }
                     else
                     {
-                        if (localTrace) RainMeadow.Debug($"resting: {basecoord.Tile}");
+                        if (localTrace) RainMeadow.OLDDebug($"resting: {basecoord.Tile}");
                         Resting();
                         mcd.moveSpeed = 0f;
                         if (template.AI && basecoord != creature.abstractCreature.abstractAI.RealAI.pathFinder.destination)
                         {
-                            if (Input.GetKey(KeyCode.L)) RainMeadow.Debug($"resting at {basecoord.Tile}");
+                            if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug($"resting at {basecoord.Tile}");
                             this.ForceAIDestination(basecoord);
                             mcd.destination = basecoord;
                         }
@@ -938,12 +938,12 @@ namespace RainMeadow
                 }
                 else
                 {
-                    if (localTrace && lockInPlace) RainMeadow.Debug($"locked in place: {basecoord.Tile}");
+                    if (localTrace && lockInPlace) RainMeadow.OLDDebug($"locked in place: {basecoord.Tile}");
                     Resting();
                     mcd.moveSpeed = 0f;
                     if (template.AI && basecoord != creature.abstractCreature.abstractAI.RealAI.pathFinder.destination)
                     {
-                        if (Input.GetKey(KeyCode.L)) RainMeadow.Debug($"resting at {basecoord.Tile}");
+                        if (Input.GetKey(KeyCode.L)) RainMeadow.OLDDebug($"resting at {basecoord.Tile}");
                         this.ForceAIDestination(basecoord);
                         mcd.destination = basecoord;
                     }
@@ -1016,7 +1016,7 @@ namespace RainMeadow
                             IntVector2 intVector = room.ShorcutEntranceHoleDirection(room.GetTilePosition(chunks[i].pos));
                             if (this.input[0].x == -intVector.x && this.input[0].y == -intVector.y)
                             {
-                                RainMeadow.Debug("creature entering shortcut");
+                                RainMeadow.OLDDebug("creature entering shortcut");
                                 creature.enteringShortCut = new IntVector2?(room.GetTilePosition(chunks[i].pos));
 
                                 if (scdata.shortCutType == ShortcutData.Type.NPCTransportation)
@@ -1027,14 +1027,14 @@ namespace RainMeadow
                                     {
                                         var newindex = (index + 1) % whackamoles.Count;
                                         creature.NPCTransportationDestination = whackamoles[newindex].startCoord;
-                                        RainMeadow.Debug($"creature entered at {index} will exit at {newindex} mapped to {creature.NPCTransportationDestination}");
+                                        RainMeadow.OLDDebug($"creature entered at {index} will exit at {newindex} mapped to {creature.NPCTransportationDestination}");
                                         // needs to be set as destination as well otherwise might be overriden
                                         toPos = creature.NPCTransportationDestination;
                                         return true;
                                     }
                                     else
                                     {
-                                        RainMeadow.Error("shortcut issue");
+                                        RainMeadow.OLDError("shortcut issue");
                                     }
                                 }
                                 return true;

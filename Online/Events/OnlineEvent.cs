@@ -26,7 +26,7 @@ namespace RainMeadow
 
         public virtual void Abort() // I was not acknowledged and the other guy left, what do, can be run on local or on remote
         {
-            RainMeadow.Error($"Aborted {this}");
+            RainMeadow.OLDError($"Aborted {this}");
             aborted = true;
         }
 

@@ -76,7 +76,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Debug("Player is null while trying to stop movement");
+                RainMeadow.OLDDebug("Player is null while trying to stop movement");
             }
         }
 

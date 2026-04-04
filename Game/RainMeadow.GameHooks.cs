@@ -167,7 +167,7 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby != null && ID != RainWorld.AchievementID.None && !rainMeadowOptions.EnableAchievementsOnline.Value)
             {
-                RainMeadow.Debug("Prevented " + Enum.GetName(typeof(RainWorld.AchievementID), ID) + " from being earned in an online lobby.");
+                RainMeadow.OLDDebug("Prevented " + Enum.GetName(typeof(RainWorld.AchievementID), ID) + " from being earned in an online lobby.");
                 return;
             }
 

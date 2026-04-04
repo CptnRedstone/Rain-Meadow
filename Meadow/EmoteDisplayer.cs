@@ -34,7 +34,7 @@ namespace RainMeadow
         // the "tiles" it adds though are UADs
         public EmoteDisplayer(Creature owner, OnlineCreature ownerEntity, MeadowCreatureData creatureData, MeadowAvatarData customization)
         {
-            RainMeadow.Debug($"EmoteDisplayer created for {owner}");
+            RainMeadow.OLDDebug($"EmoteDisplayer created for {owner}");
             this.owner = owner;
             this.ownerEntity = ownerEntity;
             this.creatureData = creatureData;
@@ -57,10 +57,10 @@ namespace RainMeadow
         {
             if (localVersion != this.creatureData.emotesVersion)
             {
-                RainMeadow.Debug("new version");
+                RainMeadow.OLDDebug("new version");
                 Clear();
                 localVersion = creatureData.emotesVersion;
-                RainMeadow.Debug("Time since tick is: " + creatureData.emotesTick.TimeSinceTick());
+                RainMeadow.OLDDebug("Time since tick is: " + creatureData.emotesTick.TimeSinceTick());
                 startInGameClock = (int)(game.clock - creatureData.emotesTick.TimeSinceTick() * game.framesPerSecond);
                 rot = 0f; // reset thiss
             }
@@ -131,7 +131,7 @@ namespace RainMeadow
         // maybe move this logic to the data thing?
         internal bool AddEmoteLocal(Emote emoteType)
         {
-            RainMeadow.Debug(emoteType);
+            RainMeadow.OLDDebug(emoteType);
             if (!ownerEntity.isMine) throw new InvalidProgrammerException("not mine");
             if (owner.abstractPhysicalObject.realizedObject == null) return false;
             if (owner.abstractPhysicalObject.Room.realizedRoom == null) return false;
@@ -166,13 +166,13 @@ namespace RainMeadow
             this.creatureData.emotes.Add(emoteType);
             this.tiles.Add(tile);
 
-            RainMeadow.Debug("Added");
+            RainMeadow.OLDDebug("Added");
             return true;
         }
 
         private void AddEmoteRemote(Emote emoteType)
         {
-            RainMeadow.Debug(emoteType);
+            RainMeadow.OLDDebug(emoteType);
             if (ownerEntity.isMine) throw new InvalidProgrammerException("mine");
             if (tiles.Any(t => t.emote == emoteType)) return;
             if (tiles.Count >= maxEmoteCount) return;
@@ -183,7 +183,7 @@ namespace RainMeadow
             owner.abstractPhysicalObject.Room.realizedRoom.AddObject(tile);
             this.tiles.Add(tile);
 
-            RainMeadow.Debug("Added");
+            RainMeadow.OLDDebug("Added");
         }
 
         public const float emoteSize = 60f;
@@ -252,7 +252,7 @@ namespace RainMeadow
                 alpha = holder.alpha;
                 lastRot = rot;
                 rot = holder.rot;
-                if (holder.owner.abstractPhysicalObject.Room is AbstractRoom absroom && absroom.realizedRoom != this.room) { RainMeadow.Debug("EmoteTile destroyed"); Destroy(); }
+                if (holder.owner.abstractPhysicalObject.Room is AbstractRoom absroom && absroom.realizedRoom != this.room) { RainMeadow.OLDDebug("EmoteTile destroyed"); Destroy(); }
                 base.Update(eu);
             }
 

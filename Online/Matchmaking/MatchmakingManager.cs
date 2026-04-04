@@ -96,7 +96,7 @@ namespace RainMeadow
 
         public abstract void JoinLobbyUsingArgs(params string?[] args);
         public static void JoinLobbyUsingCode(string code) {
-            RainMeadow.Debug($"Attempting to join lobby with code: {code}");
+            RainMeadow.OLDDebug($"Attempting to join lobby with code: {code}");
 
             string[] args = code.Split(' ');
             
@@ -127,7 +127,7 @@ namespace RainMeadow
                     }
                 }
                 else
-                    RainMeadow.Error("found +connect_lobby but no valid lobby id in the command line");
+                    RainMeadow.OLDError("found +connect_lobby but no valid lobby id in the command line");
             }
             else if (connect_lan_idx >= 0)
             {
@@ -146,9 +146,9 @@ namespace RainMeadow
                     }
                 }
                 else
-                    RainMeadow.Error("found +connect_lan_lobby but no valid lobby address and port in the command line");
+                    RainMeadow.OLDError("found +connect_lan_lobby but no valid lobby address and port in the command line");
             }
-            RainMeadow.Debug("No lobby found in that code.");
+            RainMeadow.OLDDebug("No lobby found in that code.");
         }
 
         public abstract void LeaveLobby();
@@ -175,7 +175,7 @@ namespace RainMeadow
         public virtual void RecieveChatMessage(OnlinePlayer player, string message) {
             if (message.Length > ChatTextBox.textLimit)
             {
-                RainMeadow.Error($"Error: {player} tried sending a chat message longer than what is allowed. Message will not be displayed. {message.Length}/{ChatTextBox.textLimit}");
+                RainMeadow.OLDError($"Error: {player} tried sending a chat message longer than what is allowed. Message will not be displayed. {message.Length}/{ChatTextBox.textLimit}");
                 return;
             }
             ChatLogManager.LogMessage($"{player.id.GetPersonaName()}", $"{message}");
@@ -201,7 +201,7 @@ namespace RainMeadow
         }
         public void HandleDisconnect(OnlinePlayer player)
         {
-            RainMeadow.Debug($"Handling player disconnect:{player}");
+            RainMeadow.OLDDebug($"Handling player disconnect:{player}");
             player.hasLeft = true;
             OnlineManager.lobby?.OnPlayerDisconnect(player);
             while (player.HasUnacknoledgedEvents())
@@ -210,7 +210,7 @@ namespace RainMeadow
                 OnlineManager.lobby?.OnPlayerDisconnect(player);
                 OnlineManager.ForceLoadUpdate(); // process incoming data
             }
-            RainMeadow.Debug($"Actually removing player:{player}");
+            RainMeadow.OLDDebug($"Actually removing player:{player}");
             OnlineManager.players.Remove(player);
             OnlineManager.netIO.ForgetPlayer(player);
 

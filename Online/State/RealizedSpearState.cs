@@ -78,12 +78,12 @@ namespace RainMeadow
             base.ReadTo(onlineEntity);
             if (spear.mode == Weapon.Mode.StuckInWall && !spear.stuckInWall.HasValue)
             {
-                RainMeadow.Error("Stuck in wall but has no value!");
+                RainMeadow.OLDError("Stuck in wall but has no value!");
                 spear.ChangeMode(Weapon.Mode.Free);
             }
             if (spear.mode == Weapon.Mode.StuckInCreature && spear.stuckInObject == null)
             {
-                RainMeadow.Error("Stuck in creature but no creature");
+                RainMeadow.OLDError("Stuck in creature but no creature");
                 spear.ChangeMode(Weapon.Mode.Free);
             }
 
@@ -91,7 +91,7 @@ namespace RainMeadow
 
         override public bool ShouldPosBeLenient(PhysicalObject po)
         {
-            if (po is not Spear p) { RainMeadow.Error("target is wrong type: " + po); return false; }
+            if (po is not Spear p) { RainMeadow.OLDError("target is wrong type: " + po); return false; }
             if (p.onPlayerBack) return true;
             if (p.stuckInObject != null) return true; 
             return base.ShouldPosBeLenient(po);

@@ -39,11 +39,11 @@ namespace RainMeadow
                     });
                 }
 
-                RainMeadow.Debug($"Replace {i} ScavengerAnimation.Continue checks in {ctx.Method.Name}");
+                RainMeadow.OLDDebug($"Replace {i} ScavengerAnimation.Continue checks in {ctx.Method.Name}");
             }
             catch (Exception except)
             {
-                RainMeadow.Error(except);
+                RainMeadow.OLDError(except);
             }
         }
 

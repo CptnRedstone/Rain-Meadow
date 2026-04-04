@@ -120,12 +120,12 @@ namespace RainMeadow
                     {
                         if (value)
                         {
-                            RainMeadow.Debug($"Added {name} to mute list");
+                            RainMeadow.OLDDebug($"Added {name} to mute list");
                             OnlineManager.lobby.gameMode.mutedPlayers.Add(name);
                         }
                         else
                         {
-                            RainMeadow.Debug($"Removed {name} from mute list");
+                            RainMeadow.OLDDebug($"Removed {name} from mute list");
                             OnlineManager.lobby.gameMode.mutedPlayers.Remove(name);
                         }
                         kickbutton?.UpdateSymbol(ClientMuteSymbol);

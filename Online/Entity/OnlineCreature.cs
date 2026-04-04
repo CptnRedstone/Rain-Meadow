@@ -44,23 +44,23 @@ namespace RainMeadow
                 var serializedObject = onlineCreature.abstractCreature.world.singleRoomWorld
                     ? SaveState.AbstractCreatureToStringSingleRoomWorld(onlineCreature.abstractCreature)
                     : SaveState.AbstractCreatureToStringStoryWorld(onlineCreature.abstractCreature);
-                RainMeadow.Debug("Data is " + serializedObject);
+                RainMeadow.OLDDebug("Data is " + serializedObject);
                 int index = 0;
                 int count = ExtrasIndex;
                 for (int i = 0; i < count; i++) index = serializedObject.IndexOf("<cA>", index + 4); // the first X fields are already saved
                 if (index == -1) // no extra data
                 {
-                    RainMeadow.Debug("no extra");
+                    RainMeadow.OLDDebug("no extra");
                     extraData = "";
                 }
                 else
                 {
-                    RainMeadow.Debug("extra is  " + serializedObject.Substring(index + 4));
+                    RainMeadow.OLDDebug("extra is  " + serializedObject.Substring(index + 4));
                     CreatureSaveExtras(serializedObject.Substring(index + 4));
                 }
 
                 this.creatureType = onlineCreature.creature.creatureTemplate.type; // we sneak this in here since this is called from apodef ctor before our own ctor
-                RainMeadow.Debug("resulting object would be: " + MakeSerializedObject(new AbstractPhysicalObjectState() { pos = onlinePhysicalObject.apo.pos }));
+                RainMeadow.OLDDebug("resulting object would be: " + MakeSerializedObject(new AbstractPhysicalObjectState() { pos = onlinePhysicalObject.apo.pos }));
             }
 
             public override string MakeSerializedObject(AbstractPhysicalObjectState initialState)
@@ -123,7 +123,7 @@ namespace RainMeadow
             CreatureTemplate.Type type = new CreatureTemplate.Type(array[0], false);
             if (type.Index == -1)
             {
-                RainMeadow.Debug("Unknown creature: " + array[0] + " creature not spawning");
+                RainMeadow.OLDDebug("Unknown creature: " + array[0] + " creature not spawning");
                 return null;
             }
             string[] array2 = array[2].Split('.');
@@ -146,7 +146,7 @@ namespace RainMeadow
             EntityID id = world.game.GetNewID();
 
             string serializedObject = newObjectEvent.MakeSerializedObject(initialState);
-            RainMeadow.Debug("serializedObject: " + serializedObject);
+            RainMeadow.OLDDebug("serializedObject: " + serializedObject);
             var apo = AbstractCreatureFromString(world, serializedObject, initialState.pos);
             id.altSeed = apo.ID.RandomSeed;
             apo.ID = id;
@@ -187,22 +187,22 @@ namespace RainMeadow
             var creature = (this.apo.realizedObject as Creature);
             if (creature == null)
             {
-                RainMeadow.Error("realized creature not found for: " + this);
+                RainMeadow.OLDError("realized creature not found for: " + this);
                 return;
             }
             if ((OnlineManager.lobby != null) && this.didParry)
             {
-                RainMeadow.Debug("Parried!");
+                RainMeadow.OLDDebug("Parried!");
                 OnlineManager.RunDeferred(() => this.didParry = false);
                 return;
             }
             var victimAppendage = victimAppendageRef?.GetAppendagePos(creature);
 
-            RainMeadow.Debug($"{this} hit for {damage}");
-            if (creature.State is HealthState hs1) RainMeadow.Debug($"health was {hs1.health}");
+            RainMeadow.OLDDebug($"{this} hit for {damage}");
+            if (creature.State is HealthState hs1) RainMeadow.OLDDebug($"health was {hs1.health}");
             BodyChunk? hitChunk = victimChunkIndex < 255 ? creature.bodyChunks[victimChunkIndex] : null;
             creature.Violence(onlineVillain?.apo.realizedObject.firstChunk, directionAndMomentum, hitChunk, victimAppendage, damageType, damage, stunBonus);
-            if (creature.State is HealthState hs2) RainMeadow.Debug($"health became {hs2.health}");
+            if (creature.State is HealthState hs2) RainMeadow.OLDDebug($"health became {hs2.health}");
         }
 
 
@@ -230,7 +230,7 @@ namespace RainMeadow
         [RPCMethod(runDeferred = true)] // deferred because NPCTransportationDestination needed
         public void SuckedIntoShortCut(IntVector2 entrancePos, bool carriedByOther, bool sucked_in_by_remote)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             enteringShortCut = !sucked_in_by_remote;
             var creature = (apo.realizedObject as Creature);
             if (creature != null && creature.room != null)
@@ -280,15 +280,15 @@ namespace RainMeadow
         [RPCMethod(runDeferred = true)]
         public void SpitOutOfShortCut(IntVector2 pos, RoomSession newRoom, bool spitOutAllSticks)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (this.roomSession.absroom.realizedRoom is null) {
-                RainMeadow.Error($"{this} is trying to enter abstracted room.");
+                RainMeadow.OLDError($"{this} is trying to enter abstracted room.");
                 apo.Abstractize(apo.pos);
                 return;
             }
 
             if (!this.abstractCreature.AllowedToExistInRoom(this.roomSession.absroom.realizedRoom)) {
-                RainMeadow.Error($"{this} is to early to spit out of shortcut.");
+                RainMeadow.OLDError($"{this} is to early to spit out of shortcut.");
                 return;
             }
             
@@ -298,7 +298,7 @@ namespace RainMeadow
 
             var realcreature = this.realizedCreature!;
             if (abstractCreature.Room != newRoom.absroom) {
-                RainMeadow.Error($"{this} tried to spit out of a shortcut in a room it wasn't in.");
+                RainMeadow.OLDError($"{this} tried to spit out of a shortcut in a room it wasn't in.");
                 if (realcreature.room != null) {
                     realcreature.room.RemoveObject(realcreature);
                 }
@@ -314,7 +314,7 @@ namespace RainMeadow
         [RPCMethod]
         public void TookFlight(AbstractRoomNode.Type type, WorldCoordinate start, WorldCoordinate dest)
         {
-            RainMeadow.Debug(this);
+            RainMeadow.OLDDebug(this);
             if (realizedCreature is not null && realizedCreature.room is Room room)
             {
                 try

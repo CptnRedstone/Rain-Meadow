@@ -20,7 +20,7 @@ namespace RainMeadow
             get
             {
                 int count = otherOnlinePlayers?.Count ?? 0;
-                RainMeadow.Debug($"PlayerCount: {count}");
+                RainMeadow.OLDDebug($"PlayerCount: {count}");
                 return otherOnlinePlayers?.Count > PerPage;
             }
         }
@@ -78,7 +78,7 @@ namespace RainMeadow
             CurrentOffset = offset;
             List<ArenaOnlinePlayerJoinButton> newArenaPlayerButtons = [];
             int num = CurrentOffset * PerPage;
-            RainMeadow.Debug($"Player count without me check: {otherOnlinePlayers?.Count ?? 0}");
+            RainMeadow.OLDDebug($"Player count without me check: {otherOnlinePlayers?.Count ?? 0}");
             while (num < otherOnlinePlayers?.Count && num < (CurrentOffset + 1) * PerPage)
             {
                 ArenaOnlinePlayerJoinButton playerButton = GetArenaPlayerButton(new(((num % PerPage) + 1) * XOffset, 0), otherOnlinePlayers[num]);

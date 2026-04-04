@@ -105,7 +105,7 @@ namespace RainMeadow.UI.Components
             friendlyFireCheckbox.OnValueUpdate += (config, value, oldValue) =>
             {
                 arena.friendlyFire = friendlyFireCheckbox.GetValueBool();
-                RainMeadow.Debug($"Setting friendly fire to: {arena.friendlyFire}");
+                RainMeadow.OLDDebug($"Setting friendly fire to: {arena.friendlyFire}");
             };
             new PatchedUIelementWrapper(tabWrapper, teamLerpTextBox);
             new PatchedUIelementWrapper(tabWrapper, friendlyFireCheckbox);
@@ -231,7 +231,7 @@ namespace RainMeadow.UI.Components
         {
             if (!teamBattleMode.teamColors.ContainsKey(value))
             {
-                RainMeadow.Error($"Key,{value} is not stored in team colors");
+                RainMeadow.OLDError($"Key,{value} is not stored in team colors");
                 return;
             }
             teamBattleMode.teamColors[value] = Extensions.SafeColorRange(newColor);
@@ -241,7 +241,7 @@ namespace RainMeadow.UI.Components
         {
             if (!teamBattleMode.teamNames.ContainsKey(value))
             {
-                RainMeadow.Error($"Key,{value} is not stored in team names");
+                RainMeadow.OLDError($"Key,{value} is not stored in team names");
                 return;
             }
             teamBattleMode.teamNames[value] = newName;

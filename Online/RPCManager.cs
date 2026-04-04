@@ -87,7 +87,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error("Error registering RPCs for builtin type: " + type.FullName);
+                    RainMeadow.OLDError("Error registering RPCs for builtin type: " + type.FullName);
                     throw e;
                 }
             }
@@ -107,14 +107,14 @@ namespace RainMeadow
                         }
                         catch (Exception e)
                         {
-                            RainMeadow.Error(assembly.FullName + ":" + type.FullName);
-                            RainMeadow.Error(e);
+                            RainMeadow.OLDError(assembly.FullName + ":" + type.FullName);
+                            RainMeadow.OLDError(e);
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             }
             // there's an argument that throwing would be necessary to avoid offset indexes between clients
@@ -143,7 +143,7 @@ namespace RainMeadow
                 var isStatic = method.IsStatic;
                 var isSoft = method.GetCustomAttribute<RPCMethodAttribute>() is SoftRPCMethodAttribute;
                 // get args
-                RainMeadow.Debug($"New RPC: {targetType}-{method.Name}");
+                RainMeadow.OLDDebug($"New RPC: {targetType}-{method.Name}");
                 var args = method.GetParameters();
 
                 var argsEventIndex = -1;
@@ -157,7 +157,7 @@ namespace RainMeadow
                         args = tempArgs.ToArray();
                     }
                 }
-                RainMeadow.Debug(args.Aggregate("", (e, a) => e + " - " + a));
+                RainMeadow.OLDDebug(args.Aggregate("", (e, a) => e + " - " + a));
 
                 // make serialize method(rpcEvent, serializer)
                 ParameterExpression targetVar = Expression.Variable(targetType, "target");
@@ -178,17 +178,17 @@ namespace RainMeadow
                     // dunno how to make this extensible, it's probably enough for now
                     if (typeof(OnlineResource).IsAssignableFrom(targetType))
                     {
-                        RainMeadow.Debug("target is OnlineResource");
+                        RainMeadow.OLDDebug("target is OnlineResource");
                         expressions.Add(Expression.Call(serializerParam, serializeResourceByRef.MakeGenericMethod(targetType), targetVar));
                     }
                     else if (typeof(OnlineEntity).IsAssignableFrom(targetType))
                     {
-                        RainMeadow.Debug("target is OnlineEntity");
+                        RainMeadow.OLDDebug("target is OnlineEntity");
                         expressions.Add(Expression.Call(serializerParam, serializeEntityById.MakeGenericMethod(targetType), targetVar));
                     }
                     else if (typeof(RainMeadow).IsAssignableFrom(targetType)) // lambdas aren't static lol
                     {
-                        RainMeadow.Debug("target is RainMeadow");
+                        RainMeadow.OLDDebug("target is RainMeadow");
                         expressions.Add(Expression.Assign(targetVar, Expression.Constant(RainMeadow.instance)));
                     }
                     else
@@ -292,7 +292,7 @@ namespace RainMeadow
 
         internal static RPCEvent BuildRPC(Delegate del, object[] args)
         {
-            RainMeadow.Debug($"Sending RPC: {del.Method}");
+            RainMeadow.OLDDebug($"Sending RPC: {del.Method}");
             var handler = defsByMethod[del.Method];
             if (handler is SoftRPCDefinition) return new SoftRPCEvent(handler, del, args);
             return new RPCEvent(handler, del, args);
@@ -341,7 +341,7 @@ namespace RainMeadow
             }
             catch (Exception)
             {
-                RainMeadow.Error($"Error serializing RPC {this}");
+                RainMeadow.OLDError($"Error serializing RPC {this}");
                 throw;
             }
         }
@@ -358,7 +358,7 @@ namespace RainMeadow
             {
                 if (!handler.isStatic && target == null)
                 {
-                    RainMeadow.Error($"Target of RPC not found for " + handler.summary);
+                    RainMeadow.OLDError($"Target of RPC not found for " + handler.summary);
                     from.QueueEvent(new GenericResult.Error(this));
                     return;
                 }
@@ -370,7 +370,7 @@ namespace RainMeadow
                 {
                     if (OnlineManager.lobby is null)
                     {
-                        RainMeadow.Error($"{from} failed security check for RPC {handler.summary}, lobby does not exist.");
+                        RainMeadow.OLDError($"{from} failed security check for RPC {handler.summary}, lobby does not exist.");
                         from.QueueEvent(new GenericResult.Error(this));
                         return;
                     }
@@ -390,7 +390,7 @@ namespace RainMeadow
                     {
                         if (handler.security == RPCSecurity.InResource && entity.currentlyJoinedResource is null)
                         {
-                            RainMeadow.Error($"{from} failed security check for RPC {handler.summary}, entity is not in any resources.");
+                            RainMeadow.OLDError($"{from} failed security check for RPC {handler.summary}, entity is not in any resources.");
                             from.QueueEvent(new GenericResult.Error(this));
                             return;
                         }
@@ -400,7 +400,7 @@ namespace RainMeadow
                     }
                     else
                     {
-                        RainMeadow.Error($"{from} failed security check for RPC {handler.summary}, target is not an OnlineResource or OnlineEntity.");
+                        RainMeadow.OLDError($"{from} failed security check for RPC {handler.summary}, target is not an OnlineResource or OnlineEntity.");
                         from.QueueEvent(new GenericResult.Error(this));
                         return;
                     }   
@@ -408,19 +408,19 @@ namespace RainMeadow
                 
                 if (handler.security == RPCSecurity.Owner && (securityOwner is null || securityOwner != from))
                 {
-                    RainMeadow.Error($"{from} failed security check for RPC {handler.summary}, {from} is NOT the owner of {target.ToString()}.");
+                    RainMeadow.OLDError($"{from} failed security check for RPC {handler.summary}, {from} is NOT the owner of {target.ToString()}.");
                     from.QueueEvent(new GenericResult.Error(this));
                     return;
                 }
 
                 if (securityResource is not null && !securityResource.participants.Contains(from))
                 {
-                    RainMeadow.Error($"{from} failed security check for RPC {handler.summary}, {from} is NOT a participant of {securityResource.ToString()}");
+                    RainMeadow.OLDError($"{from} failed security check for RPC {handler.summary}, {from} is NOT a participant of {securityResource.ToString()}");
                     from.QueueEvent(new GenericResult.Error(this));
                     return;
                 }
 
-                RainMeadow.Debug($"Processing RPC: {handler.summary}");
+                RainMeadow.OLDDebug($"Processing RPC: {handler.summary}");
                 var useArgs = args;
                 if (handler.eventArgIndex > -1)
                 {
@@ -441,7 +441,7 @@ namespace RainMeadow
             catch (Exception e)
             {
                 currentRPCEvent = null;
-                RainMeadow.Error($"Error handing RPC {handler.summary} {e}");
+                RainMeadow.OLDError($"Error handing RPC {handler.summary} {e}");
                 from.QueueEvent(new GenericResult.Error(this));
             }
         }
@@ -462,7 +462,7 @@ namespace RainMeadow
             }
             catch (Exception e)
             {
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
             }
         }
 
@@ -525,7 +525,7 @@ namespace RainMeadow
         {
             if (handler == softFallbackHandler)
             {
-                RainMeadow.Debug("Skipping unknown SoftRPC");
+                RainMeadow.OLDDebug("Skipping unknown SoftRPC");
                 return;
             }
             base.Process();

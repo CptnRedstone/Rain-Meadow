@@ -145,7 +145,7 @@ namespace RainMeadow.UI.Components
             }
             else
             {
-                RainMeadow.Error($"Could not find thumbnail for arena: {arenaName}");
+                RainMeadow.OLDError($"Could not find thumbnail for arena: {arenaName}");
             }
         }
         private void UpdatePreviewImage()

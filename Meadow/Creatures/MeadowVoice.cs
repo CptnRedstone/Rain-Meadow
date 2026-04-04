@@ -25,7 +25,7 @@ namespace RainMeadow
 
         internal void Call()
         {
-            RainMeadow.Debug(owner.onlineCreature);
+            RainMeadow.OLDDebug(owner.onlineCreature);
             spam = Mathf.Min(20, spam + 1f);
             volume = 1f - 0.75f * RWCustom.Custom.SCurve(Mathf.InverseLerp(3, 15, spam), 0.25f);
             var room = owner.creature.room;

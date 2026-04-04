@@ -51,12 +51,12 @@ namespace RainMeadow
                 LeaveLobby();
             };
             new StateProfiler();
-            RainMeadow.Debug("OnlineManager Created");
+            RainMeadow.OLDDebug("OnlineManager Created");
         }
 
         private void OnlineManager_OnLobbyJoined(bool ok, string error)
         {
-            RainMeadow.Debug(ok);
+            RainMeadow.OLDDebug(ok);
             currentlyJoiningLobby = default;
             if (ok)
             {
@@ -207,7 +207,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             }
         }
@@ -228,7 +228,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             }
         }
@@ -239,7 +239,7 @@ namespace RainMeadow
             fromPlayer.needsAck = true;
             if (EventMath.IsNewer(onlineEvent.eventId, fromPlayer.lastEventFromRemote))
             {
-                RainMeadow.Debug($"New event {onlineEvent} from {fromPlayer}, processing...");
+                RainMeadow.OLDDebug($"New event {onlineEvent} from {fromPlayer}, processing...");
                 fromPlayer.lastEventFromRemote = onlineEvent.eventId;
 
                 try
@@ -247,7 +247,7 @@ namespace RainMeadow
                     if (onlineEvent.runDeferred)
                     {
                         RunDeferred(() => onlineEvent.Process());
-                        RainMeadow.Debug("deferred: " + onlineEvent);
+                        RainMeadow.OLDDebug("deferred: " + onlineEvent);
                     }
                     else
                     {
@@ -256,7 +256,7 @@ namespace RainMeadow
                 }
                 catch (Exception e)
                 {
-                    RainMeadow.Error(e);
+                    RainMeadow.OLDError(e);
                 }
             }
         }
@@ -289,7 +289,7 @@ namespace RainMeadow
                         }
                         else
                         {
-                            RainMeadow.Error($"Entity {entityFeedState.entityState.entityId} not found for incoming state from {entityFeedState.entityState.from} in {entityFeedState.inResource}");
+                            RainMeadow.OLDError($"Entity {entityFeedState.entityState.entityId} not found for incoming state from {entityFeedState.entityState.from} in {entityFeedState.inResource}");
                         }
                     }
                     else // resource unloaded or not available
@@ -299,25 +299,25 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Error($"Unexpected incoming state: {state}");
+                    RainMeadow.OLDError($"Unexpected incoming state: {state}");
                 }
             }
             catch (Exception e)
             {
-                RainMeadow.Error($"Error reading state {state}");
+                RainMeadow.OLDError($"Error reading state {state}");
                 if (state is OnlineResource.ResourceState resourceState && resourceState.resource != null && (resourceState.resource.isAvailable || resourceState.resource.isWaitingForState || resourceState.resource.isPending))
                 {
-                    RainMeadow.Error(resourceState.resource);
+                    RainMeadow.OLDError(resourceState.resource);
                 }
                 else if (state is EntityFeedState entityFeedState && entityFeedState.inResource != null && entityFeedState.inResource.isAvailable)
                 {
                     var ent = entityFeedState.entityState.entityId.FindEntity();
-                    RainMeadow.Error(entityFeedState.inResource);
-                    RainMeadow.Error(entityFeedState.entityState);
-                    RainMeadow.Error(entityFeedState.entityState.entityId);
-                    RainMeadow.Error(ent);
+                    RainMeadow.OLDError(entityFeedState.inResource);
+                    RainMeadow.OLDError(entityFeedState.entityState);
+                    RainMeadow.OLDError(entityFeedState.entityState.entityId);
+                    RainMeadow.OLDError(ent);
                 }
-                RainMeadow.Error(e);
+                RainMeadow.OLDError(e);
             }
         }
 
@@ -371,14 +371,14 @@ namespace RainMeadow
                 }
 
             }
-            RainMeadow.Error("resource not found : " + rid);
+            RainMeadow.OLDError("resource not found : " + rid);
             RainMeadow.Stacktrace();
             return null;
         }
 
         public static void QuitWithError(string v)
         {
-            RainMeadow.Error(v);
+            RainMeadow.OLDError(v);
             if (lobby != null && instance.manager.upcomingProcess != ProcessManager.ProcessID.MainMenu)
             {
                 instance.manager.upcomingProcess = null;

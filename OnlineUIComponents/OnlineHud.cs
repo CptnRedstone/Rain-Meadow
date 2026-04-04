@@ -55,12 +55,12 @@ namespace RainMeadow
         {
             RainMeadow.DebugMe();
             if (avatar.FindEntity() is not OnlineEntity entity) {
-                RainMeadow.Error("Couldn't find online entity");
+                RainMeadow.OLDError("Couldn't find online entity");
                 return;
             }
 
             if (entity.owner is null) {
-                RainMeadow.Error("Online Entity has no owner");
+                RainMeadow.OLDError("Online Entity has no owner");
                 return;
             }
 

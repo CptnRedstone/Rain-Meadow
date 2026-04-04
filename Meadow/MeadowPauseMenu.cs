@@ -41,11 +41,11 @@ namespace RainMeadow
             if (MeadowMusic.regionVibeZonesDict != null)
             {
                 var hubZone = MeadowMusic.regionVibeZonesDict.MinBy(v => (world.RoomToWorldPos(Vector2.zero, room.abstractRoom.index) - world.RoomToWorldPos(Vector2.zero, v.Key)).magnitude);
-                RainMeadow.Debug($"hubzone: {hubZone.Value.room} : {hubZone.Key}");
+                RainMeadow.OLDDebug($"hubzone: {hubZone.Value.room} : {hubZone.Key}");
                 targetHub = hubZone.Key;
             }
             suco4 = RainWorld.roomNameToIndex.TryGetValue("SU_C04", out var val) ? val : -1;
-            RainMeadow.Debug("suco4 is " + suco4);
+            RainMeadow.OLDDebug("suco4 is " + suco4);
 
             int buttonCount = 0;
             SimplerButton AddButton(string localizedText, string localizedDescription, Action<SimplerButton> onClick, bool active = true, string emotesprite = null)
@@ -207,7 +207,7 @@ namespace RainMeadow
             var creature = mgm.avatars[0].realizedCreature;
             if (creature.room != null)
             {
-                RainMeadow.Debug("found in room");
+                RainMeadow.OLDDebug("found in room");
                 var room = creature.room;
                 creature.RemoveFromRoom();
                 room.CleanOutObjectNotInThisRoom(creature); // we need it this frame

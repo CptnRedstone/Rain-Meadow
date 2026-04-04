@@ -16,7 +16,7 @@ namespace RainMeadow
         {
             base.ReadTo(abstractCreature);
             var healthState = (HealthState)abstractCreature.state;
-            if (healthState.health != this.health) RainMeadow.Debug($"health changed from {healthState.health} to {health}");
+            if (healthState.health != this.health) RainMeadow.OLDDebug($"health changed from {healthState.health} to {health}");
             healthState.health = this.health;
         }
     }

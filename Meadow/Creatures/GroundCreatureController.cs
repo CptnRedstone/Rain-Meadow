@@ -48,7 +48,7 @@ namespace RainMeadow
 
                 if (originPos == self.destination || (actuallyFollowingThisPath && self.lookingForImpossiblePath))
                 {
-                    if (Input.GetKey(KeyCode.L) && actuallyFollowingThisPath) RainMeadow.Debug("returning override. lookingForImpossiblePath? " + self.lookingForImpossiblePath);
+                    if (Input.GetKey(KeyCode.L) && actuallyFollowingThisPath) RainMeadow.OLDDebug("returning override. lookingForImpossiblePath? " + self.lookingForImpossiblePath);
                     return new MovementConnection(MovementConnection.MovementType.Standard, originPos, self.destination, 1);
                 }
                 return orig(self, originPos, actuallyFollowingThisPath);
@@ -140,7 +140,7 @@ namespace RainMeadow
             // todo take body factors into factor. blue liz jump feels too stronk
             if (canGroundJump > 0 && superLaunchJump >= 20)
             {
-                RainMeadow.Debug("super jump");
+                RainMeadow.OLDDebug("super jump");
                 superLaunchJump = 0;
                 OnJump();
                 this.jumpBoost = 6f;
@@ -161,7 +161,7 @@ namespace RainMeadow
                     ((GetTile(0).verticalBeam && !GetTile(0, 0, 1).verticalBeam)
                     || (GetTile(1).verticalBeam && !GetTile(0).verticalBeam)))
                 {
-                    RainMeadow.Debug("beamtip jump");
+                    RainMeadow.OLDDebug("beamtip jump");
                     OnJump();
                     this.forceJump = 10;
                     this.jumpBoost = 8f;
@@ -182,7 +182,7 @@ namespace RainMeadow
                     ((GetTile(0).horizontalBeam && !GetTile(0, 0, 1).horizontalBeam)
                     || (GetTile(1).horizontalBeam && !GetTile(0).horizontalBeam)))
                 {
-                    RainMeadow.Debug("horiz beam jump");
+                    RainMeadow.OLDDebug("horiz beam jump");
                     OnJump();
                     this.forceJump = 10;
                     this.jumpBoost = 8f;
@@ -200,7 +200,7 @@ namespace RainMeadow
                 }
                 if (this.input[0].x != 0)
                 {
-                    RainMeadow.Debug("pole side jump");
+                    RainMeadow.OLDDebug("pole side jump");
                     OnJump();
                     this.forceJump = 10;
                     flipDirection = this.input[0].x;
@@ -217,7 +217,7 @@ namespace RainMeadow
                 }
                 if (this.input[0].y <= 0)
                 {
-                    RainMeadow.Debug("pole drop");
+                    RainMeadow.OLDDebug("pole drop");
                     OnJump();
                     mainBodyChunk.vel.y = 2f * jumpFactor;
                     if (this.input[0].y > -1)
@@ -231,7 +231,7 @@ namespace RainMeadow
             }
             else if (canCorridorBoost > 0)
             {
-                RainMeadow.Debug("corridor jump");
+                RainMeadow.OLDDebug("corridor jump");
                 OnJump();
                 this.jumpBoost = 6;
                 var jumpdir = (cs[0].pos - cs[1].pos).normalized + inputDir;
@@ -241,7 +241,7 @@ namespace RainMeadow
             }
             else if (canGroundJump > 0)
             {
-                RainMeadow.Debug("normal jump");
+                RainMeadow.OLDDebug("normal jump");
                 OnJump();
                 this.jumpBoost = 6;
                 cs[0].vel.y = 6.4f * jumpFactor;
@@ -264,7 +264,7 @@ namespace RainMeadow
             }
             else if (canWaterJump > 0)
             {
-                RainMeadow.Debug("water jump");
+                RainMeadow.OLDDebug("water jump");
                 OnJump();
                 this.jumpBoost = 8f;
                 var jumpdir = ((cs[0].pos - cs[1].pos).normalized + inputDir * 2f + Vector2.up).normalized;
@@ -289,7 +289,7 @@ namespace RainMeadow
                     && !GetTile(0, input[0].x, 1).Solid
                     )
                 {
-                    RainMeadow.Debug("ledge climb"); // against ledge
+                    RainMeadow.OLDDebug("ledge climb"); // against ledge
                     OnJump();
                     this.jumpBoost = 3f;
                     // "middle of edge" of air above ledge
@@ -311,7 +311,7 @@ namespace RainMeadow
                     && !GetTile(0, input[0].x, 0).Solid
                     )
                 {
-                    RainMeadow.Debug("ledge drag"); // trying to get past ledge
+                    RainMeadow.OLDDebug("ledge drag"); // trying to get past ledge
                     OnJump();
                     this.jumpBoost = 3f;
                     // "middle of edge" of air above ledge
@@ -329,12 +329,12 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.Debug("wall jump");
+                    RainMeadow.OLDDebug("wall jump");
                     OnJump();
                     this.jumpBoost = 6f;
                     this.forceBoost = 6;
                     var jumpdir = new Vector2(-Mathf.Sign(canWallJump), 1.74f).normalized;
-                    RainMeadow.Debug("jumpdir " + jumpdir);
+                    RainMeadow.OLDDebug("jumpdir " + jumpdir);
                     cs[0].vel.y = 0f;
                     cs[0].vel += jumpdir * 8f * jumpFactor;
                     for (int i = 1; i < cc; i++)
@@ -351,7 +351,7 @@ namespace RainMeadow
             }
             else if (canClimbJump > 0)
             {
-                RainMeadow.Debug("climb jump");
+                RainMeadow.OLDDebug("climb jump");
                 OnJump();
                 this.jumpBoost = 3f;
                 var jumpdir = (cs[0].pos - cs[1].pos).normalized + inputDir;
@@ -365,7 +365,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.Debug("Unhandled jump");
+                RainMeadow.OLDDebug("Unhandled jump");
             }
         }
 
@@ -392,7 +392,7 @@ namespace RainMeadow
             magnitude = 0.5f;
             var previousAccessibility = room.aimap.getAItile(basecoord).acc;
 
-            if (localTrace) RainMeadow.Debug($"moving from {basecoord.Tile} towards {toPos.Tile}");
+            if (localTrace) RainMeadow.OLDDebug($"moving from {basecoord.Tile} towards {toPos.Tile}");
 
             if (this.forceJump > 0) // jumping
             {
@@ -419,7 +419,7 @@ namespace RainMeadow
                         var tile = room.GetTile(chunks[i].pos + Custom.fourDirectionsAndZero[j].ToVector2() * chunks[i].rad);
                         if (tile.AnyBeam && !tile.DeepWater)
                         {
-                            RainMeadow.Debug("grip!");
+                            RainMeadow.OLDDebug("grip!");
                             ClearMovementOverride();
                             GripPole(tile);
                             toPos = room.GetWorldCoordinate(new IntVector2(tile.X, tile.Y));
@@ -441,7 +441,7 @@ namespace RainMeadow
                     var aitile = room.aimap.getAItile(tile.X, tile.Y);
                     if (!tile.Solid && (tile.verticalBeam || aitile.acc == AItile.Accessibility.Climb))
                     {
-                        if (localTrace) RainMeadow.Debug("pole close");
+                        if (localTrace) RainMeadow.OLDDebug("pole close");
                         toPos = WorldCoordinate.AddIntVector(basecoord, new IntVector2(num, 1));
                         climbing = true;
                         magnitude = 1f;
@@ -458,7 +458,7 @@ namespace RainMeadow
                         var aitile = room.aimap.getAItile(tileup2.X, tileup2.Y);
                         if (!tileup1.Solid && (tileup2.verticalBeam || aitile.acc == AItile.Accessibility.Climb))
                         {
-                            if (localTrace) RainMeadow.Debug("pole far");
+                            if (localTrace) RainMeadow.OLDDebug("pole far");
                             toPos = WorldCoordinate.AddIntVector(basecoord, new IntVector2(num, 2));
                             climbing = true;
                             magnitude = 1f;
@@ -473,21 +473,21 @@ namespace RainMeadow
 
                 if (this.input[0].x != 0) // to sides
                 {
-                    if (localTrace) RainMeadow.Debug("sides");
+                    if (localTrace) RainMeadow.OLDDebug("sides");
                     bool aheadAccessible = false;
                     if (TileAccessible(room, toPos.Tile))
                     {
-                        if (localTrace) RainMeadow.Debug("ahead");
+                        if (localTrace) RainMeadow.OLDDebug("ahead");
                         aheadAccessible = true;
                     }
                     else if (TileAccessible(room, toPos.Tile + new IntVector2(0, 1))) // try up
                     {
-                        if (localTrace) RainMeadow.Debug("up");
+                        if (localTrace) RainMeadow.OLDDebug("up");
                         toPos = WorldCoordinate.AddIntVector(toPos, new IntVector2(0, 1));
                     }
                     else if (TileAccessible(room, toPos.Tile + new IntVector2(0, -1))) // try down
                     {
-                        if (localTrace) RainMeadow.Debug("down");
+                        if (localTrace) RainMeadow.OLDDebug("down");
                         toPos = WorldCoordinate.AddIntVector(toPos, new IntVector2(0, -1));
                     }
 
@@ -497,19 +497,19 @@ namespace RainMeadow
                         WorldCoordinate furtherOut = WorldCoordinate.AddIntVector(basecoord, IntVector2.FromVector2(this.inputDir.normalized * 2.84f));
                         if (TileAccessible(room, furtherOut.Tile) && QuickConnectivity.Check(room, creature.Template, basecoord.Tile, furtherOut.Tile, 6) > 0)
                         {
-                            if (localTrace) RainMeadow.Debug("reaching further");
+                            if (localTrace) RainMeadow.OLDDebug("reaching further");
                             toPos = furtherOut;
                             magnitude = 1f;
                         }
                         else if (TileAccessible(room, furtherOut.Tile + new IntVector2(0, 1)) && QuickConnectivity.Check(room, creature.Template, basecoord.Tile, furtherOut.Tile + new IntVector2(0, 1), 6) > -1)
                         {
-                            if (localTrace) RainMeadow.Debug("further up");
+                            if (localTrace) RainMeadow.OLDDebug("further up");
                             toPos = WorldCoordinate.AddIntVector(furtherOut, new IntVector2(0, 1));
                             magnitude = 1f;
                         }
                         else if (TileAccessible(room, furtherOut.Tile + new IntVector2(0, -1)) && QuickConnectivity.Check(room, creature.Template, basecoord.Tile, furtherOut.Tile + new IntVector2(0, -1), 6) > -1)
                         {
-                            if (localTrace) RainMeadow.Debug("further down");
+                            if (localTrace) RainMeadow.OLDDebug("further down");
                             toPos = WorldCoordinate.AddIntVector(furtherOut, new IntVector2(0, -1));
                             magnitude = 1f;
                         }
@@ -517,20 +517,20 @@ namespace RainMeadow
                 }
                 else
                 {
-                    if (localTrace) RainMeadow.Debug("vertical");
+                    if (localTrace) RainMeadow.OLDDebug("vertical");
 
                     if (TileAccessible(room, toPos.Tile))
                     {
-                        if (localTrace) RainMeadow.Debug("ahead");
+                        if (localTrace) RainMeadow.OLDDebug("ahead");
                     }
                     else if (TileAccessible(room, toPos.Tile + new IntVector2(1, 0))) // right
                     {
-                        if (localTrace) RainMeadow.Debug("right");
+                        if (localTrace) RainMeadow.OLDDebug("right");
                         toPos = WorldCoordinate.AddIntVector(toPos, new IntVector2(1, 0));
                     }
                     else if (TileAccessible(room, toPos.Tile + new IntVector2(-1, 0))) // left
                     {
-                        if (localTrace) RainMeadow.Debug("left");
+                        if (localTrace) RainMeadow.OLDDebug("left");
                         toPos = WorldCoordinate.AddIntVector(toPos, new IntVector2(-1, 0));
                     }
                     if (inputDir.magnitude > 0.75f)
@@ -538,7 +538,7 @@ namespace RainMeadow
                         WorldCoordinate furtherOut = WorldCoordinate.AddIntVector(basecoord, IntVector2.FromVector2(this.inputDir.normalized * 2.84f));
                         if (!room.GetTile(toPos).Solid && !room.GetTile(furtherOut).Solid && TileAccessible(room, furtherOut.Tile)) // ahead unblocked, move further
                         {
-                            if (localTrace) RainMeadow.Debug("reaching");
+                            if (localTrace) RainMeadow.OLDDebug("reaching");
                             toPos = furtherOut;
                             magnitude = 1f;
                         }
@@ -561,13 +561,13 @@ namespace RainMeadow
                 && pathFinder.PathingCellAtWorldCoordinate(toPos).reachable
                 && QuickConnectivity.Check(room, creature.Template, basecoord.Tile, toPos.Tile, 12) > -1) // found and pathfinder-pathable
             {
-                if (localTrace) RainMeadow.Debug("pathable");
+                if (localTrace) RainMeadow.OLDDebug("pathable");
                 return true;
             }
             else
             {
                 // no pathing
-                if (localTrace) RainMeadow.Debug("unpathable");
+                if (localTrace) RainMeadow.OLDDebug("unpathable");
                 pathFinder.OutOfElement();
 
                 if (room.aimap.getAItile(toPos).acc < AItile.Accessibility.Solid // no go
@@ -583,14 +583,14 @@ namespace RainMeadow
                 )
                 {
                     // force movement
-                    if (localTrace) RainMeadow.Debug("forced move to " + toPos.Tile);
+                    if (localTrace) RainMeadow.OLDDebug("forced move to " + toPos.Tile);
                     magnitude = 1f;
                     this.MovementOverride(new MovementConnection(MovementConnection.MovementType.Standard, basecoord, toPos, 2));
                     return true;
                 }
                 else
                 {
-                    if (localTrace) RainMeadow.Debug("unable to move");
+                    if (localTrace) RainMeadow.OLDDebug("unable to move");
                     return false;
                 }
             }
@@ -619,34 +619,34 @@ namespace RainMeadow
             {
                 if (IsOnCorridor)
                 {
-                    if (localTrace) RainMeadow.Debug("can corridor boost");
+                    if (localTrace) RainMeadow.OLDDebug("can corridor boost");
                     this.canCorridorBoost = 5;
                 }
                 else if (IsOnGround)
                 {
-                    if (localTrace) RainMeadow.Debug("can ground jump");
+                    if (localTrace) RainMeadow.OLDDebug("can ground jump");
                     this.canGroundJump = 5;
                 }
                 else if (IsOnPole)
                 {
-                    if (localTrace) RainMeadow.Debug("can pole jump");
+                    if (localTrace) RainMeadow.OLDDebug("can pole jump");
                     this.canPoleJump = 5;
                 }
                 else if (IsOnClimb)
                 {
-                    if (localTrace) RainMeadow.Debug("can climb jump");
+                    if (localTrace) RainMeadow.OLDDebug("can climb jump");
                     this.canClimbJump = 5;
                 }
             }
             var wallValue = OnWall;
             if (!WallClimber && wallValue != 0 && wallValue == input[0].x)
             {
-                if (localTrace) RainMeadow.Debug("can walljump");
+                if (localTrace) RainMeadow.OLDDebug("can walljump");
                 this.canWallJump = 5 * wallValue;
             }
             if (IsOnWaterSurface && canWaterJump >= 0) // negative = locked
             {
-                if (localTrace) RainMeadow.Debug("can water jump");
+                if (localTrace) RainMeadow.OLDDebug("can water jump");
                 this.canWaterJump = 5;
             }
 
@@ -655,7 +655,7 @@ namespace RainMeadow
             {
                 if (this.input[0].jmp && (this.superLaunchJump > 10 || (this.input[0].x == 0 && this.input[0].y <= 0)))
                 {
-                    if (localTrace) RainMeadow.Debug("charging pounce");
+                    if (localTrace) RainMeadow.OLDDebug("charging pounce");
                     this.wantToJump = 0;
                     if (this.superLaunchJump <= 20)
                     {
@@ -690,7 +690,7 @@ namespace RainMeadow
 
             if (this.wantToJump > 0 && (this.canClimbJump > 0 || this.canPoleJump > 0 || this.canGroundJump > 0 || this.canWallJump != 0 || canCorridorBoost > 0 || canWaterJump > 0))
             {
-                if (localTrace) RainMeadow.Debug("jumping");
+                if (localTrace) RainMeadow.OLDDebug("jumping");
                 this.Jump();
                 this.wantToJump = 0;
             }

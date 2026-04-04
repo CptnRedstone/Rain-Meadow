@@ -152,7 +152,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                Error(ex);
+                OLDError(ex);
             }
         }
         void On_Menu_SelectNewObject(On.Menu.Menu.orig_SelectNewObject orig, Menu.Menu self, RWCustom.IntVector2 direction)
@@ -260,7 +260,7 @@ namespace RainMeadow
         {
             if (self.menu is ArenaOnlineLobbyMenu && self.flatMode)
             {
-                Debug("Prevented overriding positions.txt");
+                OLDDebug("Prevented overriding positions.txt");
                 return;
             }
             orig(self);
@@ -609,7 +609,7 @@ namespace RainMeadow
                 }
                 catch (Exception ex)
                 {
-                    RainMeadow.Debug(ex);
+                    RainMeadow.OLDDebug(ex);
                 }
             }
             orig(self, ID);

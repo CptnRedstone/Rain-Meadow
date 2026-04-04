@@ -328,7 +328,7 @@ namespace RainMeadow
 
             if (lobbyInfo is LANMatchmakingManager.LANLobbyInfo) {
                 RainMeadow.DebugMe();
-                RainMeadow.Debug($"{lobbyInfo.name}, {lobbyInfo.maxPlayerCount}, {lobbyInfo.mode}, {lobbyInfo.playerCount}, {lobbyInfo.hasPassword}");
+                RainMeadow.OLDDebug($"{lobbyInfo.name}, {lobbyInfo.maxPlayerCount}, {lobbyInfo.mode}, {lobbyInfo.playerCount}, {lobbyInfo.hasPassword}");
             }
 
             // If has password, we show the dialog, otherwise we only let them join when the dialog is no longer present
@@ -376,7 +376,7 @@ namespace RainMeadow
 
         private void OnlineManager_OnLobbyListReceived(bool ok, LobbyInfo[] lobbies)
         {
-            RainMeadow.Debug(ok);
+            RainMeadow.OLDDebug(ok);
             if (ok)
             {
                 lobbyList.allLobbies = lobbies.ToList();
@@ -397,7 +397,7 @@ namespace RainMeadow
 
         private void OnlineManager_OnLobbyJoined(bool ok, string error)
         {
-            RainMeadow.Debug(ok);
+            RainMeadow.OLDDebug(ok);
             if (!ok)
             {
                 ShowErrorDialog(Translate("Failed to join lobby.<LINE>") + error);

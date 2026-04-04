@@ -15,7 +15,7 @@ namespace RainMeadow
             }
             else if (OnlineManager.lobby.gameMode.ShouldRegisterAPO(this, apo))
             {
-                RainMeadow.Debug($"{this} - registering {apo}");
+                RainMeadow.OLDDebug($"{this} - registering {apo}");
                 oe = OnlinePhysicalObject.RegisterPhysicalObject(apo);
                 oe.EnterResource(this);
             }
@@ -32,7 +32,7 @@ namespace RainMeadow
             {
                 if (OnlineManager.lobby.gameMode.ShouldSyncAPOInRoom(this, apo))
                 {
-                    RainMeadow.Error($"Unregistered entity leaving {this} : {apo} - {Environment.StackTrace}");
+                    RainMeadow.OLDError($"Unregistered entity leaving {this} : {apo} - {Environment.StackTrace}");
                 }
             }
         }

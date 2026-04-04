@@ -62,9 +62,9 @@ namespace RainMeadow
                         configurableInts.Add(field.Name, intOption._typedValue);
                     }
                 }
-                RainMeadow.Debug(configurableBools);
-                RainMeadow.Debug(configurableInts);
-                RainMeadow.Debug(configurableFloats);
+                RainMeadow.OLDDebug(configurableBools);
+                RainMeadow.OLDDebug(configurableInts);
+                RainMeadow.OLDDebug(configurableFloats);
             }
 
             return (configurableBools, configurableFloats, configurableInts);
@@ -90,7 +90,7 @@ namespace RainMeadow
                     {
                         if (field.Name == hostBoolRemixSettings.Keys.ElementAt(i) && boolOption._typedValue != hostBoolRemixSettings.Values.ElementAt(i))
                         {
-                            RainMeadow.Debug($"Remix Key: {field.Name} with value {boolOption._typedValue} does not match host's, setting to {hostBoolRemixSettings.Values.ElementAt(i)}");
+                            RainMeadow.OLDDebug($"Remix Key: {field.Name} with value {boolOption._typedValue} does not match host's, setting to {hostBoolRemixSettings.Values.ElementAt(i)}");
                             boolOption._typedValue = hostBoolRemixSettings.Values.ElementAt(i);
                         }
                     }
@@ -102,7 +102,7 @@ namespace RainMeadow
                     {
                         if (field.Name == hostFloatRemixSettings.Keys.ElementAt(i) && floatOption._typedValue != hostFloatRemixSettings.Values.ElementAt(i))
                         {
-                            RainMeadow.Debug($"Remix Key: {field.Name} with value {floatOption._typedValue} does not match host's, setting to {hostFloatRemixSettings.Values.ElementAt(i)}");
+                            RainMeadow.OLDDebug($"Remix Key: {field.Name} with value {floatOption._typedValue} does not match host's, setting to {hostFloatRemixSettings.Values.ElementAt(i)}");
                             floatOption._typedValue = hostFloatRemixSettings.Values.ElementAt(i);
                         }
                     }
@@ -115,7 +115,7 @@ namespace RainMeadow
 
                         if (field.Name == hostIntRemixSettings.Keys.ElementAt(i) && intOption._typedValue != hostIntRemixSettings.Values.ElementAt(i))
                         {
-                            RainMeadow.Debug($"Remix Key: {field.Name} with value {intOption._typedValue} does not match host's, setting to {hostIntRemixSettings.Values.ElementAt(i)}");
+                            RainMeadow.OLDDebug($"Remix Key: {field.Name} with value {intOption._typedValue} does not match host's, setting to {hostIntRemixSettings.Values.ElementAt(i)}");
                             intOption._typedValue = hostIntRemixSettings.Values.ElementAt(i);
                         }
                     }
@@ -240,10 +240,10 @@ namespace RainMeadow
 
         public virtual void NewEntity(OnlineEntity oe, OnlineResource inResource)
         {
-            RainMeadow.Debug(oe);
+            RainMeadow.OLDDebug(oe);
             if (RainMeadow.sSpawningAvatar && oe is OnlineCreature onlineCreature)
             {
-                RainMeadow.Debug("Registring avatar: " + onlineCreature);
+                RainMeadow.OLDDebug("Registring avatar: " + onlineCreature);
                 this.avatars.Add(onlineCreature);
                 ConfigureAvatar(onlineCreature);
             }
@@ -263,12 +263,12 @@ namespace RainMeadow
 
         public virtual void ResourceAvailable(OnlineResource onlineResource)
         {
-            RainMeadow.Debug(onlineResource);
+            RainMeadow.OLDDebug(onlineResource);
         }
 
         public virtual void ResourceActive(OnlineResource onlineResource)
         {
-            RainMeadow.Debug(onlineResource);
+            RainMeadow.OLDDebug(onlineResource);
             if (onlineResource is Lobby)
             {
                 this.clientSettings = new ClientSettings(new OnlineEntity.EntityId(OnlineManager.mePlayer.inLobbyId, OnlineEntity.EntityId.IdType.settings, 0), OnlineManager.mePlayer);

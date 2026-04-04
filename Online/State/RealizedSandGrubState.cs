@@ -45,7 +45,7 @@ namespace RainMeadow
         public override void ReadTo(OnlineEntity onlineEntity)
         {
             base.ReadTo(onlineEntity);
-            if ((onlineEntity as OnlineCreature).apo.realizedObject is not SandGrub grub) { RainMeadow.Error("target not realized: " + onlineEntity); return; }
+            if ((onlineEntity as OnlineCreature).apo.realizedObject is not SandGrub grub) { RainMeadow.OLDError("target not realized: " + onlineEntity); return; }
 
             grub.BitesLeft = bites;
             if (burrow == null)

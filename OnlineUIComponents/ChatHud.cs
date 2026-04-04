@@ -43,7 +43,7 @@ namespace RainMeadow
 
             if (isLogToggled)
             {
-                RainMeadow.Debug("creating log");
+                RainMeadow.OLDDebug("creating log");
                 chatLogOverlay = new ChatLogOverlay(this, game.manager);
                 showChatLog = true;
             }
@@ -84,7 +84,7 @@ namespace RainMeadow
                 }
                 else if (!textPrompt.pausedMode && !ShouldForceCloseChat)
                 {
-                    RainMeadow.Debug("creating log");
+                    RainMeadow.OLDDebug("creating log");
                     chatLogOverlay = new ChatLogOverlay(this, game.manager);
                     showChatLog = true;
                     isLogToggled = true;
@@ -94,11 +94,11 @@ namespace RainMeadow
             {
                 if (chatInputOverlay == null && !textPrompt.pausedMode && !ShouldForceCloseChat)
                 {
-                    RainMeadow.Debug("creating input");
+                    RainMeadow.OLDDebug("creating input");
                     chatInputOverlay = new ChatInputOverlay(game.manager);
                     if (chatLogOverlay is null)
                     {
-                        RainMeadow.Debug("creating log");
+                        RainMeadow.OLDDebug("creating log");
                         chatLogOverlay = new ChatLogOverlay(this, game.manager);
                     }
                 }

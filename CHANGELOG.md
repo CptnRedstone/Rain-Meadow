@@ -1,3 +1,5 @@
+WARN MODDERS OF LOG FUNCTINO NAME CHANGES
+
 # Release 1.13.1
 ## General
 - Fixed Hunter_Illness IL Hook

@@ -87,11 +87,11 @@ namespace RainMeadow
                     )
                 )
                 {
-                    RainMeadow.Debug("Filtered list:" + slugcatName);
+                    RainMeadow.LogInfo("Filtered list:" + slugcatName);
                     SlugcatStats.Name slugcatStatSlug = (SlugcatStats.Name)enumBase;
                     if (ModManager.Watcher && slugcatStatSlug == SlugcatStats.Name.Night)
                     {
-                        RainMeadow.Debug("Filtered out Night slugcat");
+                        RainMeadow.LogInfo("Filtered out Night slugcat");
                         continue; // Skip the Night slugcat if Watcher mod is active
                     }
 
@@ -165,7 +165,7 @@ namespace RainMeadow
             }
             catch
             {
-                RainMeadow.Error("Error finding player");
+                RainMeadow.LogError("Error finding player");
             }
             return null;
         }
@@ -242,7 +242,7 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby == null)
             {
-                RainMeadow.Error("Lobby is null!");
+                RainMeadow.LogError("Lobby is null!");
                 return null;
             }
             if (player == null)
@@ -288,7 +288,7 @@ namespace RainMeadow
                     {
                         if (tb1.team == tb2.team && !arena.friendlyFire)
                         {
-                            RainMeadow.Debug("Same team! No hits");
+                            RainMeadow.LogDebug("Same team! No hits");
                         }
                         return tb1.team == tb2.team
                             && !arena.friendlyFire
@@ -312,13 +312,13 @@ namespace RainMeadow
             OnlinePlayer? onlinePlayer = FindOnlinePlayerByFakePlayerNumber(arena, playerNumber);
             if (onlinePlayer == null)
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find onlineplayer");
+                RainMeadow.LogError("GetPlayerTrophies: Could not find onlineplayer");
                 return trophies;
             }
 
             if (!arena.playerNumberWithTrophies.ContainsKey(onlinePlayer.inLobbyId))
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find player number in dictionary");
+                RainMeadow.LogError("GetPlayerTrophies: Could not find player number in dictionary");
                 return trophies;
             }
             for (int i = 0; i < arena.playerNumberWithTrophies[onlinePlayer.inLobbyId].Count; i++)
@@ -344,13 +344,13 @@ namespace RainMeadow
             );
             if (onlinePlayer == null)
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find onlineplayer");
+                RainMeadow.LogError("GetPlayerTrophies: Could not find onlineplayer");
                 return trophies;
             }
 
             if (!arena.playerNumberWithTrophies.ContainsKey(onlinePlayer.inLobbyId))
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find player number in dictionary");
+                RainMeadow.LogWarning("GetPlayerTrophies: Could not find player number in dictionary");
                 return trophies;
             }
 
@@ -371,13 +371,13 @@ namespace RainMeadow
             OnlinePlayer? onlinePlayer = FindOnlinePlayerByFakePlayerNumber(arena, playerNumber);
             if (onlinePlayer == null)
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find onlineplayer");
+                RainMeadow.LogError("GetPlayerTrophies: Could not find onlineplayer");
                 return trophies;
             }
 
             if (!arena.playerNumberWithTrophiesPerRound.ContainsKey(onlinePlayer.inLobbyId))
             {
-                RainMeadow.Warn("GetPlayerTrophies: Could not find player number in dictionary");
+                RainMeadow.LogWarning("GetPlayerTrophies: Could not find player number in dictionary");
                 return trophies;
             }
             for (int i = 0; i < arena.playerNumberWithTrophiesPerRound[onlinePlayer.inLobbyId].Count; i++)
@@ -403,13 +403,13 @@ namespace RainMeadow
             );
             if (onlinePlayer == null)
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find onlineplayer");
+                RainMeadow.LogError("GetPlayerTrophies: Could not find onlineplayer");
                 return trophies;
             }
 
             if (!arena.playerNumberWithTrophiesPerRound.ContainsKey(onlinePlayer.inLobbyId))
             {
-                RainMeadow.Error("GetPlayerTrophies: Could not find player number in dictionary");
+                RainMeadow.LogError("GetPlayerTrophies: Could not find player number in dictionary");
                 return trophies;
             }
 

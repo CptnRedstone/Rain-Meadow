@@ -18,7 +18,7 @@ namespace RainMeadow
     [BepInPlugin("henpemaz.rainmeadow", "RainMeadow", MeadowVersionStr)]
     public partial class RainMeadow : BaseUnityPlugin
     {
-        public const string MeadowVersionStr = "0.1.13.1";
+        public const string MeadowVersionStr = "4.3.2.1";
         public const string ReleaseUrl = "https://api.github.com/repos/henpemaz/Rain-Meadow/releases/latest";
         public static string NewVersionAvailable = "";
         public static RainMeadow instance;
@@ -193,34 +193,34 @@ namespace RainMeadow
                 var sw = Stopwatch.StartNew();
                 OnlineState.InitializeBuiltinTypes();
                 sw.Stop();
-                RainMeadow.Debug($"OnlineState.InitializeBuiltinTypes: {sw.Elapsed}");
+                RainMeadow.OLDDebug($"OnlineState.InitializeBuiltinTypes: {sw.Elapsed}");
 
                 sw = Stopwatch.StartNew();
                 OnlineGameMode.InitializeBuiltinTypes();
                 sw.Stop();
-                RainMeadow.Debug($"OnlineGameMode.InitializeBuiltinTypes: {sw.Elapsed}");
+                RainMeadow.OLDDebug($"OnlineGameMode.InitializeBuiltinTypes: {sw.Elapsed}");
 
                 sw = Stopwatch.StartNew();
                 MeadowProgression.InitializeBuiltinTypes();
                 sw.Stop();
-                RainMeadow.Debug($"MeadowProgression.InitializeBuiltinTypes: {sw.Elapsed}");
+                RainMeadow.OLDDebug($"MeadowProgression.InitializeBuiltinTypes: {sw.Elapsed}");
 
                 sw = Stopwatch.StartNew();
                 RPCManager.SetupRPCs();
                 sw.Stop();
-                RainMeadow.Debug($"RPCManager.SetupRPCs: {sw.Elapsed}");
+                RainMeadow.OLDDebug($"RPCManager.SetupRPCs: {sw.Elapsed}");
 
                 AssetBundle bundle = AssetBundle.LoadFromFile(AssetManager.ResolveFilePath("assetbundles/rainmeadow"));
                 Shader[] newShaders = bundle.LoadAllAssets<Shader>();
                 foreach (Shader shader in newShaders)
                 {
-                    RainMeadow.Debug("found shader " + shader.name);
+                    RainMeadow.OLDDebug("found shader " + shader.name);
                     var found = false;
                     foreach (FShader oldshader in self.Shaders.Values)
                     {
                         if (oldshader.shader.name == shader.name)
                         {
-                            RainMeadow.Debug("replaced existing shader");
+                            RainMeadow.OLDDebug("replaced existing shader");
                             oldshader.shader = shader;
                             found = true;
                             break;
@@ -228,7 +228,7 @@ namespace RainMeadow
                     }
                     if (!found)
                     {
-                        RainMeadow.Debug("registered as new shader");
+                        RainMeadow.OLDDebug("registered as new shader");
                         self.Shaders[shader.name] = FShader.CreateShader(shader.name, shader);
                     }
                 }
@@ -303,16 +303,16 @@ namespace RainMeadow
                 {
                     latestVersion = "0." + latestVersion;
                 }
-                RainMeadow.Debug($"Current Version - {MeadowVersionStr}, Latest Version - {latestVersion}");
+                RainMeadow.OLDDebug($"Current Version - {MeadowVersionStr}, Latest Version - {latestVersion}");
                 if (IsNewerVersion(latestVersion, MeadowVersionStr))
                 {
-                    RainMeadow.Debug($"NEW RAIN MEADOW VERSION FOUND.");
+                    RainMeadow.OLDDebug($"NEW RAIN MEADOW VERSION FOUND.");
                     // One day grace window before users are prompted to update.
                     if (json.TryGetValue("published_at", out var published)
                         && DateTime.TryParse(published.ToString(), out var publishedDate)
                         && publishedDate.AddDays(1) > DateTime.Now)
                     {
-                        RainMeadow.Debug($"Update popup grace period active until: {publishedDate.AddDays(1).ToLongDateString()}");
+                        RainMeadow.OLDDebug($"Update popup grace period active until: {publishedDate.AddDays(1).ToLongDateString()}");
                         yield break;
                     }
                     NewVersionAvailable = latestVersion;

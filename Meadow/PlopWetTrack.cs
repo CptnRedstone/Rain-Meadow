@@ -96,7 +96,7 @@ namespace RainMeadow
                     plop.Update(power);
                 };
                 int float2 = DateTime.Now.Millisecond;
-                if ((float2 - float1) > 15) RainMeadow.Debug($"Big amount of elapsed time in plop ({plops.Count}) calculations: " + (float2 - float1));
+                if ((float2 - float1) > 15) RainMeadow.OLDDebug($"Big amount of elapsed time in plop ({plops.Count}) calculations: " + (float2 - float1));
             }
 
             if (plopstoremove.Count > 0)

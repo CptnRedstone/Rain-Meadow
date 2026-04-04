@@ -172,10 +172,10 @@ namespace RainMeadow
             MethodInfo cached = null;
             if (serializerMethods.TryGetValue(key, out cached))
             {
-                RainMeadow.Debug($"Using cached method for {key}");
+                RainMeadow.OLDDebug($"Using cached method for {key}");
                 return cached;
             }
-            RainMeadow.Debug($"Adding cached method for {key}");
+            RainMeadow.OLDDebug($"Adding cached method for {key}");
             var method = MakeSerializationMethod(fieldType, nullable, polymorphic, longList);
             serializerMethods.Add(key, method);
             return method;
@@ -261,7 +261,7 @@ namespace RainMeadow
 
             if (!(fieldType.IsValueType || (fieldType.IsArray && fieldType.GetElementType().IsValueType)) && fieldType != typeof(string))
             {
-                RainMeadow.Debug($"{fieldType} not handled by SerializerCallMethod");
+                RainMeadow.OLDDebug($"{fieldType} not handled by SerializerCallMethod");
             }
 
             if (Nullable.GetUnderlyingType(fieldType) is Type t)
