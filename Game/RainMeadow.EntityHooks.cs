@@ -196,7 +196,7 @@ namespace RainMeadow
                     // apo.realize doesn't handle oracles
                     self.realizedObject = new Oracle(self, self.Room.realizedRoom);
                 }
-                RainMeadow.OLDDebug(self.type);
+                RainMeadow.LogDebug("Realizing: " + self.type);
                 if (!oe.isMine && !oe.realized && oe.isTransferable && !oe.isPending)
                 {
                     if (oe.roomSession == null || !oe.roomSession.participants.Contains(oe.owner)) //if owner of oe is subscribed (is participant) do not request
@@ -347,13 +347,14 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby != null && isStoryMode(out var storyGameMode) && callback is Watcher.WarpPoint warpPoint)
             {
+                RainMeadow.DebugMe();
                 var forcedWarp = storyGameMode.myLastWarp;
                 if (forcedWarp != null)
                 {
-                    OLDDebug("Forced warp found");
+                    LogDebug("Forced warp found");
                     if (warpData != forcedWarp)
                     {
-                        OLDDebug("Replacing called Warp data with forced warp data");
+                        LogDebug("Replacing called Warp data with forced warp data");
                         warpData = forcedWarp;
                     }
                 }
@@ -364,13 +365,13 @@ namespace RainMeadow
                 }*/
                 orig(self, callback, warpData, useNormalWarpLoader);
                 string sourceRoomName = warpPoint.getSourceRoom() == null ? "" : warpPoint.getSourceRoom().abstractRoom.name;
-                RainMeadow.OLDDebug($"doing warp point from {sourceRoomName}, data={warpData.ToString()}");
+                RainMeadow.LogDebug($"doing warp point from {sourceRoomName}, data={warpData.ToString()}");
+                LogDebug($"active world's name? {self.activeWorld?.name ?? "NULL"}, warpPoint's region: {warpData.RegionString}");
             }
             else
             {
                 orig(self, callback, warpData, useNormalWarpLoader);
             }
-            OLDDebug($"active world's name? {self.activeWorld?.name ?? "NULL"}, warpPoint's region: {warpData.RegionString}");
         }
 
         public void OverWorld_InitiateSpecialWarp_WarpPoint2(ILContext il)
@@ -390,7 +391,6 @@ namespace RainMeadow
                 {
                     if (OnlineManager.lobby != null && isStoryMode(out var storyGameMode) && storyGameMode.lastWarpIsEcho)
                     {
-                        RainMeadow.OLDDebug($"LAST WARP ECHO OK ACK");
                         self.warpData = storyGameMode.myLastWarp; //OVERRIDE WARP DATA VERY IMPORTANT!
                         warpData = storyGameMode.myLastWarp;
                     }
@@ -448,7 +448,7 @@ namespace RainMeadow
                     }
                     else if (roomName == "SI_SAINTINTRO")
                     {
-                        RainMeadow.OLDDebug("Running Saint ending...");
+                        RainMeadow.LogMessage("Running Saint ending...");
                         if (OnlineManager.lobby.isOwner)
                         {
                             foreach (var player in OnlineManager.players)
@@ -491,7 +491,7 @@ namespace RainMeadow
                 newRoom.game.GetStorySession.importantWarpPointTransferedEntities.Clear();
                 newRoom.game.GetStorySession.saveState.importantTransferEntitiesAfterWarpPointSave.Clear();
                 WorldSession newWorldSession = newRoom.world.GetResource() ?? throw new KeyNotFoundException();
-                RainMeadow.OLDDebug($"new room loaded w={warpData}! forcing camera to {newRoom.abstractRoom.name}");
+                RainMeadow.LogInfo($"new room loaded w={warpData}! forcing camera to {newRoom.abstractRoom.name}");
 
                 for (int l = 0; l < newRoom.game.cameras.Length; l++)
                 { // once again, force camera
@@ -533,7 +533,7 @@ namespace RainMeadow
             }
             catch (Exception ex)
             {
-                OLDError(ex);
+                LogFatal(ex);
             }
         }
 
@@ -555,11 +555,11 @@ namespace RainMeadow
 
         private void DeactivateAndWait(On.OverWorld.orig_WorldLoaded orig, OverWorld self, bool warpUsed, bool isSameWorld, WorldSession oldWorldSession, WorldSession newWorldSession, World newWorld)
         {
-            RainMeadow.OLDDebug(this);
+            RainMeadow.DebugMe();
             if (!isSameWorld && oldWorldSession.isActive)
             { // there exists "warps" to the same world, twice, for some bloody reason
                 //this in fact probably is required for now because rain world devs DESPISE US
-                RainMeadow.OLDDebug("Unsubscribing from old world");
+                RainMeadow.LogDebug("Unsubscribing from old world");
                 oldWorldSession.Deactivate();
                 oldWorldSession.NotNeeded(); // done? let go
             }
@@ -573,7 +573,7 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby != null)
             {
-                OLDDebug($"Warp Status -> worldLoader: {self.worldLoader?.ReturnWorld().name ?? "NULL"}, activeWorld: {self.activeWorld.name}");
+                LogDebug($"Warp Status -> worldLoader: {self.worldLoader?.ReturnWorld().name ?? "NULL"}, activeWorld: {self.activeWorld.name}");
 
                 World newWorld = self.worldLoader?.ReturnWorld() ?? self.activeWorld;
                 WorldSession newWorldSession = newWorld.GetResource() ?? throw new KeyNotFoundException("New world session not found.");
@@ -595,7 +595,7 @@ namespace RainMeadow
 
                     // pre: remove remote entities
                     // we go over all APOs in the room
-                    OLDDebug("Gate switchery 1");
+                    LogDebug("Gate switchery 1");
                     Room room = self.reportBackToGate.room;
                     var entities = room.abstractRoom.entities;
                     for (int i = entities.Count - 1; i >= 0; i--)
@@ -628,7 +628,7 @@ namespace RainMeadow
                 }
                 else if (warpUsed)
                 {
-                    RainMeadow.OLDDebug("getting warp point!");
+                    RainMeadow.LogDebug("getting warp point!");
                     //somehow WorldLoaded() gets called more than once in a row and leads to this exception when spawning from echo warp. No big issue tho..
                     Watcher.WarpPoint warpPoint = self.specialWarpCallback as Watcher.WarpPoint ?? throw new InvalidProgrammerException("watcher warp point doesnt exist at time of loading");
 
@@ -637,8 +637,8 @@ namespace RainMeadow
                     Room room = warpPoint.room; //may be null in the case a client activates an echo warp
                     isFirstWarpWorld = room == null; //do not update gate status afterwards :)
 
-                    OLDDebug($"destination region: {warpData.destRegion}, worldLoader is null? {self.worldLoader == null}, worldLoader's World is null? {self.worldLoader == null || self.worldLoader.world == null}, activeWorld is null? {self.activeWorld == null}");
-                    OLDDebug($"Watcher warp switchery APOs preparations from {self.activeWorld.name} to {(self.worldLoader == null ? newWorld.name : ($"{self.worldLoader.worldName}/{newWorld.name}"))}");
+                    LogDebug($"destination region: {warpData.destRegion}, worldLoader is null? {self.worldLoader == null}, worldLoader's World is null? {self.worldLoader == null || self.worldLoader.world == null}, activeWorld is null? {self.activeWorld == null}");
+                    LogDebug($"Watcher warp switchery APOs preparations from {self.activeWorld.name} to {(self.worldLoader == null ? newWorld.name : ($"{self.worldLoader.worldName}/{newWorld.name}"))}");
                     foreach (var playerAvatar in OnlineManager.lobby.playerAvatars.Select(kv => kv.Value))
                     { //it will move places
                         if (playerAvatar.type == (byte)OnlineEntity.EntityId.IdType.none) continue; // not in game
@@ -656,7 +656,6 @@ namespace RainMeadow
                             opo1.beingMoved = false;
                         }
                     }
-                    RainMeadow.OLDDebug($"Watcher warp switchery post");
 
                     DeactivateAndWait(orig, self, warpUsed, isSameWorld, oldWorldSession, newWorldSession, newWorld);
                 }
@@ -673,7 +672,7 @@ namespace RainMeadow
                     {
                         if (absplayer.realizedCreature is Player player)
                         {
-                            RainMeadow.OLDDebug($"fixing player");
+                            RainMeadow.LogDebug($"fixing player");
                             // do not get stuck on bottom left
                             if (self.warpData?.destPos != null)
                             {
@@ -715,7 +714,7 @@ namespace RainMeadow
                     if (storyGameMode.myLastWarp != null)
                     {
                         if (self.specialWarpPointGoal != null && self.specialWarpPointGoal != storyGameMode.myLastWarp)
-                            OLDDebug("We loaded from a warp different of our forced warp!");
+                            LogDebug("We loaded from a warp different of our forced warp!");
                         storyGameMode.myLastWarp = null;
                     }
                 }

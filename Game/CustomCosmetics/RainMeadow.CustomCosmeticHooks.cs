@@ -71,7 +71,7 @@ namespace RainMeadow
                     }
                     catch (Exception except)
                     {
-                        RainMeadow.OLDError(except);
+                        RainMeadow.LogFatal(except);
                     }
                 });
 
@@ -94,14 +94,14 @@ namespace RainMeadow
                     }
                     catch (Exception except)
                     {
-                        RainMeadow.OLDError(except);
+                        RainMeadow.LogFatal(except);
                     }
                 });
 
             }
             catch (Exception except)
             {
-                RainMeadow.OLDError(except);
+                RainMeadow.LogFatal(except);
             }
         }
 
@@ -120,7 +120,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.OLDError(except);
+                RainMeadow.LogFatal(except);
             }
         }
 
@@ -139,7 +139,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.OLDError(except);
+                RainMeadow.LogFatal(except);
             }
         }
 
@@ -161,7 +161,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.OLDError(except);
+                RainMeadow.LogFatal(except);
             }
         }
 
@@ -181,7 +181,7 @@ namespace RainMeadow
             }
             catch (Exception except)
             {
-                RainMeadow.OLDError(except);
+                RainMeadow.LogFatal(except);
             }
         }
 

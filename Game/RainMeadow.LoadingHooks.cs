@@ -104,8 +104,7 @@ namespace RainMeadow
                 if (RoomSession.map.TryGetValue(absRoom, out var roomSession))
                 {
                     // we go over all APOs in the room
-                    OLDDebug("Next level switching");
-                    RainMeadow.OLDDebug("Unsubscribing from old world");
+                    RainMeadow.LogDebug("Next level switching; Unsubscribing from old world");
                     if (roomSession.worldSession.isActive)
                     {
                         roomSession.worldSession.Deactivate();
@@ -116,13 +115,11 @@ namespace RainMeadow
                     {
                         if (OnlineManager.lobby.isOwner)
                         {
-                            OLDDebug(
-                                $"Waiting for {roomSession.worldSession.participants.Count} players to leave..."
-                            );
+                            LogInfo($"Waiting for {roomSession.worldSession.participants.Count} players to leave...");
                         }
                         else
                         {
-                            OLDDebug($"Waiting for host  players to join new world...");
+                            LogInfo($"Waiting for host player to join new world...");
                         }
                         manager.rainWorld.StartCoroutine(
                             ArenaNextLevel_WaitLoop(orig, self, manager, roomSession.worldSession)
@@ -148,7 +145,6 @@ namespace RainMeadow
                         }
                     }
 
-                    RainMeadow.OLDDebug("Arena: Moving to next level");
                     self.currentLevel++;
                     if (OnlineManager.lobby.isOwner)
                     {
@@ -188,9 +184,6 @@ namespace RainMeadow
                                 hasEnteredGameArea = true,
                             };
 
-                            OLDDebug(
-                                $"Arena: Local Sitting Data: {newArenaPlayer.playerNumber}: {newArenaPlayer.playerClass}"
-                            );
                             arena.AddOrInsertPlayerStats(arena, newArenaPlayer, pl);
 
                             self.players.Add(newArenaPlayer);
@@ -221,9 +214,6 @@ namespace RainMeadow
                                         .playingAs,
                                     hasEnteredGameArea = true,
                                 };
-                                OLDDebug(
-                                    $"Arena: Local Sitting Data: {newArenaPlayer.playerNumber}: {newArenaPlayer.playerClass}"
-                                );
                                 arena.AddOrInsertPlayerStats(arena, newArenaPlayer, player);
                                 self.players.Add(newArenaPlayer);
                             }
@@ -247,7 +237,7 @@ namespace RainMeadow
                 {
                     if (rs.isActive) rs.Deactivate();
                     rs.NotNeeded();
-                    OLDDebug("Room released: " + self.name);
+                    LogDebug("Room released: " + self.name);
                     // room release needs to be instant, because the game just checks room != null in realizer logic
                     foreach (AbstractWorldEntity? item in self.entities.Concat(self.entitiesInDens))
                     {
@@ -325,7 +315,7 @@ namespace RainMeadow
                 // activate the new world
                 if (self.Finished && !ws.isActive)
                 {
-                    OLDDebug("world loading activating new world");
+                    LogDebug("World loading activating new world");
                     ws.Activate();
                 }
 
@@ -362,8 +352,7 @@ namespace RainMeadow
                 // TODO: Why?
                 catch (System.NullReferenceException e) // happens in riv ending
                 {
-                    RainMeadow.OLDError(e);
-                    RainMeadow.OLDError("rivulet hackfix null ref exception is bad!");
+                    RainMeadow.LogFatal(e);
                 }
             }
         }

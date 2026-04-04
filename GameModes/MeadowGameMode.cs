@@ -39,16 +39,16 @@ namespace RainMeadow
 
         public override void NewEntity(OnlineEntity oe, OnlineResource inResource)
         {
-            RainMeadow.OLDDebug($"{oe} + {inResource}");
+            RainMeadow.LogDebug($"{oe} + {inResource}");
             base.NewEntity(oe, inResource);
             if (oe is OnlineCreature oc)
             {
-                RainMeadow.OLDDebug("Registering new creature: " + oc);
+                RainMeadow.LogDebug("Registering new creature: " + oc);
                 oe.AddData(new MeadowCreatureData());
                 oe.AddData(new MeadowMusicData());
                 if (oc.realizedCreature != null && EmoteDisplayer.map.TryGetValue(oc.realizedCreature, out var d)) // migrate over on re-register
                 {
-                    RainMeadow.OLDDebug("re-register, migrating emotedisplayer");
+                    RainMeadow.LogDebug("re-register, migrating emotedisplayer");
                     throw new InvalidProgrammerException("entity re-register"); // lemme test if this still needs supporting because it has more implications
 
 
@@ -92,13 +92,13 @@ namespace RainMeadow
             }
             game.world.GetAbstractRoom(abstractCreature.pos.room).AddEntity(abstractCreature);
 
-            RainMeadow.OLDDebug("spawned avatar is " + abstractCreature);
+            RainMeadow.LogDebug("spawned avatar is " + abstractCreature);
             return abstractCreature;
         }
 
         public override void ConfigureAvatar(OnlineCreature onlineCreature)
         {
-            RainMeadow.OLDDebug(onlineCreature);
+            RainMeadow.LogDebug(onlineCreature);
             onlineCreature.AddData(avatarData);
             avatarData.overlaySkin = AvatarData.ConfigureOverlay(onlineCreature);
         }
@@ -151,7 +151,7 @@ namespace RainMeadow
             base.ResourceActive(res);
             if (res is OverworldSession overworld)
             {
-                RainMeadow.OLDDebug("Setting up region data");
+                RainMeadow.LogDebug("Setting up region data");
                 MeadowRegionData regionData = overworld.GetData<MeadowRegionData>();
 
                 var totalRooms = 0;
@@ -160,7 +160,7 @@ namespace RainMeadow
                 regionData.regionSpawnWeights = new float[totalRegions];
                 if (overworld.isOwner)
                 {
-                    RainMeadow.OLDDebug($"Goal setup for {totalRegions} regions");
+                    RainMeadow.LogDebug($"Goal setup for {totalRegions} regions");
                     regionData.regionRedTokensGoal = new ushort[totalRegions];
                     regionData.regionBlueTokensGoal = new ushort[totalRegions];
                     regionData.regionGoldTokensGoal = new ushort[totalRegions];
@@ -201,7 +201,7 @@ namespace RainMeadow
             else if (res is WorldSession ws)
             {
                 MeadowWorldData regionData = ws.GetData<MeadowWorldData>();
-                RainMeadow.OLDDebug("Processing world data for " + ws);
+                RainMeadow.LogDebug("Processing world data for " + ws);
                 var shelters = new HashSet<int>(ws.world.shelters);
                 var gates = new HashSet<int>(ws.world.gates);
                 var validRooms = ws.world.abstractRooms.Where(r => !shelters.Contains(r.index) && !gates.Contains(r.index)).ToArray();
@@ -220,7 +220,7 @@ namespace RainMeadow
                 {
                     int SpawnItems(int toSpawn, AbstractPhysicalObject.AbstractObjectType type)
                     {
-                        RainMeadow.OLDDebug($"Spawning {toSpawn} {type}");
+                        RainMeadow.LogDebug($"Spawning {toSpawn} {type}");
                         var spawnedItems = validRooms.Select(r => r.entities.Count(e => e is AbstractMeadowCollectible amc && amc.type == type && !amc.collected)).Sum();
                         toSpawn -= spawnedItems;
                         if (toSpawn < 0) return 0;
@@ -260,7 +260,7 @@ namespace RainMeadow
             {
                 var mrd = rs.GetData<MeadowRoomData>();
 
-                RainMeadow.OLDDebug("Registering places in room " + rs);
+                RainMeadow.LogDebug("Registering places in room " + rs);
 
                 var self = rs.absroom.realizedRoom;
                 bool ValidPlacement(int x, int y)
@@ -318,7 +318,7 @@ namespace RainMeadow
                 }
                 UnityEngine.Random.state = state;
 
-                RainMeadow.OLDDebug($"{mrd.NumberOfPlaces} places registered");
+                RainMeadow.LogDebug($"{mrd.NumberOfPlaces} places registered");
             }
         }
 
@@ -339,7 +339,7 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby.overworld.isOwner && OnlineManager.lobby.overworld.isActive)
             {
-                RainMeadow.OLDDebug($"Item consumed: {OnlineManager.lobby.overworld.subresources[region].Id()} {type} from {evt.from}");
+                RainMeadow.LogDebug($"Item consumed: {OnlineManager.lobby.overworld.subresources[region].Id()} {type} from {evt.from}");
                 var lobbyData = OnlineManager.lobby.overworld.GetData<MeadowRegionData>();
                 var newRegion = RandomIndexFromWeightedList(lobbyData.regionSpawnWeights);
                 if (type == RainMeadow.Ext_PhysicalObjectType.MeadowTokenRed)
@@ -386,7 +386,7 @@ namespace RainMeadow
         {
             if (OnlineManager.lobby.overworld.isActive)
             {
-                RainMeadow.OLDDebug($"Item respawning: {OnlineManager.lobby.overworld.subresources[region].Id()} {type} from {evt.from}");
+                RainMeadow.LogDebug($"Item respawning: {OnlineManager.lobby.overworld.subresources[region].Id()} {type} from {evt.from}");
                 var ws = OnlineManager.lobby.overworld.subresources[region] as WorldSession;
                 if (ws.isActive && ws.isOwner)
                 {
@@ -405,7 +405,7 @@ namespace RainMeadow
         {
             if (oc.TryGetData<MeadowAvatarData>(out var data))
             {
-                RainMeadow.OLDDebug(oc);
+                RainMeadow.LogDebug(oc);
                 var mcc = RainMeadow.creatureCustomizations.GetValue(creature, (c) => data) as MeadowAvatarData;
                 // playable creatures
                 CreatureController.BindAvatar(creature, oc, mcc);
@@ -416,7 +416,7 @@ namespace RainMeadow
                 }
                 else
                 {
-                    RainMeadow.OLDError("missing mcd?? " + oc);
+                    RainMeadow.LogError("missing mcd?? " + oc);
                 }
 
                 creature.abstractCreature.tentacleImmune = true;
@@ -427,7 +427,7 @@ namespace RainMeadow
             }
             else
             {
-                RainMeadow.OLDError("creature not avatar ?? " + oc);
+                RainMeadow.LogError("creature not avatar ?? " + oc);
             }
         }
 

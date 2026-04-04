@@ -28,7 +28,7 @@
             }
             else
             {
-                RainMeadow.OLDError($"player {ent} hasn't joined the room yet");
+                RainMeadow.LogWarning($"player {ent} hasn't joined the room yet");
             }
 
             return base.GetInput();
